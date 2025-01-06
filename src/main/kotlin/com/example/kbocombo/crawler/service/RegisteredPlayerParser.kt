@@ -1,4 +1,4 @@
-package com.example.kbocombo.crawler
+package com.example.kbocombo.crawler.service
 
 import com.example.kbocombo.entity.PlayerPosition
 import com.example.kbocombo.entity.WebId

@@ -1,5 +1,6 @@
-package com.example.kbocombo.crawler
+package com.example.kbocombo.crawler.service
 
+import com.example.kbocombo.crawler.vo.RegisteredPageTeamConverter
 import com.example.kbocombo.entity.Team
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -62,7 +63,7 @@ class RegisteredPlayerParameterGenerator {
         private const val SELECT_SEARCH_DATE = "${PREFIX}hfSearchDate"
         private const val SCRIPT_MANAGER_KEY = "${PREFIX}ScriptManager1"
         private const val BUTTON = "${PREFIX}btnCalendarSelect"
-        private const val SCRIPT_MANAGER_VALUE = "${PREFIX}${RECORD}${BUTTON}"
+        private const val SCRIPT_MANAGER_VALUE = "$PREFIX$RECORD$BUTTON"
         private const val EVENT_TARGET = "__EVENTTARGET"
         private const val VIEW_STATE = "__VIEWSTATE"
         private const val VIEW_STATE_GENERATOR = "__VIEWSTATEGENERATOR"
