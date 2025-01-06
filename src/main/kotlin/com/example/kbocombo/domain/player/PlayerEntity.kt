@@ -59,6 +59,9 @@ class PlayerEntity(
     @Column(name = "team", nullable = false)
     var team: Team,
 
+    @Column(name = "retire", nullable = false)
+    var retire: Boolean = false,
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0L
