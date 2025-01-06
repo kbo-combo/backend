@@ -8,7 +8,7 @@ import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
 
 @Component
-class KboSiteParameterGenerator {
+class RegisteredPlayerParameterGenerator {
 
     fun getParams(response: ResponseEntity<String>): MultiValueMap<String, String> {
         val formData = LinkedMultiValueMap<String, String>()
