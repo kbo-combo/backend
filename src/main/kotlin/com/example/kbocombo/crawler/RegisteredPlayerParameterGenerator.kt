@@ -1,5 +1,6 @@
 package com.example.kbocombo.crawler
 
+import com.example.kbocombo.entity.Team
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.springframework.http.ResponseEntity
@@ -16,6 +17,12 @@ class RegisteredPlayerParameterGenerator {
         setDefaultParams(formData, response.body) { key -> getStateById(key, Jsoup.parse(body)) }
         formData.add(EVENT_TARGET, BUTTON)
         return formData
+    }
+
+    fun updateTeam(params: MultiValueMap<String, String>, team: Team): MultiValueMap<String, String> {
+        return LinkedMultiValueMap(params).apply {
+            this[SELECT_TEAM_KEY] = WebTeamData.convert(team).name
+        }
     }
 
     private fun setDefaultParams(
