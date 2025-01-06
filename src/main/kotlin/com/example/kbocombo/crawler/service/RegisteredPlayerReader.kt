@@ -1,9 +1,9 @@
 package com.example.kbocombo.crawler.service
 
 import com.example.kbocombo.crawler.client.KboClient
-import com.example.kbocombo.domain.PlayerPosition
-import com.example.kbocombo.domain.Team
-import com.example.kbocombo.domain.WebId
+import com.example.kbocombo.domain.player.vo.PlayerPosition
+import com.example.kbocombo.domain.player.vo.Team
+import com.example.kbocombo.domain.player.vo.WebId
 import org.springframework.stereotype.Component
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap

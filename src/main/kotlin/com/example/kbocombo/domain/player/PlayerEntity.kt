@@ -1,5 +1,10 @@
-package com.example.kbocombo.domain
+package com.example.kbocombo.domain.player
 
+import com.example.kbocombo.domain.player.vo.HandType
+import com.example.kbocombo.domain.player.vo.PlayerDetailPosition
+import com.example.kbocombo.domain.player.vo.PlayerPosition
+import com.example.kbocombo.domain.player.vo.Team
+import com.example.kbocombo.domain.player.vo.WebId
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue

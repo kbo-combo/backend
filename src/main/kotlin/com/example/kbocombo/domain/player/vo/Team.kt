@@ -1,4 +1,4 @@
-package com.example.kbocombo.domain
+package com.example.kbocombo.domain.player.vo
 
 enum class Team {
     NC,

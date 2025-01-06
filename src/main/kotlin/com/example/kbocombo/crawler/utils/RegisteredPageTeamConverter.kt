@@ -1,6 +1,6 @@
 package com.example.kbocombo.crawler.utils
 
-import com.example.kbocombo.domain.Team
+import com.example.kbocombo.domain.player.vo.Team
 
 enum class RegisteredPageTeamConverter {
     HT, // 기아
