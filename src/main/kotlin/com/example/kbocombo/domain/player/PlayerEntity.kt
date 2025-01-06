@@ -7,6 +7,8 @@ import com.example.kbocombo.domain.player.vo.Team
 import com.example.kbocombo.domain.player.vo.WebId
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
@@ -31,9 +33,11 @@ class PlayerEntity(
     @Column(name = "draft_year")
     var draftYear: Int?,
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "hitting_hand", nullable = false)
     var hittingHand: HandType,
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "throwing_hand", nullable = false)
     var throwingHand: HandType,
 
@@ -43,12 +47,15 @@ class PlayerEntity(
     @Column(name = "web_id", nullable = false)
     val webId: WebId,
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "position")
     var position: PlayerPosition?,
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "detail_position")
     var detailPosition: PlayerDetailPosition?,
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "team", nullable = false)
     var team: Team,
 
