@@ -1,8 +1,10 @@
 package com.example.kbocombo.utils
 
+import org.springframework.stereotype.Component
 import kotlin.random.Random
 
-class UserNameGenerator {
+@Component
+class UsernameGenerator {
 
     fun generate() : String {
         return "${getRandomPrefix()} ${getRandomSuffix()}_${generateSixDigitNumber()}"
