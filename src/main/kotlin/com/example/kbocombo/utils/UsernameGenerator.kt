@@ -1,13 +1,14 @@
 package com.example.kbocombo.utils
 
 import org.springframework.stereotype.Component
+import java.util.UUID
 import kotlin.random.Random
 
 @Component
 class UsernameGenerator {
 
     fun generate() : String {
-        return "${getRandomPrefix()} ${getRandomSuffix()}_${generateSixDigitNumber()}"
+        return "${getRandomPrefix()} ${getRandomSuffix()}_${getUuidByLength(6)}"
     }
 
     private fun getRandomPrefix(): String {
@@ -20,8 +21,8 @@ class UsernameGenerator {
         return SUFFIX[randomIndex]
     }
 
-    private fun generateSixDigitNumber(): Int {
-        return Random.nextInt(0, 1000000)
+    private fun getUuidByLength(length: Int): String {
+        return UUID.randomUUID().toString().substring(0 until length)
     }
 
     companion object {
