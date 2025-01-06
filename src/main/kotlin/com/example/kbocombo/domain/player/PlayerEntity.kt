@@ -48,8 +48,8 @@ class PlayerEntity(
     val webId: WebId,
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "position")
-    var position: PlayerPosition?,
+    @Column(name = "position", nullable = false)
+    var position: PlayerPosition,
 
     @Enumerated(EnumType.STRING)
     @Column(name = "detail_position")
