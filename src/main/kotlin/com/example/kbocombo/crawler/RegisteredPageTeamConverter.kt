@@ -2,7 +2,7 @@ package com.example.kbocombo.crawler
 
 import com.example.kbocombo.entity.Team
 
-enum class WebTeamData {
+enum class RegisteredPageTeamConverter {
     HT, // 기아
     SS, // 삼성
     LG,
@@ -15,7 +15,7 @@ enum class WebTeamData {
     WO; // 키움
 
     companion object {
-        fun convert(team: Team): WebTeamData {
+        fun convert(team: Team): RegisteredPageTeamConverter {
             return when (team) {
                 Team.NC -> NC
                 Team.KIA -> HT

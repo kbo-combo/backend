@@ -21,7 +21,7 @@ class RegisteredPlayerParameterGenerator {
 
     fun updateTeam(params: MultiValueMap<String, String>, team: Team): MultiValueMap<String, String> {
         return LinkedMultiValueMap(params).apply {
-            this[SELECT_TEAM_KEY] = WebTeamData.convert(team).name
+            this[SELECT_TEAM_KEY] = RegisteredPageTeamConverter.convert(team).name
         }
     }
 
