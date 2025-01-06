@@ -1,6 +1,6 @@
 package com.example.kbocombo.crawler.service
 
-import com.example.kbocombo.crawler.vo.RegisteredPageTeamConverter
+import com.example.kbocombo.crawler.utils.RegisteredPageTeamConverter
 import com.example.kbocombo.entity.Team
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -15,7 +15,7 @@ class RegisteredPlayerParameterGenerator {
     fun getParams(response: ResponseEntity<String>): MultiValueMap<String, String> {
         val formData = LinkedMultiValueMap<String, String>()
         val body = response.body ?: throw IllegalArgumentException("Initial body is null")
-        setDefaultParams(formData, response.body) { key -> getStateById(key, Jsoup.parse(body)) }
+        setDefaultParams(formData, body) { key -> getStateById(key, Jsoup.parse(body)) }
         formData.add(EVENT_TARGET, BUTTON)
         return formData
     }
@@ -59,7 +59,7 @@ class RegisteredPlayerParameterGenerator {
         private const val DATE_ID = "cphContents_cphContents_cphContents_hfSearchDate"
         private const val PREFIX = "ctl00\$ctl00\$ctl00\$cphContents\$cphContents\$cphContents\$"
         private const val RECORD = "udpRecord|"
-        const val SELECT_TEAM_KEY = "${PREFIX}hfSearchTeam"
+        private const val SELECT_TEAM_KEY = "${PREFIX}hfSearchTeam"
         private const val SELECT_SEARCH_DATE = "${PREFIX}hfSearchDate"
         private const val SCRIPT_MANAGER_KEY = "${PREFIX}ScriptManager1"
         private const val BUTTON = "${PREFIX}btnCalendarSelect"

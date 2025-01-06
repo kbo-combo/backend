@@ -1,4 +1,4 @@
-package com.example.kbocombo.crawler.vo
+package com.example.kbocombo.crawler.utils
 
 import com.example.kbocombo.entity.Team
 
