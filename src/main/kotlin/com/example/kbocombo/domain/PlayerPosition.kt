@@ -1,4 +1,4 @@
-package com.example.kbocombo.entity
+package com.example.kbocombo.domain
 
 enum class PlayerPosition {
     PITCHER,

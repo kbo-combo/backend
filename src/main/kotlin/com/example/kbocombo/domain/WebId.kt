@@ -1,4 +1,4 @@
-package com.example.kbocombo.entity
+package com.example.kbocombo.domain
 
 @JvmInline
 value class WebId(

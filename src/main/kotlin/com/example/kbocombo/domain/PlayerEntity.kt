@@ -1,4 +1,4 @@
-package com.example.kbocombo.entity
+package com.example.kbocombo.domain
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity

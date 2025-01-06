@@ -1,7 +1,7 @@
 package com.example.kbocombo.crawler.service
 
 import com.example.kbocombo.crawler.utils.RegisteredPageTeamConverter
-import com.example.kbocombo.entity.Team
+import com.example.kbocombo.domain.Team
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.springframework.http.ResponseEntity
