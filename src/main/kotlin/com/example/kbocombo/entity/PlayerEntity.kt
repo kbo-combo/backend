@@ -32,7 +32,7 @@ class PlayerEntity(
     @Column(name = "position", nullable = false)
     val position: PlayerPosition,
     @Column(name = "team", nullable = false)
-    var team: PlayerTeam,
+    var team: Team,
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0L

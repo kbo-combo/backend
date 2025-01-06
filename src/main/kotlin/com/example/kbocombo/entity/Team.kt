@@ -1,6 +1,6 @@
 package com.example.kbocombo.entity
 
-enum class PlayerTeam {
+enum class Team {
     NC,
     KIA,
     두산,
