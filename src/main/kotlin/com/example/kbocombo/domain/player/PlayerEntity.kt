@@ -17,7 +17,7 @@ import java.time.LocalDate
 @Entity
 class PlayerEntity(
     @Column(name = "birth_date", nullable = false)
-    var birthDate: LocalDate,
+    val birthDate: LocalDate,
     @Column(name = "height")
     var height: Int?,
     @Column(name = "weight")
@@ -31,13 +31,13 @@ class PlayerEntity(
     @Column(name = "throwing_hand", nullable = false)
     var throwingHand: HandType,
     @Column(name = "name", nullable = false)
-    var name: String,
+    val name: String,
     @Column(name = "web_id", nullable = false)
     val webId: WebId,
     @Column(name = "position")
-    val position: PlayerPosition?,
+    var position: PlayerPosition?,
     @Column(name = "detail_position")
-    val detailPosition: PlayerDetailPosition?,
+    var detailPosition: PlayerDetailPosition?,
     @Column(name = "team", nullable = false)
     var team: Team,
     @Id
