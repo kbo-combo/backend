@@ -29,8 +29,10 @@ class PlayerEntity(
     var name: String,
     @Column(name = "web_id", nullable = false)
     val webId: WebId,
-    @Column(name = "position", nullable = false)
-    val position: PlayerPosition,
+    @Column(name = "position")
+    val position: PlayerPosition?,
+    @Column(name = "detail_position")
+    val detailPosition: PlayerDetailPosition?,
     @Column(name = "team", nullable = false)
     var team: Team,
     @Id
