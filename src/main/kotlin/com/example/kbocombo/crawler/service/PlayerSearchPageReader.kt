@@ -12,8 +12,9 @@ class PlayerSearchPageReader(
     private val kboClient: KboClient,
     private val playerSearchParamGenerator: PlayerSearchParamGenerator,
     private val playerSearchPageParser: PlayerSearchPageParser
-) {
-    fun findAll(): List<NewPlayerData> {
+) : PlayerCrawler {
+
+    override fun getPlayers(): List<NewPlayerData> {
         return Team.values()
             .flatMap { team -> getPlayers(team) }
     }
