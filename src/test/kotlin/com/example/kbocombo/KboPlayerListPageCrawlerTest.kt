@@ -1,17 +1,17 @@
 package com.example.kbocombo
 
-import com.example.kbocombo.crawler.service.PlayerSearchPageReader
+import com.example.kbocombo.crawler.service.KboPlayerListPageCrawler
 import com.example.kbocombo.domain.player.vo.WebId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import kotlin.test.Test
 
 @SpringBootTest
-class PlayerSearchPageReaderTest @Autowired constructor(val finder: PlayerSearchPageReader) {
+class KboPlayerListPageCrawlerTest @Autowired constructor(val finder: KboPlayerListPageCrawler) {
 
     @Test
     fun `모든 팀 선수들을 페이징 처리하며 잘 가져온다`() {
-        val actual = finder.findAll()
+        val actual = finder.getPlayers()
 
         val webIds = actual.map { it.webId }
 

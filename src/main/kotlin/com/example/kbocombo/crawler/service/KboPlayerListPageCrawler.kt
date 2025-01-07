@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component
 import org.springframework.util.LinkedMultiValueMap
 
 @Component
-class PlayerSearchPageReader(
+class KboPlayerListPageCrawler(
     private val kboClient: KboClient,
     private val playerSearchParamGenerator: PlayerSearchParamGenerator,
     private val playerSearchPageParser: PlayerSearchPageParser
