@@ -1,5 +1,7 @@
 package com.example.kbocombo.crawler.service
 
+import com.example.kbocombo.crawler.utils.toTeamFilterCode
+import com.example.kbocombo.domain.player.vo.Team
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.springframework.http.ResponseEntity
@@ -10,39 +12,37 @@ import org.springframework.util.MultiValueMap
 @Component
 class PlayerSearchParamGenerator {
 
-    fun generateTeamFilterParam(response: ResponseEntity<String>, teamCode: String): MultiValueMap<String, String> {
+    fun generateTeamFilterParam(response: ResponseEntity<String>, team: Team): MultiValueMap<String, String> {
         val body = requireNotNull(response.body)
-        val formData = getFilterDefaultForm(body, teamCode)
+        val formData = getFilterDefaultForm(body, team)
         formData.add(SCRIPT_MANAGER_KEY, TEAM_FILTER_SCRIPT_MANAGER_VALUE)
         formData.add(EVENT_TARGET_KEY, TEAM_BUTTON)
         return formData
     }
 
-    fun generatePageParam(response: ResponseEntity<String>, page: Int, teamCode: String): MultiValueMap<String, String> {
+    fun generatePageParam(response: ResponseEntity<String>, page: Int, team: Team): MultiValueMap<String, String> {
         val body = requireNotNull(response.body)
-        val formData = extractPageParam(body)
+        val formData = extractPageParam(body, team)
         val buttonSuffix = getPageButtonSuffix(page)
         formData.add(EVENT_TARGET_KEY, PAGE_BUTTON_PREFIX + buttonSuffix)
         formData.add(SCRIPT_MANAGER_KEY, PAGE_SCRIPT_MANAGER_VALUE + buttonSuffix)
-        formData.add(TEAM_BUTTON, teamCode)
         return formData
     }
 
-    private fun getFilterDefaultForm(body: String, teamCode: String): LinkedMultiValueMap<String, String> {
-        val formData = extractFilterParam(body)
+    private fun getFilterDefaultForm(body: String, team: Team): LinkedMultiValueMap<String, String> {
+        val formData = extractFilterParam(body, team)
         formData.add(SCRIPT_MANAGER_KEY, TEAM_FILTER_SCRIPT_MANAGER_VALUE)
         formData.add(EVENT_TARGET_KEY, TEAM_BUTTON)
-        formData.add(TEAM_BUTTON, teamCode)
         return formData
     }
 
-    private fun extractFilterParam(body: String): LinkedMultiValueMap<String, String> {
+    private fun extractFilterParam(body: String, team: Team): LinkedMultiValueMap<String, String> {
         val document = Jsoup.parse(body)
-        return createFormDataWithExtractor { key -> getStateById(key, document) }
+        return createFormDataWithExtractor(team, { key -> getStateById(key, document) })
     }
 
-    private fun extractPageParam(body: String): LinkedMultiValueMap<String, String> {
-        return createFormDataWithExtractor { key -> getStateValue(key, body) }
+    private fun extractPageParam(body: String, team: Team): LinkedMultiValueMap<String, String> {
+        return createFormDataWithExtractor(team, { key -> getStateValue(key, body) })
     }
 
     private fun getPageButtonSuffix(page: Int): String {
@@ -58,6 +58,7 @@ class PlayerSearchParamGenerator {
     }
 
     private fun createFormDataWithExtractor(
+        team: Team,
         extractor: (String) -> String
     ): LinkedMultiValueMap<String, String> {
         val formData = LinkedMultiValueMap<String, String>()
@@ -65,6 +66,7 @@ class PlayerSearchParamGenerator {
         formData.add(VIEW_STATE_GENERATOR_KEY, extractor(VIEW_STATE_GENERATOR_KEY))
         formData.add(EVENT_VALIDATION_KEY, extractor(EVENT_VALIDATION_KEY))
         formData.add(ASYNC_POST_KEY, "true")
+        formData.add(TEAM_BUTTON, toTeamFilterCode(team))
         return formData
     }
 
