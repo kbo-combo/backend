@@ -35,11 +35,11 @@ class PlayerEntity(
 
     @Enumerated(EnumType.STRING)
     @Column(name = "hitting_hand", nullable = false)
-    var hittingHand: HandType,
+    val hittingHand: HandType,
 
     @Enumerated(EnumType.STRING)
     @Column(name = "throwing_hand", nullable = false)
-    var throwingHand: HandType,
+    val throwingHand: HandType,
 
     @Column(name = "name", nullable = false)
     val name: String,
@@ -49,15 +49,15 @@ class PlayerEntity(
 
     @Enumerated(EnumType.STRING)
     @Column(name = "position", nullable = false)
-    var position: PlayerPosition,
+    val position: PlayerPosition,
 
     @Enumerated(EnumType.STRING)
     @Column(name = "detail_position", nullable = false)
-    var detailPosition: PlayerDetailPosition,
+    val detailPosition: PlayerDetailPosition,
 
     @Enumerated(EnumType.STRING)
     @Column(name = "team", nullable = false)
-    var team: Team,
+    val team: Team,
 
     @Column(name = "retire", nullable = false)
     var retire: Boolean = false,
