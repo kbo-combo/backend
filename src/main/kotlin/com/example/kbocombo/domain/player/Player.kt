@@ -18,6 +18,10 @@ import java.time.LocalDate
 @Table(name = "PLAYER")
 @Entity
 class Player(
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Long = 0L,
+
     @Column(name = "birth_date", nullable = false)
     val birthDate: LocalDate,
 
@@ -61,8 +65,4 @@ class Player(
 
     @Column(name = "retire", nullable = false)
     var retire: Boolean = false,
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long = 0L
 )
