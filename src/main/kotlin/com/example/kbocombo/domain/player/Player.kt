@@ -17,7 +17,7 @@ import java.time.LocalDate
 
 @Table(name = "PLAYER")
 @Entity
-class PlayerEntity(
+class Player(
     @Column(name = "birth_date", nullable = false)
     val birthDate: LocalDate,
 
