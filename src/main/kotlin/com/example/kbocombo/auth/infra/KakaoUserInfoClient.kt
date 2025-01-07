@@ -1,6 +1,7 @@
 package com.example.kbocombo.auth.infra
 
-import com.example.kbocombo.auth.domain.UserInfo
+import com.example.kbocombo.auth.domain.MemberInfo
+import com.example.kbocombo.domain.vo.SocialProvider
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
@@ -8,9 +9,9 @@ import org.springframework.stereotype.Component
 import org.springframework.web.client.RestTemplate
 
 @Component
-class KakaoLoginUserInfoClient {
+class KakaoUserInfoClient {
 
-    fun request(accessToken: String): UserInfo {
+    fun getUserInfo(accessToken: String): MemberInfo {
         val restTemplate = RestTemplate()
         val headers = HttpHeaders().apply {
             set("Authorization", "Bearer $accessToken")
@@ -28,7 +29,7 @@ class KakaoLoginUserInfoClient {
         val kakaoProfileResponse = responseEntity.body
             ?: throw IllegalStateException("카카오 유저 정보 가져오기를 실패했습니다.")
 
-        return kakaoProfileResponse.toUserInfo()
+        return kakaoProfileResponse.toMemberInfo()
     }
 
     companion object {
@@ -38,12 +39,11 @@ class KakaoLoginUserInfoClient {
 
 data class KakaoProfileResponse(
     val userId: Long,
-    val nickname: String,
 ) {
-    fun toUserInfo(): UserInfo {
-        return UserInfo(
+    fun toMemberInfo(): MemberInfo {
+        return MemberInfo(
             userId = userId,
-            nickname = nickname,
+            socialProvider = SocialProvider.KAKAO
         )
     }
 }
