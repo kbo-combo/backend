@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Component
 
 @Component
-class PlayerSearchPageParser {
+class KboPlayerListPageParser {
 
     fun parse(response: ResponseEntity<String>): List<Pair<WebId, PlayerPosition>> {
         val body = requireNotNull(response.body)

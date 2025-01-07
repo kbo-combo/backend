@@ -10,8 +10,8 @@ import org.springframework.util.LinkedMultiValueMap
 @Component
 class KboPlayerListPageCrawler(
     private val kboClient: KboClient,
-    private val playerSearchParamGenerator: PlayerSearchParamGenerator,
-    private val playerSearchPageParser: PlayerSearchPageParser
+    private val kboPlayerListPageParamGenerator: KboPlayerListPageParamGenerator,
+    private val kboPlayerListPageParser: KboPlayerListPageParser
 ) : PlayerCrawler {
 
     override fun getPlayers(): List<NewPlayerData> {
@@ -32,7 +32,7 @@ class KboPlayerListPageCrawler(
 
     private fun getInitialResponse(team: Team): ResponseEntity<String> {
         val initialResponse = kboClient.getPlayers(LinkedMultiValueMap())
-        val param = playerSearchParamGenerator.generateTeamFilterParam(initialResponse, team)
+        val param = kboPlayerListPageParamGenerator.generateTeamFilterParam(initialResponse, team)
         return kboClient.getPlayers(param)
     }
 
@@ -41,9 +41,9 @@ class KboPlayerListPageCrawler(
         page: Int,
         team: Team
     ): List<NewPlayerData> {
-        val pageParam = playerSearchParamGenerator.generatePageParam(response, page, team)
+        val pageParam = kboPlayerListPageParamGenerator.generatePageParam(response, page, team)
         val playerData = kboClient.getPlayers(pageParam)
-        return playerSearchPageParser.parse(playerData)
+        return kboPlayerListPageParser.parse(playerData)
             .map { NewPlayerData(it.first, it.second, team) }
     }
 }

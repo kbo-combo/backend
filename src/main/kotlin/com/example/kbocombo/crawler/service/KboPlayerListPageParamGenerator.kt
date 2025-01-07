@@ -10,7 +10,7 @@ import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
 
 @Component
-class PlayerSearchParamGenerator {
+class KboPlayerListPageParamGenerator {
 
     fun generateTeamFilterParam(response: ResponseEntity<String>, team: Team): MultiValueMap<String, String> {
         val body = requireNotNull(response.body)
