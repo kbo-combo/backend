@@ -25,17 +25,17 @@ class Player(
     @Column(name = "birth_date", nullable = false)
     val birthDate: LocalDate,
 
-    @Column(name = "height")
-    var height: Int?,
+    @Column(name = "height", nullable = false)
+    val height: Int,
 
-    @Column(name = "weight")
-    var weight: Int?,
+    @Column(name = "weight", nullable = false)
+    val weight: Int,
 
-    @Column(name = "draft_info")
-    var draftInfo: String?,
+    @Column(name = "draft_info", nullable = false)
+    val draftInfo: String,
 
-    @Column(name = "draft_year")
-    var draftYear: Int?,
+    @Column(name = "draft_year", nullable = false)
+    val draftYear: Int,
 
     @Enumerated(EnumType.STRING)
     @Column(name = "hitting_hand", nullable = false)
