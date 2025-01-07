@@ -10,7 +10,7 @@ import org.springframework.util.MultiValueMap
 @Component
 class PlayerSearchParamGenerator {
 
-    fun createPositionFilterParam(response: ResponseEntity<String>, positionCode: String): MultiValueMap<String, String> {
+    fun generateTeamFilterParam(response: ResponseEntity<String>, positionCode: String): MultiValueMap<String, String> {
         val body = requireNotNull(response.body)
         val formData = getFilterDefaultForm(body, positionCode)
         formData.add(SCRIPT_MANAGER_KEY, POSITION_FILTER_SCRIPT_MANAGER_VALUE)
@@ -18,7 +18,7 @@ class PlayerSearchParamGenerator {
         return formData
     }
 
-    fun createPageParam(response: ResponseEntity<String>, page: Int, positionCode: String): MultiValueMap<String, String> {
+    fun generatePageParam(response: ResponseEntity<String>, page: Int, positionCode: String): MultiValueMap<String, String> {
         val body = requireNotNull(response.body)
         val formData = extractPageParam(body)
         val buttonSuffix = getPageButtonSuffix(page)
