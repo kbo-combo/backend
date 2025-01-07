@@ -1,6 +1,16 @@
 package com.example.kbocombo.crawler.service
 
+import org.springframework.http.HttpHeaders
+import org.springframework.http.ResponseEntity
+import org.springframework.stereotype.Component
+
+@Component
 class PlayerSearchParamGenerator {
+
+    fun getCookie(response: ResponseEntity<String>): String? {
+        return response.headers[HttpHeaders.SET_COOKIE]?.firstOrNull()
+    }
+
     private companion object {
         private const val PREFIX = "ctl00\$ctl00\$ctl00\$cphContents\$cphContents\$cphContents\$"
         private const val SCRIPT_MANAGER_KEY = "ScriptManager1"
