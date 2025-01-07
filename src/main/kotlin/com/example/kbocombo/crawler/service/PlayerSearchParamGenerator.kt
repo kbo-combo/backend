@@ -10,29 +10,29 @@ import org.springframework.util.MultiValueMap
 @Component
 class PlayerSearchParamGenerator {
 
-    fun createPositionFilterParam(response: ResponseEntity<String>): MultiValueMap<String, String> {
+    fun createPositionFilterParam(response: ResponseEntity<String>, positionCode: String): MultiValueMap<String, String> {
         val body = requireNotNull(response.body)
-        val formData = getFilterDefaultForm(body)
+        val formData = getFilterDefaultForm(body, positionCode)
         formData.add(SCRIPT_MANAGER_KEY, POSITION_FILTER_SCRIPT_MANAGER_VALUE)
         formData.add(EVENT_TARGET_KEY, POSITION_BUTTON)
         return formData
     }
 
-    fun createPageParam(response: ResponseEntity<String>, page: Int, position: String): MultiValueMap<String, String> {
+    fun createPageParam(response: ResponseEntity<String>, page: Int, positionCode: String): MultiValueMap<String, String> {
         val body = requireNotNull(response.body)
         val formData = extractPageParam(body)
         val buttonSuffix = getPageButtonSuffix(page)
         formData.add(EVENT_TARGET_KEY, PAGE_BUTTON_PREFIX + buttonSuffix)
         formData.add(SCRIPT_MANAGER_KEY, PAGE_SCRIPT_MANAGER_VALUE + buttonSuffix)
-        formData.add(POSITION_BUTTON, "2")
+        formData.add(POSITION_BUTTON, positionCode)
         return formData
     }
 
-    private fun getFilterDefaultForm(body: String): LinkedMultiValueMap<String, String> {
+    private fun getFilterDefaultForm(body: String, positionCode: String): LinkedMultiValueMap<String, String> {
         val formData = extractFilterParam(body)
         formData.add(SCRIPT_MANAGER_KEY, POSITION_FILTER_SCRIPT_MANAGER_VALUE)
         formData.add(EVENT_TARGET_KEY, POSITION_BUTTON)
-        formData.add(POSITION_BUTTON, "2")
+        formData.add(POSITION_BUTTON, positionCode)
         return formData
     }
 
