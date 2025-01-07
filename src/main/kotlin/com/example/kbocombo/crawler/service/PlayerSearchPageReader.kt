@@ -21,19 +21,15 @@ class PlayerSearchPageReader(
     }
 
     private fun getWebIdsByTeam(team: Team): List<Pair<WebId, PlayerPosition>> {
-        val webIds = mutableListOf<Pair<WebId, PlayerPosition>>()
         val teamCode = getPlayerSearchTeamCode(team)
         val response = getInitialResponse(teamCode)
 
-        for (page in 1 until 15) {
-            val parsedWebIds = getWebIds(response, page, teamCode)
-            if (parsedWebIds.isEmpty()) {
-                return webIds
-            }
-            webIds.addAll(parsedWebIds)
-        }
-
-        return webIds
+        return (1 until 15)
+            .asSequence()
+            .map { page -> getWebIds(response, page, teamCode) }
+            .takeWhile { it.isNotEmpty() }
+            .flatten()
+            .toList()
     }
 
     private fun getInitialResponse(teamCode: String): ResponseEntity<String> {
