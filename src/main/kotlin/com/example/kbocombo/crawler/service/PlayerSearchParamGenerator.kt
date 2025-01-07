@@ -26,8 +26,9 @@ class PlayerSearchParamGenerator {
     fun createPageParam(response: ResponseEntity<String>, page: Int, position: String): MultiValueMap<String, String> {
         val body = requireNotNull(response.body)
         val formData = extractPageParam(body)
-        formData.add(EVENT_TARGET_KEY, PAGE_BUTTON)
-        formData.add(SCRIPT_MANAGER_KEY, PAGE_SCRIPT_MANAGER_VALUE)
+        val buttonSuffix = getPageButtonSuffix(page)
+        formData.add(EVENT_TARGET_KEY, PAGE_BUTTON_PREFIX + buttonSuffix)
+        formData.add(SCRIPT_MANAGER_KEY, PAGE_SCRIPT_MANAGER_VALUE + buttonSuffix)
         formData.add(POSITION_BUTTON, "2")
         return formData
     }
@@ -47,6 +48,18 @@ class PlayerSearchParamGenerator {
 
     private fun extractPageParam(body: String): LinkedMultiValueMap<String, String> {
         return createFormDataWithExtractor { key -> getStateValue(key, body) }
+    }
+
+    private fun getPageButtonSuffix(page: Int): String {
+        return  when {
+            page == 1 -> "btnNo1"
+            page % 5 == 2 -> "btnNo2"
+            page % 5 == 3 -> "btnNo3"
+            page % 5 == 4 -> "btnNo4"
+            page % 5 == 0 -> "btnNo5"
+            page % 5 == 1 -> "btnNext"
+            else -> throw IllegalStateException("잘못된 Page")
+        }
     }
 
     private fun createFormDataWithExtractor(
@@ -77,10 +90,10 @@ class PlayerSearchParamGenerator {
         private const val PREFIX = "ctl00\$ctl00\$ctl00\$cphContents\$cphContents\$cphContents\$"
         private const val SCRIPT_MANAGER_KEY = "${PREFIX}ScriptManager1"
         private const val POSITION_BUTTON = "${PREFIX}ddlPosition"
-        private const val PAGE_BUTTON = "${PREFIX}ucPager\$btnNo5"
+        private const val PAGE_BUTTON_PREFIX = "${PREFIX}ucPager\$"
         private const val SCRIPT_MANAGER_SUM = "udpRecord|"
         private const val POSITION_FILTER_SCRIPT_MANAGER_VALUE = "${PREFIX}${SCRIPT_MANAGER_SUM}${POSITION_BUTTON}"
-        private const val PAGE_SCRIPT_MANAGER_VALUE = "${PREFIX}${SCRIPT_MANAGER_SUM}${PAGE_BUTTON}"
+        private const val PAGE_SCRIPT_MANAGER_VALUE = "${PREFIX}${SCRIPT_MANAGER_SUM}$PAGE_BUTTON_PREFIX"
         private const val EVENT_TARGET_KEY = "__EVENTTARGET"
         private const val VIEW_STATE_KEY = "__VIEWSTATE"
         private const val VIEW_STATE_GENERATOR_KEY = "__VIEWSTATEGENERATOR"
