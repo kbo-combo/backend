@@ -52,8 +52,8 @@ class PlayerEntity(
     var position: PlayerPosition,
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "detail_position")
-    var detailPosition: PlayerDetailPosition?,
+    @Column(name = "detail_position", nullable = false)
+    var detailPosition: PlayerDetailPosition,
 
     @Enumerated(EnumType.STRING)
     @Column(name = "team", nullable = false)
