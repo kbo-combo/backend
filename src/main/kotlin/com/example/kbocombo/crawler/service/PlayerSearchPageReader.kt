@@ -5,9 +5,9 @@ import com.example.kbocombo.crawler.utils.getPlayerSearchTeamCode
 import com.example.kbocombo.domain.player.vo.PlayerPosition
 import com.example.kbocombo.domain.player.vo.Team
 import com.example.kbocombo.domain.player.vo.WebId
+import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Component
 import org.springframework.util.LinkedMultiValueMap
-import org.springframework.util.MultiValueMap
 
 @Component
 class PlayerSearchPageReader(
@@ -16,35 +16,39 @@ class PlayerSearchPageReader(
     private val playerSearchPageParser: PlayerSearchPageParser
 ) {
     fun findAll(): List<Pair<WebId, PlayerPosition>> {
-        val players = mutableListOf<Pair<WebId, PlayerPosition>>()
-        for (team in Team.values()) {
-            players.addAll(findPlayersByTeam(team))
-        }
-        return players
+        return Team.values()
+            .flatMap { team -> getWebIdsByTeam(team) }
     }
 
-    private fun findPlayersByTeam(team: Team): List<Pair<WebId, PlayerPosition>> {
-        val players = mutableListOf<Pair<WebId, PlayerPosition>>()
+    private fun getWebIdsByTeam(team: Team): List<Pair<WebId, PlayerPosition>> {
+        val webIds = mutableListOf<Pair<WebId, PlayerPosition>>()
         val teamCode = getPlayerSearchTeamCode(team)
-        var param = getInitialParam(teamCode)
-        var teamFilterResponse = kboClient.getPlayers(param)
+        val response = getInitialResponse(teamCode)
 
         for (page in 1 until 15) {
-            param = playerSearchParamGenerator.generatePageParam(teamFilterResponse, page, teamCode)
-            val data = kboClient.getPlayers(param)
-            val elements = playerSearchPageParser.parse(data)
-            if (elements.isEmpty()) {
-                break
+            val parsedWebIds = getWebIds(response, page, teamCode)
+            if (parsedWebIds.isEmpty()) {
+                return webIds
             }
-            players.addAll(elements)
-            teamFilterResponse = data
+            webIds.addAll(parsedWebIds)
         }
 
-        return players
+        return webIds
     }
 
-    private fun getInitialParam(teamCode: String): MultiValueMap<String, String> {
+    private fun getInitialResponse(teamCode: String): ResponseEntity<String> {
         val initialResponse = kboClient.getPlayers(LinkedMultiValueMap())
-        return playerSearchParamGenerator.generateTeamFilterParam(initialResponse, teamCode)
+        val param = playerSearchParamGenerator.generateTeamFilterParam(initialResponse, teamCode)
+        return kboClient.getPlayers(param)
+    }
+
+    private fun getWebIds(
+        response: ResponseEntity<String>,
+        page: Int,
+        teamCode: String
+    ): List<Pair<WebId, PlayerPosition>> {
+        val pageParam = playerSearchParamGenerator.generatePageParam(response, page, teamCode)
+        val playerData = kboClient.getPlayers(pageParam)
+        return playerSearchPageParser.parse(playerData)
     }
 }
