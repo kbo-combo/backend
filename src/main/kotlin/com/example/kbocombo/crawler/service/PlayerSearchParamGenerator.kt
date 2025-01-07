@@ -2,7 +2,6 @@ package com.example.kbocombo.crawler.service
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import org.springframework.http.HttpHeaders
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Component
 import org.springframework.util.LinkedMultiValueMap
@@ -10,10 +9,6 @@ import org.springframework.util.MultiValueMap
 
 @Component
 class PlayerSearchParamGenerator {
-
-    fun getCookie(response: ResponseEntity<String>): String? {
-        return response.headers[HttpHeaders.SET_COOKIE]?.firstOrNull()
-    }
 
     fun createPositionFilterParam(response: ResponseEntity<String>): MultiValueMap<String, String> {
         val body = requireNotNull(response.body)
