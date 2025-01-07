@@ -14,6 +14,6 @@ interface KboClient {
     @PostExchange("/Player/Search.aspx")
     fun getPlayers(
         @RequestBody form: MultiValueMap<String, String>,
-        @RequestHeader(HttpHeaders.COOKIE, required = false) cookie: String
+        @RequestHeader(HttpHeaders.COOKIE, required = false) cookie: String?
     ): ResponseEntity<String>
 }
