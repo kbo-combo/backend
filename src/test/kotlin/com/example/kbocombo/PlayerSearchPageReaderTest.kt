@@ -13,7 +13,7 @@ class PlayerSearchPageReaderTest @Autowired constructor(val finder: PlayerSearch
     fun `모든 팀 선수들을 페이징 처리하며 잘 가져온다`() {
         val actual = finder.findAll()
 
-        val webIds = actual.map { it.first }
+        val webIds = actual.map { it.webId }
 
         // 은퇴 or 트레이드 아마 올해는 없을거고 이름이 뒷페이지인 선수들로 테스트
         // 최형우

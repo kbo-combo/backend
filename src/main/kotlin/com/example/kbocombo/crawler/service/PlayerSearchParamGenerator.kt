@@ -46,14 +46,13 @@ class PlayerSearchParamGenerator {
     }
 
     private fun getPageButtonSuffix(page: Int): String {
-        return  when {
-            page == 1 -> "btnNo1"
-            page % 5 == 2 -> "btnNo2"
-            page % 5 == 3 -> "btnNo3"
-            page % 5 == 4 -> "btnNo4"
-            page % 5 == 0 -> "btnNo5"
-            page % 5 == 1 -> "btnNext"
-            else -> throw IllegalStateException("잘못된 Page")
+        return when (page % 5) {
+            1 -> if (page == 1) "btnNo1" else "btnNext"
+            2 -> "btnNo2"
+            3 -> "btnNo3"
+            4 -> "btnNo4"
+            0 -> "btnNo5"
+            else -> error("잘못된 Page")
         }
     }
 
