@@ -63,6 +63,6 @@ class Player(
     @Column(name = "team", nullable = false)
     val team: Team,
 
-    @Column(name = "retire", nullable = false)
-    var retire: Boolean = false,
+    @Column(name = "is_retired", nullable = false)
+    var isRetired: Boolean = false,
 )
