@@ -1,7 +1,7 @@
 package com.example.kbocombo.crawler.service
 
 import com.example.kbocombo.crawler.client.KboClient
-import com.example.kbocombo.crawler.utils.getPlayerSearchTeamCode
+import com.example.kbocombo.crawler.utils.toTeamFilterCode
 import com.example.kbocombo.domain.player.vo.PlayerPosition
 import com.example.kbocombo.domain.player.vo.Team
 import com.example.kbocombo.domain.player.vo.WebId
@@ -21,7 +21,7 @@ class PlayerSearchPageReader(
     }
 
     private fun getWebIdsByTeam(team: Team): List<Pair<WebId, PlayerPosition>> {
-        val teamCode = getPlayerSearchTeamCode(team)
+        val teamCode = toTeamFilterCode(team)
         val response = getInitialResponse(teamCode)
 
         return (1 until 15)
