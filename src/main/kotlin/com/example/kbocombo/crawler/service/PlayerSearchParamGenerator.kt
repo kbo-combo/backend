@@ -81,8 +81,6 @@ class PlayerSearchParamGenerator {
         private const val SCRIPT_MANAGER_SUM = "udpRecord|"
         private const val POSITION_FILTER_SCRIPT_MANAGER_VALUE = "${PREFIX}${SCRIPT_MANAGER_SUM}${POSITION_BUTTON}"
         private const val PAGE_SCRIPT_MANAGER_VALUE = "${PREFIX}${SCRIPT_MANAGER_SUM}${PAGE_BUTTON}"
-        private const val PAGE_KEY = "${PREFIX}hfPage"
-        private const val PAGE = "hfPage"
         private const val EVENT_TARGET_KEY = "__EVENTTARGET"
         private const val VIEW_STATE_KEY = "__VIEWSTATE"
         private const val VIEW_STATE_GENERATOR_KEY = "__VIEWSTATEGENERATOR"
