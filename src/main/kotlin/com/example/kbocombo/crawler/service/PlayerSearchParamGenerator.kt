@@ -10,29 +10,29 @@ import org.springframework.util.MultiValueMap
 @Component
 class PlayerSearchParamGenerator {
 
-    fun generateTeamFilterParam(response: ResponseEntity<String>, positionCode: String): MultiValueMap<String, String> {
+    fun generateTeamFilterParam(response: ResponseEntity<String>, teamCode: String): MultiValueMap<String, String> {
         val body = requireNotNull(response.body)
-        val formData = getFilterDefaultForm(body, positionCode)
-        formData.add(SCRIPT_MANAGER_KEY, POSITION_FILTER_SCRIPT_MANAGER_VALUE)
-        formData.add(EVENT_TARGET_KEY, POSITION_BUTTON)
+        val formData = getFilterDefaultForm(body, teamCode)
+        formData.add(SCRIPT_MANAGER_KEY, TEAM_FILTER_SCRIPT_MANAGER_VALUE)
+        formData.add(EVENT_TARGET_KEY, TEAM_BUTTON)
         return formData
     }
 
-    fun generatePageParam(response: ResponseEntity<String>, page: Int, positionCode: String): MultiValueMap<String, String> {
+    fun generatePageParam(response: ResponseEntity<String>, page: Int, teamCode: String): MultiValueMap<String, String> {
         val body = requireNotNull(response.body)
         val formData = extractPageParam(body)
         val buttonSuffix = getPageButtonSuffix(page)
         formData.add(EVENT_TARGET_KEY, PAGE_BUTTON_PREFIX + buttonSuffix)
         formData.add(SCRIPT_MANAGER_KEY, PAGE_SCRIPT_MANAGER_VALUE + buttonSuffix)
-        formData.add(POSITION_BUTTON, positionCode)
+        formData.add(TEAM_BUTTON, teamCode)
         return formData
     }
 
-    private fun getFilterDefaultForm(body: String, positionCode: String): LinkedMultiValueMap<String, String> {
+    private fun getFilterDefaultForm(body: String, teamCode: String): LinkedMultiValueMap<String, String> {
         val formData = extractFilterParam(body)
-        formData.add(SCRIPT_MANAGER_KEY, POSITION_FILTER_SCRIPT_MANAGER_VALUE)
-        formData.add(EVENT_TARGET_KEY, POSITION_BUTTON)
-        formData.add(POSITION_BUTTON, positionCode)
+        formData.add(SCRIPT_MANAGER_KEY, TEAM_FILTER_SCRIPT_MANAGER_VALUE)
+        formData.add(EVENT_TARGET_KEY, TEAM_BUTTON)
+        formData.add(TEAM_BUTTON, teamCode)
         return formData
     }
 
@@ -84,10 +84,10 @@ class PlayerSearchParamGenerator {
     private companion object {
         private const val PREFIX = "ctl00\$ctl00\$ctl00\$cphContents\$cphContents\$cphContents\$"
         private const val SCRIPT_MANAGER_KEY = "${PREFIX}ScriptManager1"
-        private const val POSITION_BUTTON = "${PREFIX}ddlPosition"
+        private const val TEAM_BUTTON = "${PREFIX}ddlTeam"
         private const val PAGE_BUTTON_PREFIX = "${PREFIX}ucPager\$"
         private const val SCRIPT_MANAGER_SUM = "udpRecord|"
-        private const val POSITION_FILTER_SCRIPT_MANAGER_VALUE = "${PREFIX}${SCRIPT_MANAGER_SUM}${POSITION_BUTTON}"
+        private const val TEAM_FILTER_SCRIPT_MANAGER_VALUE = "${PREFIX}${SCRIPT_MANAGER_SUM}${TEAM_BUTTON}"
         private const val PAGE_SCRIPT_MANAGER_VALUE = "${PREFIX}${SCRIPT_MANAGER_SUM}$PAGE_BUTTON_PREFIX"
         private const val EVENT_TARGET_KEY = "__EVENTTARGET"
         private const val VIEW_STATE_KEY = "__VIEWSTATE"
