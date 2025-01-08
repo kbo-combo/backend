@@ -1,7 +1,6 @@
 package com.example.kbocombo.crawler.infrastructure
 
 import com.example.kbocombo.crawler.dto.NewPlayerData
-import com.example.kbocombo.crawler.dto.PlayerResponse
 import com.example.kbocombo.crawler.utils.toHittingHand
 import com.example.kbocombo.crawler.utils.toPitchingHand
 import com.example.kbocombo.crawler.utils.toPlayerDetailPosition
@@ -23,7 +22,7 @@ class KboPlayerDetailPageParser {
 
     private val logger = LoggerFactory.getLogger(KboPlayerDetailPageParser::class.java)
 
-    fun getPlayerProfile(playerData: List<NewPlayerData>): List<PlayerResponse> {
+    fun getPlayerProfile(playerData: List<NewPlayerData>): List<Player> {
         return playerData.mapNotNull {
             runCatching { toPlayer(it) }
                 .onFailure { e ->
@@ -33,9 +32,9 @@ class KboPlayerDetailPageParser {
         }
     }
 
-    private fun toPlayer(playerData: NewPlayerData): PlayerResponse? {
+    private fun toPlayer(playerData: NewPlayerData): Player? {
         val document = getDocument(playerData.webId)
-        val player = Player(
+        return Player(
             name = getName(document),
             height = getHeight(document),
             weight = getWeight(document),
@@ -47,10 +46,9 @@ class KboPlayerDetailPageParser {
             detailPosition = getPlayerDetailPosition(document),
             birthDate = getBirthDate(document),
             team = playerData.team,
+            imageUrl = getPlayerImageUrl(document),
             webId = playerData.webId
         )
-        val imageUrl = getPlayerImageUrl(document)
-        return PlayerResponse(player, imageUrl)
     }
 
     private fun getDocument(webId: WebId): Document =
