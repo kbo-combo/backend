@@ -6,16 +6,13 @@ import com.example.kbocombo.domain.player.vo.PlayerDetailPosition
 import com.example.kbocombo.domain.player.vo.PlayerPosition
 import com.example.kbocombo.domain.player.vo.Team
 import com.example.kbocombo.domain.player.vo.WebId
-import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
-import jakarta.persistence.FetchType
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
-import jakarta.persistence.OneToOne
 import jakarta.persistence.Table
 import java.time.LocalDate
 
@@ -25,9 +22,6 @@ class Player(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0L,
-
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "player", cascade = [CascadeType.ALL], optional = false)
-    val playerImage: PlayerImage,
 
     @Column(name = "birth_date", nullable = false)
     val birthDate: LocalDate,
@@ -69,7 +63,13 @@ class Player(
     @Enumerated(EnumType.STRING)
     @Column(name = "team", nullable = false)
     val team: Team,
+) {
 
     @Column(name = "is_retired", nullable = false)
-    var isRetired: Boolean = false,
-)
+    var isRetired: Boolean = false
+        protected set
+
+    @Column(name = "image_url", nullable = false)
+    var imageUrl: String? = null
+        protected set
+}
