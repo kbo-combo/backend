@@ -1,6 +1,6 @@
 package com.example.kbocombo.crawler.infrastructure
 
-import com.example.kbocombo.crawler.client.KboClient
+import com.example.kbocombo.crawler.client.KboHttpClient
 import com.example.kbocombo.crawler.dto.NewPlayerData
 import com.example.kbocombo.crawler.service.PlayerCrawler
 import com.example.kbocombo.domain.player.vo.Team
@@ -10,7 +10,7 @@ import org.springframework.util.LinkedMultiValueMap
 
 @Component
 class KboPlayerListPageCrawler(
-    private val kboClient: KboClient,
+    private val kboHttpClient: KboHttpClient,
     private val kboPlayerListPageParamGenerator: KboPlayerListPageParamGenerator,
     private val kboPlayerListPageParser: KboPlayerListPageParser
 ) : PlayerCrawler {
@@ -32,9 +32,9 @@ class KboPlayerListPageCrawler(
     }
 
     private fun getInitialResponse(team: Team): ResponseEntity<String> {
-        val initialResponse = kboClient.getPlayers(LinkedMultiValueMap())
+        val initialResponse = kboHttpClient.getPlayers(LinkedMultiValueMap())
         val param = kboPlayerListPageParamGenerator.generateTeamFilterParam(initialResponse, team)
-        return kboClient.getPlayers(param)
+        return kboHttpClient.getPlayers(param)
     }
 
     private fun getPlayersByPage(
@@ -43,7 +43,7 @@ class KboPlayerListPageCrawler(
         team: Team
     ): List<NewPlayerData> {
         val pageParam = kboPlayerListPageParamGenerator.generatePageParam(response, page, team)
-        val playerData = kboClient.getPlayers(pageParam)
+        val playerData = kboHttpClient.getPlayers(pageParam)
         return kboPlayerListPageParser.parse(playerData)
             .map { NewPlayerData(it.first, it.second, team) }
     }

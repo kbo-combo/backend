@@ -7,7 +7,7 @@ import org.springframework.web.service.annotation.HttpExchange
 import org.springframework.web.service.annotation.PostExchange
 
 @HttpExchange
-interface KboClient {
+interface KboHttpClient {
 
     @PostExchange("/Player/Search.aspx")
     fun getPlayers(@RequestBody form: MultiValueMap<String, String>): ResponseEntity<String>

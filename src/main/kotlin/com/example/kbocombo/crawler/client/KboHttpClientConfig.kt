@@ -10,10 +10,10 @@ import org.springframework.web.service.invoker.HttpServiceProxyFactory
 import java.util.Collections
 
 @Configuration
-class KboClientConfig {
+class KboHttpClientConfig {
 
     @Bean
-    fun kboClient() : KboClient {
+    fun kboClient() : KboHttpClient {
         val client = RestClient.builder()
             .baseUrl("https://www.koreabaseball.com")
             .defaultHeaders { it.addAll(getHeaders())}
@@ -21,7 +21,7 @@ class KboClientConfig {
         val adapter = RestClientAdapter.create(client)
         val factory = HttpServiceProxyFactory.builderFor(adapter)
             .build()
-        return factory.createClient(KboClient::class.java)
+        return factory.createClient(KboHttpClient::class.java)
     }
 
     fun getHeaders(): HttpHeaders {
