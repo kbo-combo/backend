@@ -10,10 +10,8 @@ class KboPlayerCrawler(
     private val playerCrawler: PlayerCrawler
 ) : PlayerClient {
 
-    override fun findAllNewPlayers(savedPlayers: List<Player>): List<Player> {
+    override fun findAllPlayers(): List<Player> {
         val players = playerCrawler.getPlayers()
-        val savedWebIds = savedPlayers.map { it.webId }.toSet()
-        val newPlayersData = players.filter { it.webId !in savedWebIds }
-        return kboPlayerDetailPageParser.getPlayerProfile(newPlayersData)
+        return kboPlayerDetailPageParser.getPlayerProfile(players)
     }
 }

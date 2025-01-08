@@ -10,7 +10,7 @@ class PlayerAppender(
 
     fun saveNewPlayers() {
         val savedPlayers = playerRepository.findAll()
-        val newPlayers = playerClient.findAllNewPlayers(savedPlayers)
-        newPlayers.forEach(playerRepository::save)
+        val originPlayers = playerClient.findAllPlayers()
+        originPlayers.forEach(playerRepository::save)
     }
 }
