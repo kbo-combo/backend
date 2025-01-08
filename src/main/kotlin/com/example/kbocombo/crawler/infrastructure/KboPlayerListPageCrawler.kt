@@ -1,7 +1,8 @@
-package com.example.kbocombo.crawler.service
+package com.example.kbocombo.crawler.infrastructure
 
 import com.example.kbocombo.crawler.client.KboClient
 import com.example.kbocombo.crawler.dto.NewPlayerData
+import com.example.kbocombo.crawler.service.PlayerCrawler
 import com.example.kbocombo.domain.player.vo.Team
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Component

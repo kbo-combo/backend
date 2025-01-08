@@ -1,4 +1,4 @@
-package com.example.kbocombo.crawler.service
+package com.example.kbocombo.crawler.infrastructure
 
 import com.example.kbocombo.crawler.utils.toTeamFilterCode
 import com.example.kbocombo.domain.player.vo.Team
@@ -88,8 +88,8 @@ class KboPlayerListPageParamGenerator {
         private const val TEAM_BUTTON = "${PREFIX}ddlTeam"
         private const val PAGE_BUTTON_PREFIX = "${PREFIX}ucPager\$"
         private const val SCRIPT_MANAGER_SUM = "udpRecord|"
-        private const val TEAM_FILTER_SCRIPT_MANAGER_VALUE = "${PREFIX}${SCRIPT_MANAGER_SUM}${TEAM_BUTTON}"
-        private const val PAGE_SCRIPT_MANAGER_VALUE = "${PREFIX}${SCRIPT_MANAGER_SUM}$PAGE_BUTTON_PREFIX"
+        private const val TEAM_FILTER_SCRIPT_MANAGER_VALUE = "$PREFIX$SCRIPT_MANAGER_SUM$TEAM_BUTTON"
+        private const val PAGE_SCRIPT_MANAGER_VALUE = "$PREFIX$SCRIPT_MANAGER_SUM$PAGE_BUTTON_PREFIX"
         private const val EVENT_TARGET_KEY = "__EVENTTARGET"
         private const val VIEW_STATE_KEY = "__VIEWSTATE"
         private const val VIEW_STATE_GENERATOR_KEY = "__VIEWSTATEGENERATOR"
