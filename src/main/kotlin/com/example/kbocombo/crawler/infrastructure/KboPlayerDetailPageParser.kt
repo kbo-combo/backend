@@ -1,6 +1,7 @@
 package com.example.kbocombo.crawler.infrastructure
 
 import com.example.kbocombo.crawler.dto.NewPlayerData
+import com.example.kbocombo.crawler.dto.PlayerResponse
 import com.example.kbocombo.crawler.utils.toHittingHand
 import com.example.kbocombo.crawler.utils.toPitchingHand
 import com.example.kbocombo.crawler.utils.toPlayerDetailPosition
@@ -22,7 +23,7 @@ class KboPlayerDetailPageParser {
 
     private val logger = LoggerFactory.getLogger(KboPlayerDetailPageParser::class.java)
 
-    fun getPlayerProfile(playerData: List<NewPlayerData>): List<Player> {
+    fun getPlayerProfile(playerData: List<NewPlayerData>): List<PlayerResponse> {
         return playerData.mapNotNull {
             runCatching { toPlayer(it) }
                 .onFailure { e ->
@@ -32,9 +33,9 @@ class KboPlayerDetailPageParser {
         }
     }
 
-    private fun toPlayer(playerData: NewPlayerData): Player? {
+    private fun toPlayer(playerData: NewPlayerData): PlayerResponse? {
         val document = getDocument(playerData.webId)
-        return Player(
+        val player = Player(
             name = getName(document),
             height = getHeight(document),
             weight = getWeight(document),
@@ -48,6 +49,8 @@ class KboPlayerDetailPageParser {
             team = playerData.team,
             webId = playerData.webId
         )
+        val imageUrl = getPlayerImageUrl(document)
+        return PlayerResponse(player, imageUrl)
     }
 
     private fun getDocument(webId: WebId): Document =
@@ -101,10 +104,17 @@ class KboPlayerDetailPageParser {
         return toPlayerDetailPosition(rawPosition)
     }
 
+    private fun getPlayerImageUrl(document: Document): String {
+        return document.select(IMAGE_KEY)
+            .attr("src")
+            .substringAfter("//")
+    }
+
     private companion object {
         private val formatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일", Locale.KOREAN)
         private const val PREFIX = "cphContents_cphContents_cphContents_playerProfile_"
         private const val NAME_ID = "${PREFIX}lblName"
+        private const val IMAGE_KEY = "img#${PREFIX}\"imgProgile"
         private const val POSITION_ID = "${PREFIX}lblPosition"
         private const val HEIGHT_WITH_WEIGHT_ID = "${PREFIX}lblHeightWeight"
         private const val DRAFT_INFO_ID = "${PREFIX}lblDraft"
