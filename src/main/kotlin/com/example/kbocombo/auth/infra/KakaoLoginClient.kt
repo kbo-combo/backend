@@ -15,7 +15,7 @@ import java.nio.charset.StandardCharsets
 
 @Component
 class KakaoLoginClient(
-    @Value("\${kakao.clientId}")
+    @Value("\${kakao.client_id}")
     private val clientId: String
 ) {
     private val restTemplate: RestTemplate = RestTemplate()
