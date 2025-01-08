@@ -1,9 +1,11 @@
 package com.example.kbocombo.auth.domain
 
-import com.example.kbocombo.domain.vo.SocialProvider
+import com.example.kbocombo.member.domain.vo.SocialProvider
 
 data class MemberInfo(
-    private val userId: Long,
-    private val socialProvider: SocialProvider,
+    val userId: Long,
+    val nickname: String,
+    val email: String,
+    val socialProvider: SocialProvider,
 ) {
 }

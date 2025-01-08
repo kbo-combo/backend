@@ -1,4 +1,4 @@
-package com.example.kbocombo.domain.vo
+package com.example.kbocombo.member.domain.vo
 
 enum class SocialProvider(
     val typeName: String

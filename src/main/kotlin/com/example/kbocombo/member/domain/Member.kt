@@ -1,6 +1,6 @@
-package com.example.kbocombo.domain
+package com.example.kbocombo.member.domain
 
-import com.example.kbocombo.domain.vo.SocialProvider
+import com.example.kbocombo.member.domain.vo.SocialProvider
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
@@ -16,6 +16,9 @@ class Member(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0L,
+
+    @Column(name = "email", nullable = false, updatable = false)
+    val email: String,
 
     @Column(name = "nickname", nullable = false)
     val nickname: String,

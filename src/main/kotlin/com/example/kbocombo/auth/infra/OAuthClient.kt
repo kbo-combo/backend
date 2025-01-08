@@ -1,7 +1,7 @@
 package com.example.kbocombo.auth.infra
 
 import com.example.kbocombo.auth.domain.MemberInfo
-import com.example.kbocombo.domain.vo.SocialProvider
+import com.example.kbocombo.member.domain.vo.SocialProvider
 
 interface OAuthClient {
 
