@@ -1,7 +1,9 @@
 package com.example.kbocombo.auth.infra
 
 import com.example.kbocombo.auth.domain.MemberInfo
-import com.example.kbocombo.domain.vo.SocialProvider
+import com.example.kbocombo.member.domain.vo.SocialProvider
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.annotation.JsonProperty
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
@@ -9,9 +11,9 @@ import org.springframework.stereotype.Component
 import org.springframework.web.client.RestTemplate
 
 @Component
-class KakaoUserInfoClient {
+class KakaoMemberInfoClient {
 
-    fun getUserInfo(accessToken: String): MemberInfo {
+    fun getMemberInfo(accessToken: String): MemberInfo {
         val restTemplate = RestTemplate()
         val headers = HttpHeaders().apply {
             set("Authorization", "Bearer $accessToken")
@@ -37,13 +39,34 @@ class KakaoUserInfoClient {
     }
 }
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class KakaoProfileResponse(
+    @JsonProperty("id")
     val userId: Long,
+    @JsonProperty("kakao_account")
+    val kakaoAccount: KakaoAccount,
+
 ) {
     fun toMemberInfo(): MemberInfo {
         return MemberInfo(
             userId = userId,
-            socialProvider = SocialProvider.KAKAO
+            socialProvider = SocialProvider.KAKAO,
+            email = kakaoAccount.email,
+            nickname = kakaoAccount.profile.nickname
         )
     }
 }
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+data class KakaoAccount(
+    @JsonProperty("profile")
+    val profile: Profile,
+    @JsonProperty("email")
+    val email: String
+)
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+data class Profile(
+    @JsonProperty("nickname")
+    val nickname: String
+)
