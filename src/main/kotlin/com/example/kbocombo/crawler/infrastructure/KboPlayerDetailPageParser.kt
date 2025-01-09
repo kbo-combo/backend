@@ -57,46 +57,46 @@ class KboPlayerDetailPageParser {
     }
 
     private fun getName(document: Document): String {
-        return document.getElementById(NAME_ID).text()
+        return document.getTextById(NAME_ID)
     }
 
     private fun getDraftInfo(document: Document): String {
-        return document.getElementById(DRAFT_INFO_ID).text()
+        return document.getTextById(DRAFT_INFO_ID)
     }
 
     private fun getDraftYear(document: Document): Int {
-        val text = document.getElementById(DRAFT_INFO_ID)?.text().orEmpty()
+        val text = document.getTextById(DRAFT_INFO_ID)
         val rawYear = text.substringBefore(" ").toInt()
         return if (rawYear < 2000) rawYear + 1900 else rawYear + 2000
     }
 
     private fun getWeight(document: Document): Int {
-        val heightWithWeight = document.getElementById(HEIGHT_WITH_WEIGHT_ID).text()
+        val heightWithWeight = document.getTextById(HEIGHT_WITH_WEIGHT_ID)
         return heightWithWeight.substringAfter("/").substringBefore("kg").toInt()
     }
 
     private fun getHeight(document: Document): Int {
-        val heightWithWeight = document.getElementById(HEIGHT_WITH_WEIGHT_ID).text()
+        val heightWithWeight = document.getTextById(HEIGHT_WITH_WEIGHT_ID)
         return heightWithWeight.substringAfter(" ").substringBefore("cm").toInt()
     }
 
     private fun getPitchingHandType(document: Document): PitchingHandType {
-        val rawPosition = document.getElementById(POSITION_ID).text()
+        val rawPosition = document.getTextById(POSITION_ID)
         return toPitchingHand(rawPosition.substringAfter("(").take(2))
     }
 
     private fun getHittingHandType(document: Document): HittingHandType {
-        val rawPosition = document.getElementById(POSITION_ID).text()
+        val rawPosition = document.getTextById(POSITION_ID)
         return toHittingHand(rawPosition.substringBefore(")").takeLast(2))
     }
 
     private fun getBirthDate(document: Document): LocalDate {
-        val birthDate = document.getElementById(BIRTH_DAY_ID).text()
+        val birthDate = document.getTextById(BIRTH_DAY_ID)
         return LocalDate.parse(birthDate, formatter)
     }
 
     private fun getPlayerDetailPosition(document: Document): PlayerDetailPosition {
-        val rawPosition = document.getElementById(POSITION_ID).text().substringBefore("(")
+        val rawPosition = document.getTextById(POSITION_ID).substringBefore("(")
         return toPlayerDetailPosition(rawPosition)
     }
 
@@ -104,6 +104,13 @@ class KboPlayerDetailPageParser {
         return document.select(IMAGE_KEY)
             .attr("src")
             .substringAfter("//")
+    }
+
+
+    fun Document.getTextById(id: String): String {
+        val element = this.getElementById(id)
+        return element?.text()
+            ?: throw IllegalArgumentException("Element with ID '$id' not found in the document.")
     }
 
     private companion object {
