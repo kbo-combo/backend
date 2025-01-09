@@ -3,10 +3,12 @@ package com.example.kbocombo.player
 import com.example.kbocombo.player.vo.HittingHandType
 import com.example.kbocombo.player.vo.PitchingHandType
 import com.example.kbocombo.player.vo.PlayerDetailPosition
+import com.example.kbocombo.player.vo.PlayerImage
 import com.example.kbocombo.player.vo.PlayerPosition
 import com.example.kbocombo.player.vo.Team
 import com.example.kbocombo.player.vo.WebId
 import jakarta.persistence.Column
+import jakarta.persistence.Embedded
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
@@ -64,14 +66,11 @@ class Player(
     @Column(name = "team", nullable = false)
     val team: Team,
 
-    imageUrl: String?,
+    @Embedded
+    val playerImage: PlayerImage
 ) {
 
     @Column(name = "is_retired", nullable = false)
     var isRetired: Boolean = false
-        protected set
-
-    @Column(name = "image_url", nullable = false)
-    var imageUrl: String? = null
         protected set
 }

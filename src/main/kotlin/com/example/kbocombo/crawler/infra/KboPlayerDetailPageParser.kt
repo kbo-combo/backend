@@ -7,6 +7,7 @@ import com.example.kbocombo.player.Player
 import com.example.kbocombo.player.vo.HittingHandType
 import com.example.kbocombo.player.vo.PitchingHandType
 import com.example.kbocombo.player.vo.PlayerDetailPosition
+import com.example.kbocombo.player.vo.PlayerImage
 import com.example.kbocombo.player.vo.WebId
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -43,7 +44,7 @@ class KboPlayerDetailPageParser {
             detailPosition = getPlayerDetailPosition(document),
             birthDate = getBirthDate(document),
             team = playerData.team,
-            imageUrl = getPlayerImageUrl(document),
+            playerImage = getPlayerImageUrl(document),
             webId = playerData.webId
         )
     }
@@ -99,10 +100,10 @@ class KboPlayerDetailPageParser {
         return toPlayerDetailPosition(rawPosition)
     }
 
-    private fun getPlayerImageUrl(document: Document): String {
-        return document.select(IMAGE_KEY)
+    private fun getPlayerImageUrl(document: Document): PlayerImage {
+        return PlayerImage(document.select(IMAGE_KEY)
             .attr("src")
-            .substringAfter("//")
+            .substringAfter("//"))
     }
 
 
