@@ -42,31 +42,22 @@ class KakaoMemberInfoClient {
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class KakaoProfileResponse(
     @JsonProperty("id")
-    val userId: Long,
+    val socialId: Long,
     @JsonProperty("kakao_account")
     val kakaoAccount: KakaoAccount,
 
-) {
+    ) {
     fun toMemberInfo(): MemberInfo {
         return MemberInfo(
-            userId = userId,
+            socialId = socialId,
             socialProvider = SocialProvider.KAKAO,
             email = kakaoAccount.email,
-            nickname = kakaoAccount.profile.nickname
         )
     }
 }
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class KakaoAccount(
-    @JsonProperty("profile")
-    val profile: Profile,
     @JsonProperty("email")
     val email: String
-)
-
-@JsonIgnoreProperties(ignoreUnknown = true)
-data class Profile(
-    @JsonProperty("nickname")
-    val nickname: String
 )

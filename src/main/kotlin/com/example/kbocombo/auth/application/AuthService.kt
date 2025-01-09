@@ -34,16 +34,14 @@ class AuthService(
 }
 
 data class OAuthMemberResponse(
-    val userId: Long,
-    val nickname: String,
+    val socialId: Long,
     val email: String,
     val socialProvider: String,
 ) {
     companion object {
         fun from(memberInfo: MemberInfo): OAuthMemberResponse {
             return OAuthMemberResponse(
-                userId = memberInfo.userId,
-                nickname = memberInfo.nickname,
+                socialId = memberInfo.socialId,
                 email = memberInfo.email,
                 socialProvider = memberInfo.socialProvider.name
             )
