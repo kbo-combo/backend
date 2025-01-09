@@ -63,6 +63,7 @@ class Player(
     @Enumerated(EnumType.STRING)
     @Column(name = "team", nullable = false)
     val team: Team,
+
     imageUrl: String?,
 ) {
 
@@ -73,6 +74,4 @@ class Player(
     @Column(name = "image_url", nullable = false)
     var imageUrl: String? = null
         protected set
-
-    fun isDifferentImageUrl(imageUrl: String?): Boolean = this.imageUrl != imageUrl
 }
