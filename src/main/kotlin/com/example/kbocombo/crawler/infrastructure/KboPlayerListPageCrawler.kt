@@ -12,9 +12,9 @@ class KboPlayerListPageCrawler(
     private val kboHttpClient: KboHttpClient,
     private val kboPlayerListPageParamGenerator: KboPlayerListPageParamGenerator,
     private val kboPlayerListPageParser: KboPlayerListPageParser
-) : PlayerCrawler {
+) {
 
-    override fun getPlayers(): List<NewPlayerData> {
+    fun getPlayers(): List<NewPlayerData> {
         return Team.values()
             .flatMap { team -> getPlayers(team) }
     }

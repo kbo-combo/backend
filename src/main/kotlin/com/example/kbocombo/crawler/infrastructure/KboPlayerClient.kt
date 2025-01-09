@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component
 @Component
 class KboPlayerClient(
     private val kboPlayerDetailPageParser: KboPlayerDetailPageParser,
-    private val playerCrawler: PlayerCrawler
+    private val playerCrawler: KboPlayerListPageCrawler
 ) : PlayerClient {
 
     override fun findAllPlayers(): List<Player> {
