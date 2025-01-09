@@ -10,6 +10,6 @@ interface PlayerRepository : Repository<Player, Long> {
 
     fun save(player: Player): Player
 
-    @Query("update player p set p.imageUrl = :imageUrl where p.playerId = :playerId")
+    @Query("update Player p set p.imageUrl = :imageUrl where p.id = :playerId")
     fun updateImage(player: Player, imageUrl: String?)
 }
