@@ -7,6 +7,13 @@ import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Component
 import org.springframework.util.LinkedMultiValueMap
 
+/**
+ * 해당 사이트의 프레임워크 특성상 이전 상태를 가지고 있어야 필터링이나 다음 페이지 이동등이 가능함
+ * 따라서 다음과 같이 진행
+ * 1. 최초 API 호출 (상태값 추가)
+ * 2. Team Filter 적용
+ * 3. 페이지 이동
+ */
 @Component
 class KboPlayerListPageCrawler(
     private val kboHttpClient: KboHttpClient,
