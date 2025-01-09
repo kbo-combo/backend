@@ -73,12 +73,8 @@ class Player(
         protected set
 
     fun updateImageIfChanged(imageUrl: String?) {
-        if (imageUrl == null) {
-            return
-        }
+        if (imageUrl.isNullOrBlank() || !playerImage.isDifferent(imageUrl)) return
 
-        if (playerImage.isDifferent(imageUrl)) {
-            playerImage = PlayerImage(imageUrl)
-        }
+        playerImage = PlayerImage(imageUrl)
     }
 }
