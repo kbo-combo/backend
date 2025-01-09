@@ -20,8 +20,6 @@ class KboPlayerListPageCrawlerTest @Autowired constructor(
 //            kboPlayerDetailPageParser.getPlayerProfile(it)
 //        }
 
-        kboPlayerDetailPageParser.getPlayerProfile(actual)
-
         val webIds = actual.map { it.webId }
 
         // 은퇴 or 트레이드 아마 올해는 없을거고 이름이 뒷페이지인 선수들로 테스트

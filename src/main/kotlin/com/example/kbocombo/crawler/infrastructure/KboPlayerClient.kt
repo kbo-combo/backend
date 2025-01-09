@@ -12,6 +12,6 @@ class KboPlayerClient(
 
     override fun findAllPlayers(): List<Player> {
         val players = playerCrawler.getPlayers()
-        return kboPlayerDetailPageParser.getPlayerProfile(players)
+        return players.mapNotNull(kboPlayerDetailPageParser::getPlayerProfile)
     }
 }

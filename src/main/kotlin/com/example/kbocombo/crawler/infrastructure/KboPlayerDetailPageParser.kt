@@ -22,15 +22,13 @@ class KboPlayerDetailPageParser {
 
     private val logger = LoggerFactory.getLogger(KboPlayerDetailPageParser::class.java)
 
-    fun getPlayerProfile(playerData: List<NewPlayerData>): List<Player> {
-        return playerData.mapNotNull {
-            runCatching { toPlayer(it) }
+    fun getPlayerProfile(playerData: NewPlayerData): Player? {
+        return runCatching { toPlayer(playerData) }
                 .onFailure { e ->
-                    logger.error("Failed to parse player with webId=${it.webId.value}", e)
+                    logger.error("Failed to parse player with ${playerData.webId}", e)
                 }
                 .getOrNull()
         }
-    }
 
     private fun toPlayer(playerData: NewPlayerData): Player? {
         val document = getDocument(playerData.webId)
@@ -112,7 +110,7 @@ class KboPlayerDetailPageParser {
         private val formatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일", Locale.KOREAN)
         private const val PREFIX = "cphContents_cphContents_cphContents_playerProfile_"
         private const val NAME_ID = "${PREFIX}lblName"
-        private const val IMAGE_KEY = "img#${PREFIX}\"imgProgile"
+        private const val IMAGE_KEY = "img#${PREFIX}imgProgile"
         private const val POSITION_ID = "${PREFIX}lblPosition"
         private const val HEIGHT_WITH_WEIGHT_ID = "${PREFIX}lblHeightWeight"
         private const val DRAFT_INFO_ID = "${PREFIX}lblDraft"
