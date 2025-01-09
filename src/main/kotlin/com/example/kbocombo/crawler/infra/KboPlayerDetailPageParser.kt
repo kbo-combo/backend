@@ -7,6 +7,7 @@ import com.example.kbocombo.player.Player
 import com.example.kbocombo.player.vo.HittingHandType
 import com.example.kbocombo.player.vo.PitchingHandType
 import com.example.kbocombo.player.vo.PlayerDetailPosition
+import com.example.kbocombo.player.vo.PlayerDraftInfo
 import com.example.kbocombo.player.vo.PlayerImage
 import com.example.kbocombo.player.vo.WebId
 import org.jsoup.Jsoup
@@ -24,11 +25,11 @@ class KboPlayerDetailPageParser {
 
     fun getPlayerProfile(playerData: WebPlayerInfo): Player? {
         return runCatching { toPlayer(playerData) }
-                .onFailure { e ->
-                    logger.error("Failed to parse player with ${playerData.webId}", e)
-                }
-                .getOrNull()
-        }
+            .onFailure { e ->
+                logger.error("Failed to parse player with ${playerData.webId}", e)
+            }
+            .getOrNull()
+    }
 
     private fun toPlayer(playerData: WebPlayerInfo): Player? {
         val document = getDocument(playerData.webId)
@@ -38,8 +39,7 @@ class KboPlayerDetailPageParser {
             weight = getWeight(document),
             hittingHandType = getHittingHandType(document),
             pitchingHandType = getPitchingHandType(document),
-            draftInfo = getDraftInfo(document),
-            draftYear = getDraftYear(document),
+            playerDraftInfo = PlayerDraftInfo(getDraftDetail(document), getDraftYear(document)),
             position = playerData.position,
             detailPosition = getPlayerDetailPosition(document),
             birthDate = getBirthDate(document),
@@ -60,7 +60,7 @@ class KboPlayerDetailPageParser {
         return document.getTextById(NAME_ID)
     }
 
-    private fun getDraftInfo(document: Document): String {
+    private fun getDraftDetail(document: Document): String {
         return document.getTextById(DRAFT_INFO_ID)
     }
 

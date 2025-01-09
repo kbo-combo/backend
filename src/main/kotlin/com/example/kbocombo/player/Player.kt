@@ -3,6 +3,7 @@ package com.example.kbocombo.player
 import com.example.kbocombo.player.vo.HittingHandType
 import com.example.kbocombo.player.vo.PitchingHandType
 import com.example.kbocombo.player.vo.PlayerDetailPosition
+import com.example.kbocombo.player.vo.PlayerDraftInfo
 import com.example.kbocombo.player.vo.PlayerImage
 import com.example.kbocombo.player.vo.PlayerPosition
 import com.example.kbocombo.player.vo.Team
@@ -34,12 +35,6 @@ class Player(
     @Column(name = "weight", nullable = false)
     val weight: Int,
 
-    @Column(name = "draft_info", nullable = false)
-    val draftInfo: String,
-
-    @Column(name = "draft_year", nullable = false)
-    val draftYear: Int,
-
     @Enumerated(EnumType.STRING)
     @Column(name = "hitting_hand_type", nullable = false)
     val hittingHandType: HittingHandType,
@@ -65,6 +60,9 @@ class Player(
     @Enumerated(EnumType.STRING)
     @Column(name = "team", nullable = false)
     val team: Team,
+
+    @Embedded
+    val playerDraftInfo: PlayerDraftInfo,
 
     @Embedded
     val playerImage: PlayerImage
