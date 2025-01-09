@@ -1,6 +1,5 @@
 package com.example.kbocombo.crawler.infrastructure
 
-import com.example.kbocombo.crawler.dto.NewPlayerData
 import com.example.kbocombo.crawler.utils.toHittingHand
 import com.example.kbocombo.crawler.utils.toPitchingHand
 import com.example.kbocombo.crawler.utils.toPlayerDetailPosition
@@ -22,7 +21,7 @@ class KboPlayerDetailPageParser {
 
     private val logger = LoggerFactory.getLogger(KboPlayerDetailPageParser::class.java)
 
-    fun getPlayerProfile(playerData: NewPlayerData): Player? {
+    fun getPlayerProfile(playerData: PlayerInfo): Player? {
         return runCatching { toPlayer(playerData) }
                 .onFailure { e ->
                     logger.error("Failed to parse player with ${playerData.webId}", e)
@@ -30,7 +29,7 @@ class KboPlayerDetailPageParser {
                 .getOrNull()
         }
 
-    private fun toPlayer(playerData: NewPlayerData): Player? {
+    private fun toPlayer(playerData: PlayerInfo): Player? {
         val document = getDocument(playerData.webId)
         return Player(
             name = getName(document),
