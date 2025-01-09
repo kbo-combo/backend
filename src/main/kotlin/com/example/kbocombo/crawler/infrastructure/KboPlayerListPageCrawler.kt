@@ -1,6 +1,5 @@
 package com.example.kbocombo.crawler.infrastructure
 
-import com.example.kbocombo.crawler.client.KboHttpClient
 import com.example.kbocombo.domain.player.vo.PlayerPosition
 import com.example.kbocombo.domain.player.vo.Team
 import com.example.kbocombo.domain.player.vo.WebId

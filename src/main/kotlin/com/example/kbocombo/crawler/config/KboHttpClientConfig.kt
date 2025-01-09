@@ -1,5 +1,6 @@
-package com.example.kbocombo.crawler.client
+package com.example.kbocombo.crawler.config
 
+import com.example.kbocombo.crawler.infrastructure.KboHttpClient
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpHeaders

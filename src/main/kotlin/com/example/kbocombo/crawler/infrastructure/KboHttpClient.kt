@@ -1,4 +1,4 @@
-package com.example.kbocombo.crawler.client
+package com.example.kbocombo.crawler.infrastructure
 
 import org.springframework.http.ResponseEntity
 import org.springframework.util.MultiValueMap
