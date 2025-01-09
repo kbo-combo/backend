@@ -1,7 +1,7 @@
 package com.example.kbocombo
 
-import com.example.kbocombo.crawler.infrastructure.KboPlayerDetailPageParser
-import com.example.kbocombo.crawler.infrastructure.KboPlayerListPageCrawler
+import com.example.kbocombo.crawler.infra.KboPlayerDetailPageParser
+import com.example.kbocombo.crawler.infra.KboPlayerListPageCrawler
 import com.example.kbocombo.domain.player.vo.WebId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest

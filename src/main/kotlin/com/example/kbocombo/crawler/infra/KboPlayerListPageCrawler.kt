@@ -1,4 +1,4 @@
-package com.example.kbocombo.crawler.infrastructure
+package com.example.kbocombo.crawler.infra
 
 import com.example.kbocombo.domain.player.vo.PlayerPosition
 import com.example.kbocombo.domain.player.vo.Team

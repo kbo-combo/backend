@@ -1,7 +1,7 @@
-package com.example.kbocombo.crawler.service
+package com.example.kbocombo.crawler.application
 
-import com.example.kbocombo.crawler.infrastructure.KboPlayerDetailPageParser
-import com.example.kbocombo.crawler.infrastructure.WebPlayerInfo
+import com.example.kbocombo.crawler.infra.KboPlayerDetailPageParser
+import com.example.kbocombo.crawler.infra.WebPlayerInfo
 import com.example.kbocombo.domain.player.vo.PlayerPosition.HITTER
 import com.example.kbocombo.domain.player.vo.Team.NC
 import com.example.kbocombo.domain.player.vo.WebId
