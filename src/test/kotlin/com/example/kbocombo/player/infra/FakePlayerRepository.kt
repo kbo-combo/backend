@@ -1,4 +1,4 @@
-package com.example.kbocombo.player.fake
+package com.example.kbocombo.player.infra
 
 import com.example.kbocombo.player.Player
 import java.util.concurrent.atomic.AtomicLong
@@ -20,7 +20,7 @@ class FakePlayerRepository : PlayerRepository {
         return newPlayer
     }
 
-    override fun findAllByRetiredNot(): List<Player> {
+    override fun findAllByIsRetiredFalse(): List<Player> {
         return db.filterNot { it.isRetired }
     }
 

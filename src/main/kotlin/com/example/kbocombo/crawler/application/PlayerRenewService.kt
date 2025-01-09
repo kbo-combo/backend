@@ -12,7 +12,7 @@ class PlayerRenewService(
 
     @Transactional
     fun renew(recentPlayers: List<Player>) {
-        val savedPlayers = playerRepository.findAllByRetiredNot()
+        val savedPlayers = playerRepository.findAllByIsRetiredFalse()
             .associateBy { it.webId }
 
         for (recentPlayer in recentPlayers) {

@@ -7,5 +7,5 @@ interface PlayerRepository : Repository<Player, Long> {
 
     fun save(player: Player) : Player
 
-    fun findAllByRetiredNot() : List<Player>
+    fun findAllByIsRetiredFalse() : List<Player>
 }
