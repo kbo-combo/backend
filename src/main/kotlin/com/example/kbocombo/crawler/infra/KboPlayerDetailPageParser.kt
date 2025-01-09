@@ -31,6 +31,11 @@ class KboPlayerDetailPageParser {
             .getOrNull()
     }
 
+
+    /**
+     * 팀은 전체 페이지와 상세 페이지에 다르게 명시될 수 있음
+     * 상무로 save하는 경우 방지하기 위해 전체 페이지로 설정
+     */
     private fun toPlayer(playerData: WebPlayerInfo): Player? {
         val document = getDocument(playerData.webId)
         return Player(
