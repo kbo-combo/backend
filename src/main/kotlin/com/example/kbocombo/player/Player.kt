@@ -65,10 +65,20 @@ class Player(
     val playerDraftInfo: PlayerDraftInfo,
 
     @Embedded
-    val playerImage: PlayerImage
+    var playerImage: PlayerImage
 ) {
 
     @Column(name = "is_retired", nullable = false)
     var isRetired: Boolean = false
         protected set
+
+    fun updateImageIfChanged(imageUrl: String?) {
+        if (imageUrl == null) {
+            return
+        }
+
+        if (playerImage.isDifferent(imageUrl)) {
+            playerImage = PlayerImage(imageUrl)
+        }
+    }
 }

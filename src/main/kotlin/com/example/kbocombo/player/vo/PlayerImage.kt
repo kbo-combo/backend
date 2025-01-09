@@ -6,5 +6,8 @@ import jakarta.persistence.Embeddable
 @Embeddable
 class PlayerImage(
     @Column(name = "image_url")
-    private var imageUrl: String?,
-)
+    val imageUrl: String?,
+) {
+
+    fun isDifferent(imageUrl: String): Boolean = this.imageUrl != imageUrl
+}
