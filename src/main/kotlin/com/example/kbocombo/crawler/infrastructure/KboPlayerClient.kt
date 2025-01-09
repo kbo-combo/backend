@@ -5,7 +5,7 @@ import com.example.kbocombo.domain.player.Player
 import org.springframework.stereotype.Component
 
 @Component
-class KboPlayerCrawler(
+class KboPlayerClient(
     private val kboPlayerDetailPageParser: KboPlayerDetailPageParser,
     private val playerCrawler: PlayerCrawler
 ) : PlayerClient {
