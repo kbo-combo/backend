@@ -1,7 +1,7 @@
 package com.example.kbocombo.crawler.service
 
 import com.example.kbocombo.crawler.infrastructure.KboPlayerDetailPageParser
-import com.example.kbocombo.crawler.infrastructure.PlayerInfo
+import com.example.kbocombo.crawler.infrastructure.WebPlayerInfo
 import com.example.kbocombo.domain.player.vo.PlayerPosition.HITTER
 import com.example.kbocombo.domain.player.vo.Team.NC
 import com.example.kbocombo.domain.player.vo.WebId
@@ -25,7 +25,7 @@ class KboPlayerDetailPageParserTest {
         // given
 
         // when
-        val actual = kboPlayerDetailPageParser.getPlayerProfile(PlayerInfo(WebId(51907), HITTER, NC))
+        val actual = kboPlayerDetailPageParser.getPlayerProfile(WebPlayerInfo(WebId(51907), HITTER, NC))
 
         // then
     }

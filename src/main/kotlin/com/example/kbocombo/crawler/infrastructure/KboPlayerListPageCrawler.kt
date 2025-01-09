@@ -1,8 +1,9 @@
 package com.example.kbocombo.crawler.infrastructure
 
 import com.example.kbocombo.crawler.client.KboHttpClient
-import com.example.kbocombo.crawler.dto.NewPlayerData
+import com.example.kbocombo.domain.player.vo.PlayerPosition
 import com.example.kbocombo.domain.player.vo.Team
+import com.example.kbocombo.domain.player.vo.WebId
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Component
 import org.springframework.util.LinkedMultiValueMap
@@ -14,12 +15,12 @@ class KboPlayerListPageCrawler(
     private val kboPlayerListPageParser: KboPlayerListPageParser
 ) {
 
-    fun getPlayers(): List<NewPlayerData> {
+    fun getPlayers(): List<WebPlayerInfo> {
         return Team.values()
             .flatMap { team -> getPlayers(team) }
     }
 
-    private fun getPlayers(team: Team): List<NewPlayerData> {
+    private fun getPlayers(team: Team): List<WebPlayerInfo> {
         val response = getInitialResponse(team)
 
         return (1 until 15)
@@ -40,10 +41,16 @@ class KboPlayerListPageCrawler(
         response: ResponseEntity<String>,
         page: Int,
         team: Team
-    ): List<NewPlayerData> {
+    ): List<WebPlayerInfo> {
         val pageParam = kboPlayerListPageParamGenerator.generatePageParam(response, page, team)
         val playerData = kboHttpClient.getPlayers(pageParam)
         return kboPlayerListPageParser.parse(playerData)
-            .map { NewPlayerData(it.first, it.second, team) }
+            .map { WebPlayerInfo(it.first, it.second, team) }
     }
 }
+
+data class WebPlayerInfo(
+    val webId: WebId,
+    val position: PlayerPosition,
+    val team: Team
+)

@@ -21,7 +21,7 @@ class KboPlayerDetailPageParser {
 
     private val logger = LoggerFactory.getLogger(KboPlayerDetailPageParser::class.java)
 
-    fun getPlayerProfile(playerData: PlayerInfo): Player? {
+    fun getPlayerProfile(playerData: WebPlayerInfo): Player? {
         return runCatching { toPlayer(playerData) }
                 .onFailure { e ->
                     logger.error("Failed to parse player with ${playerData.webId}", e)
@@ -29,7 +29,7 @@ class KboPlayerDetailPageParser {
                 .getOrNull()
         }
 
-    private fun toPlayer(playerData: PlayerInfo): Player? {
+    private fun toPlayer(playerData: WebPlayerInfo): Player? {
         val document = getDocument(playerData.webId)
         return Player(
             name = getName(document),
