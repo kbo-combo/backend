@@ -2,9 +2,11 @@ package com.example.kbocombo.auth.infra
 
 import com.example.kbocombo.auth.domain.MemberInfo
 import com.example.kbocombo.member.domain.vo.SocialProvider
+import org.springframework.stereotype.Component
 
+@Component
 class OAuthClients(
-    oAuthClients: Set<OAuthClient>
+    private val oAuthClients: Set<OAuthClient>
 ) {
     private val clients: Map<SocialProvider, OAuthClient> = oAuthClients.associateBy { it.getSocialProvider() }
 
