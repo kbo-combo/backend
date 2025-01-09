@@ -22,7 +22,7 @@ class PlayerRenewService(
                 continue
             }
 
-            savedPlayer.updateImageIfChanged(recentPlayer.playerImage.imageUrl)
+            savedPlayer.updateImageIfNeed(recentPlayer.playerImage)
         }
     }
 }

@@ -72,9 +72,9 @@ class Player(
     var isRetired: Boolean = false
         protected set
 
-    fun updateImageIfChanged(imageUrl: String?) {
-        if (imageUrl.isNullOrBlank() || !playerImage.isDifferent(imageUrl)) return
-
-        playerImage = PlayerImage(imageUrl)
+    fun updateImageIfNeed(newImage: PlayerImage) {
+        if (playerImage.needsImageUpdate(newImage.imageUrl)) {
+            playerImage = newImage
+        }
     }
 }

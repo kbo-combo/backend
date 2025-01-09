@@ -9,5 +9,7 @@ class PlayerImage(
     val imageUrl: String?,
 ) {
 
-    fun isDifferent(imageUrl: String): Boolean = this.imageUrl != imageUrl
+    fun needsImageUpdate(newImageUrl: String?): Boolean {
+        return !newImageUrl.isNullOrBlank() && this.imageUrl != newImageUrl
+    }
 }
