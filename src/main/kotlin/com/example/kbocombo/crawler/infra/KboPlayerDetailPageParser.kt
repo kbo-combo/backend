@@ -3,11 +3,11 @@ package com.example.kbocombo.crawler.infra
 import com.example.kbocombo.crawler.utils.toHittingHand
 import com.example.kbocombo.crawler.utils.toPitchingHand
 import com.example.kbocombo.crawler.utils.toPlayerDetailPosition
-import com.example.kbocombo.domain.player.Player
-import com.example.kbocombo.domain.player.vo.HittingHandType
-import com.example.kbocombo.domain.player.vo.PitchingHandType
-import com.example.kbocombo.domain.player.vo.PlayerDetailPosition
-import com.example.kbocombo.domain.player.vo.WebId
+import com.example.kbocombo.player.Player
+import com.example.kbocombo.player.vo.HittingHandType
+import com.example.kbocombo.player.vo.PitchingHandType
+import com.example.kbocombo.player.vo.PlayerDetailPosition
+import com.example.kbocombo.player.vo.WebId
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.slf4j.LoggerFactory

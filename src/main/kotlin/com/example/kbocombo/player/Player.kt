@@ -1,11 +1,11 @@
-package com.example.kbocombo.domain.player
+package com.example.kbocombo.player
 
-import com.example.kbocombo.domain.player.vo.HittingHandType
-import com.example.kbocombo.domain.player.vo.PitchingHandType
-import com.example.kbocombo.domain.player.vo.PlayerDetailPosition
-import com.example.kbocombo.domain.player.vo.PlayerPosition
-import com.example.kbocombo.domain.player.vo.Team
-import com.example.kbocombo.domain.player.vo.WebId
+import com.example.kbocombo.player.vo.HittingHandType
+import com.example.kbocombo.player.vo.PitchingHandType
+import com.example.kbocombo.player.vo.PlayerDetailPosition
+import com.example.kbocombo.player.vo.PlayerPosition
+import com.example.kbocombo.player.vo.Team
+import com.example.kbocombo.player.vo.WebId
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType

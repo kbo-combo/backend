@@ -1,9 +1,9 @@
 package com.example.kbocombo.crawler.infra
 
-import com.example.kbocombo.domain.player.vo.PlayerDetailPosition
-import com.example.kbocombo.domain.player.vo.PlayerPosition
-import com.example.kbocombo.domain.player.vo.Team
-import com.example.kbocombo.domain.player.vo.WebId
+import com.example.kbocombo.player.vo.PlayerDetailPosition
+import com.example.kbocombo.player.vo.PlayerPosition
+import com.example.kbocombo.player.vo.Team
+import com.example.kbocombo.player.vo.WebId
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 

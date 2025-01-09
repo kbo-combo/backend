@@ -1,6 +1,6 @@
 package com.example.kbocombo.crawler.application
 
-import com.example.kbocombo.domain.player.Player
+import com.example.kbocombo.player.Player
 
 interface PlayerClient {
 

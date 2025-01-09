@@ -1,4 +1,4 @@
-package com.example.kbocombo.domain.player.vo
+package com.example.kbocombo.player.vo
 
 /**
  * KBO 공식 사이트에서 쓰는 선수 식별자

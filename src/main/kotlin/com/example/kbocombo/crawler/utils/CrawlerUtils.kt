@@ -1,9 +1,9 @@
 package com.example.kbocombo.crawler.utils
 
-import com.example.kbocombo.domain.player.vo.HittingHandType
-import com.example.kbocombo.domain.player.vo.PitchingHandType
-import com.example.kbocombo.domain.player.vo.PlayerDetailPosition
-import com.example.kbocombo.domain.player.vo.Team
+import com.example.kbocombo.player.vo.HittingHandType
+import com.example.kbocombo.player.vo.PitchingHandType
+import com.example.kbocombo.player.vo.PlayerDetailPosition
+import com.example.kbocombo.player.vo.Team
 
 fun toTeamFilterCode(team: Team): String {
     return when (team) {

@@ -1,7 +1,7 @@
 package com.example.kbocombo.crawler.infra
 
-import com.example.kbocombo.domain.player.vo.PlayerPosition
-import com.example.kbocombo.domain.player.vo.WebId
+import com.example.kbocombo.player.vo.PlayerPosition
+import com.example.kbocombo.player.vo.WebId
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 import org.springframework.http.ResponseEntity

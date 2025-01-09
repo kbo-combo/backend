@@ -1,6 +1,6 @@
 package com.example.kbocombo.crawler.infra
 
-import com.example.kbocombo.domain.player.vo.WebId
+import com.example.kbocombo.player.vo.WebId
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.collections.shouldHaveSize

@@ -1,7 +1,7 @@
 package com.example.kbocombo.crawler.infra
 
 import com.example.kbocombo.crawler.utils.toTeamFilterCode
-import com.example.kbocombo.domain.player.vo.Team
+import com.example.kbocombo.player.vo.Team
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.springframework.http.ResponseEntity

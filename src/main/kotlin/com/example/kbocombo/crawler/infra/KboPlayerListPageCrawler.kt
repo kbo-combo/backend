@@ -1,8 +1,8 @@
 package com.example.kbocombo.crawler.infra
 
-import com.example.kbocombo.domain.player.vo.PlayerPosition
-import com.example.kbocombo.domain.player.vo.Team
-import com.example.kbocombo.domain.player.vo.WebId
+import com.example.kbocombo.player.vo.PlayerPosition
+import com.example.kbocombo.player.vo.Team
+import com.example.kbocombo.player.vo.WebId
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Component
 import org.springframework.util.LinkedMultiValueMap
