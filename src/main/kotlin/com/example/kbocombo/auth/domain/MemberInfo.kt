@@ -7,5 +7,4 @@ data class MemberInfo(
     val nickname: String,
     val email: String,
     val socialProvider: SocialProvider,
-) {
-}
+)

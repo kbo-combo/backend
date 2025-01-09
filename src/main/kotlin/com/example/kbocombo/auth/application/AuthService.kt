@@ -23,11 +23,30 @@ class AuthService(
         socialProvider: SocialProvider,
         code: String,
         redirectUri: String
-    ): MemberInfo {
-        return oAuthClients.getMemberInfo(
+    ): OAuthMemberResponse {
+        val memberInfo = oAuthClients.getMemberInfo(
             socialProvider = socialProvider,
             code = code,
             redirectUri = redirectUri
         )
+        return OAuthMemberResponse.from(memberInfo)
+    }
+}
+
+data class OAuthMemberResponse(
+    val userId: Long,
+    val nickname: String,
+    val email: String,
+    val socialProvider: String,
+) {
+    companion object {
+        fun from(memberInfo: MemberInfo): OAuthMemberResponse {
+            return OAuthMemberResponse(
+                userId = memberInfo.userId,
+                nickname = memberInfo.nickname,
+                email = memberInfo.email,
+                socialProvider = memberInfo.socialProvider.name
+            )
+        }
     }
 }

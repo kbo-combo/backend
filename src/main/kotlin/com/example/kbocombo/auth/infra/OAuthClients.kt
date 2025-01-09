@@ -16,7 +16,6 @@ class OAuthClients(
     fun getMemberInfo(socialProvider: SocialProvider, code: String, redirectUri: String): MemberInfo {
         val client = getClient(socialProvider)
         val accessToken = client.requestToken(code, redirectUri)
-        println("accessToken = ${accessToken}")
         return client.findUserInfo(accessToken = accessToken)
     }
 

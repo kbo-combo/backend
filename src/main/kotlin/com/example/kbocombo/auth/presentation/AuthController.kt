@@ -1,6 +1,7 @@
 package com.example.kbocombo.auth.presentation
 
 import com.example.kbocombo.auth.application.AuthService
+import com.example.kbocombo.auth.application.OAuthMemberResponse
 import com.example.kbocombo.member.domain.vo.SocialProvider
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.ResponseEntity
@@ -34,13 +35,13 @@ class AuthController(
     fun login(
         @PathVariable socialProvider: String,
         @RequestParam code: String,
-    ): ResponseEntity<Unit> {
-        val memberInfo = authService.getMemberInfo(
+        @RequestParam redirectUri: String,
+    ): ResponseEntity<OAuthMemberResponse> {
+        val result = authService.getMemberInfo(
             socialProvider = SocialProvider.valueOf(socialProvider.uppercase(Locale.getDefault())),
             code = code,
-            redirectUri = "http://localhost:8080/oauth/kakao/login"
+            redirectUri = redirectUri
         )
-        println(memberInfo.email + " " + memberInfo.nickname + " " + memberInfo.userId)
-        return ResponseEntity.ok().build()
+        return ResponseEntity.ok().body(result)
     }
 }
