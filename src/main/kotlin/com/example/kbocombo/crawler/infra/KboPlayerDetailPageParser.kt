@@ -101,9 +101,11 @@ class KboPlayerDetailPageParser {
     }
 
     private fun getPlayerImageUrl(document: Document): PlayerImage {
-        return PlayerImage(document.select(IMAGE_KEY)
+        val imageUrl = document.select(IMAGE_KEY)
             .attr("src")
-            .substringAfter("//"))
+            .substringAfter("//")
+            .takeIf { it.isNotBlank() }
+        return PlayerImage(imageUrl)
     }
 
 
