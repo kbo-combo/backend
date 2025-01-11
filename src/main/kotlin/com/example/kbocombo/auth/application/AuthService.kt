@@ -12,11 +12,12 @@ class AuthService(
     private val oAuthClients: OAuthClients
 ) {
 
-    fun getRedirectUri(socialProvider: SocialProvider, redirectUri: String): String {
-        return oAuthClients.getRedirectUri(
+    fun getRedirectUri(socialProvider: SocialProvider, redirectUri: String): OAuthRedirectUriResponse {
+        val authorizedRedirectUri = oAuthClients.getRedirectUri(
             socialProvider = socialProvider,
             redirectUri = redirectUri
         )
+        return OAuthRedirectUriResponse(redirectUri = authorizedRedirectUri)
     }
 
     fun getMemberInfo(
@@ -32,6 +33,10 @@ class AuthService(
         return OAuthMemberResponse.from(memberInfo)
     }
 }
+
+data class OAuthRedirectUriResponse(
+    val redirectUri: String
+)
 
 data class OAuthMemberResponse(
     val socialId: Long,
