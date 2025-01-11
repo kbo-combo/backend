@@ -1,5 +1,6 @@
 package com.example.kbocombo.crawler.infra
 
+import com.example.kbocombo.common.logError
 import com.example.kbocombo.crawler.utils.toHittingHand
 import com.example.kbocombo.crawler.utils.toPitchingHand
 import com.example.kbocombo.crawler.utils.toPlayerDetailPosition
@@ -12,7 +13,6 @@ import com.example.kbocombo.player.vo.PlayerImage
 import com.example.kbocombo.player.vo.WebId
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -21,13 +21,10 @@ import java.util.Locale
 @Component
 class KboPlayerDetailPageParser {
 
-    private val logger = LoggerFactory.getLogger(KboPlayerDetailPageParser::class.java)
 
     fun getPlayerProfile(playerData: WebPlayerInfo): Player? {
         return runCatching { toPlayer(playerData) }
-            .onFailure { e ->
-                logger.error("Failed to parse player with ${playerData.webId}", e)
-            }
+            .onFailure { e -> logError("Failed to parse player with ${playerData.webId}", e) }
             .getOrNull()
     }
 
