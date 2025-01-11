@@ -4,38 +4,18 @@ import com.example.kbocombo.auth.domain.MemberInfo
 import com.example.kbocombo.member.domain.vo.SocialProvider
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
-import org.springframework.http.HttpEntity
-import org.springframework.http.HttpHeaders
-import org.springframework.http.HttpMethod
 import org.springframework.stereotype.Component
-import org.springframework.web.client.RestTemplate
 
 @Component
-class KakaoMemberInfoClient {
+class KakaoMemberInfoClient(
+    private val kakaoAuthorizedHttpClient: KakaoAuthorizedHttpClient
+) {
 
     fun getMemberInfo(accessToken: String): MemberInfo {
-        val restTemplate = RestTemplate()
-        val headers = HttpHeaders().apply {
-            set("Authorization", "Bearer $accessToken")
-        }
-
-        val requestEntity = HttpEntity<Void>(headers)
-
-        val responseEntity = restTemplate.exchange(
-            PROFILE_REQUEST_URL,
-            HttpMethod.GET,
-            requestEntity,
-            KakaoProfileResponse::class.java
-        )
-
-        val kakaoProfileResponse = responseEntity.body
-            ?: throw IllegalStateException("카카오 유저 정보 가져오기를 실패했습니다.")
+        val token = "Bearer $accessToken"
+        val kakaoProfileResponse = kakaoAuthorizedHttpClient.getMemberInfo(authorization = token)
 
         return kakaoProfileResponse.toMemberInfo()
-    }
-
-    companion object {
-        private const val PROFILE_REQUEST_URL = "https://kapi.kakao.com/v2/user/me"
     }
 }
 

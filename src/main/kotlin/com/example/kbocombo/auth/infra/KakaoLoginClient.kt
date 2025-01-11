@@ -4,9 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.service.annotation.HttpExchange
-import org.springframework.web.service.annotation.PostExchange
 import org.springframework.web.util.UriComponentsBuilder
 
 @Component
@@ -40,24 +37,6 @@ class KakaoLoginClient(
         private const val GRANT_TYPE: String = "authorization_code"
         private const val RESPONSE_TYPE: String = "code"
     }
-}
-
-@HttpExchange
-interface KakaoHttpClient {
-
-    @PostExchange(
-        url = "/oauth/token",
-        headers = [
-            "Content-Type=application/x-www-form-urlencoded",
-            "Accept-Charset=UTF-8"
-        ]
-    )
-    fun getAccessToken(
-        @RequestParam("grant_type") grantType: String,
-        @RequestParam("client_id") clientId: String,
-        @RequestParam("redirect_uri") redirectUri: String,
-        @RequestParam("code") authCode: String
-    ): KakaoTokenResponse
 }
 
 @JsonIgnoreProperties(ignoreUnknown = true)
