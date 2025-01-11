@@ -13,7 +13,7 @@ class OAuthHttpConfig {
     @Bean
     fun kakaoHttpClient(): KakaoHttpClient {
         val client = RestClient.builder()
-            .baseUrl("https://www.koreabaseball.com")
+            .baseUrl("https://kauth.kakao.com")
             .build()
         val adapter = RestClientAdapter.create(client)
         val factory = HttpServiceProxyFactory.builderFor(adapter)
