@@ -1,12 +1,15 @@
-package com.example.kbocombo.domain.player
+package com.example.kbocombo.player
 
-import com.example.kbocombo.domain.player.vo.HittingHandType
-import com.example.kbocombo.domain.player.vo.PitchingHandType
-import com.example.kbocombo.domain.player.vo.PlayerDetailPosition
-import com.example.kbocombo.domain.player.vo.PlayerPosition
-import com.example.kbocombo.domain.player.vo.Team
-import com.example.kbocombo.domain.player.vo.WebId
+import com.example.kbocombo.player.vo.HittingHandType
+import com.example.kbocombo.player.vo.PitchingHandType
+import com.example.kbocombo.player.vo.PlayerDetailPosition
+import com.example.kbocombo.player.vo.PlayerDraftInfo
+import com.example.kbocombo.player.vo.PlayerImage
+import com.example.kbocombo.player.vo.PlayerPosition
+import com.example.kbocombo.player.vo.Team
+import com.example.kbocombo.player.vo.WebId
 import jakarta.persistence.Column
+import jakarta.persistence.Embedded
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
@@ -31,12 +34,6 @@ class Player(
 
     @Column(name = "weight", nullable = false)
     val weight: Int,
-
-    @Column(name = "draft_info", nullable = false)
-    val draftInfo: String,
-
-    @Column(name = "draft_year", nullable = false)
-    val draftYear: Int,
 
     @Enumerated(EnumType.STRING)
     @Column(name = "hitting_hand_type", nullable = false)
@@ -64,6 +61,20 @@ class Player(
     @Column(name = "team", nullable = false)
     val team: Team,
 
+    @Embedded
+    val playerDraftInfo: PlayerDraftInfo,
+
+    @Embedded
+    var playerImage: PlayerImage
+) {
+
     @Column(name = "is_retired", nullable = false)
-    var isRetired: Boolean = false,
-)
+    var isRetired: Boolean = false
+        protected set
+
+    fun updateImageIfNeed(newImage: PlayerImage) {
+        if (playerImage.needsImageUpdate(newImage.imageUrl)) {
+            playerImage = newImage
+        }
+    }
+}
