@@ -4,14 +4,16 @@ import com.example.kbocombo.auth.application.AuthService
 import com.example.kbocombo.auth.application.OAuthMemberResponse
 import com.example.kbocombo.auth.application.OAuthRedirectUriResponse
 import com.example.kbocombo.member.domain.vo.SocialProvider
+import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
-import java.util.Locale
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import java.util.Locale
+
 
 @RestController
 @CrossOrigin(value = ["*"])
@@ -36,12 +38,29 @@ class AuthController(
         @PathVariable socialProvider: String,
         @RequestParam code: String,
         @RequestParam redirectUri: String,
+        request: HttpServletRequest
     ): ResponseEntity<OAuthMemberResponse> {
-        val result = authService.getMemberInfo(
+        val memberResponse = authService.login(
             socialProvider = SocialProvider.valueOf(socialProvider.uppercase(Locale.getDefault())),
             code = code,
             redirectUri = redirectUri
         )
-        return ResponseEntity.ok().body(result)
+
+        setMemberSession(request, memberResponse)
+        return ResponseEntity.ok().body(memberResponse)
+    }
+
+    private fun setMemberSession(
+        request: HttpServletRequest,
+        memberResponse: OAuthMemberResponse
+    ) {
+        val session = request.session
+        session.setAttribute(SESSION_KEY, memberResponse.email)
+        session.maxInactiveInterval = EXPIRED_TIME
+    }
+
+    companion object {
+        private const val SESSION_KEY = "MEMBER_SESSION_KEY"
+        private const val EXPIRED_TIME = 21600
     }
 }
