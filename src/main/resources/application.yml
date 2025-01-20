@@ -1,16 +1,10 @@
 spring:
   profiles:
     active: local
-  datasource:
-    url: jdbc:mysql://localhost:13306/combo
-    username: user
-    password: password
-    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
-    database-platform: org.hibernate.dialect.MySQL8Dialect
     properties:
       hibernate:
         format_sql: true
     show-sql: true
     hibernate:
-      ddl-auto: none
+      ddl-auto: create
