@@ -1,8 +1,8 @@
 package com.example.kbocombo.player.application
 
 import com.example.kbocombo.player.infra.HitterQueryRepository
-import com.example.kbocombo.player.presentation.request.HitterComboQueryRequest
-import com.example.kbocombo.player.presentation.response.HitterComboResponse
+import com.example.kbocombo.player.presentation.request.HitterTeamRequest
+import com.example.kbocombo.player.presentation.response.HitterTeamResponse
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -13,8 +13,8 @@ class HitterQueryService(
     private val hitterQueryRepository: HitterQueryRepository
 ) {
 
-    fun findAllHittersByTeam(request: HitterComboQueryRequest): List<HitterComboResponse> {
+    fun findAllHittersByTeam(request: HitterTeamRequest): List<HitterTeamResponse> {
         val players = hitterQueryRepository.findAllHitterByTeam(request)
-        return HitterComboResponse.toList(players)
+        return HitterTeamResponse.toList(players)
     }
 }

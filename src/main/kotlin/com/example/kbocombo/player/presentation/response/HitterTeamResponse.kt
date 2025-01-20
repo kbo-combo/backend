@@ -5,7 +5,7 @@ import com.example.kbocombo.player.vo.HittingHandType
 import com.example.kbocombo.player.vo.PlayerDetailPosition
 import com.example.kbocombo.player.vo.Team
 
-data class HitterComboResponse(
+data class HitterTeamResponse(
     val playerId: Long,
     val name: String,
     val team: Team,
@@ -16,9 +16,9 @@ data class HitterComboResponse(
 
     companion object {
 
-        fun toList(players: List<Player>): List<HitterComboResponse> {
+        fun toList(players: List<Player>): List<HitterTeamResponse> {
             return players.map {
-                HitterComboResponse(
+                HitterTeamResponse(
                     playerId = it.id,
                     name = it.name,
                     team = it.team,
