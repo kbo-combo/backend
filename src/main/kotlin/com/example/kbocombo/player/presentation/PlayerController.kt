@@ -14,7 +14,7 @@ class PlayerController(
 ) {
 
     @GetMapping
-    fun findAllHittersByParam(request: HitterComboQueryRequest): List<HitterComboResponse> {
-        return playerQueryService.findAllByParam(request)
+    fun findAllHittersByTeam(request: HitterComboQueryRequest): List<HitterComboResponse> {
+        return playerQueryService.findAllHittersByTeam(request)
     }
 }

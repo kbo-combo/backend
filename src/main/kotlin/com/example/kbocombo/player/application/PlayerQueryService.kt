@@ -13,8 +13,8 @@ class PlayerQueryService(
     private val playerQueryRepository: PlayerQueryRepository
 ) {
 
-    fun findAllByParam(request: HitterComboQueryRequest): List<HitterComboResponse> {
-        val players = playerQueryRepository.findAllHitterByParam(request)
+    fun findAllHittersByTeam(request: HitterComboQueryRequest): List<HitterComboResponse> {
+        val players = playerQueryRepository.findAllHitterByTeam(request)
         return HitterComboResponse.toList(players)
     }
 }

@@ -12,7 +12,7 @@ class PlayerQueryRepository(
     private val queryFactory: JPAQueryFactory
 ) {
 
-    fun findAllHitterByParam(request: HitterComboQueryRequest): List<Player> {
+    fun findAllHitterByTeam(request: HitterComboQueryRequest): List<Player> {
         return queryFactory
             .selectFrom(player)
             .where(
