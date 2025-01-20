@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    active: local
   datasource:
     url: jdbc:mysql://localhost:13306/combo
     username: user
