@@ -24,7 +24,6 @@ class AuthController(
     fun getAuthRedirectUri(
         @PathVariable socialProvider: String,
         @RequestParam redirectUri: String,
-        response: HttpServletResponse
     ): ResponseEntity<OAuthRedirectUriResponse> {
         val oAuthRedirectUriResponse = authService.getRedirectUri(
             socialProvider = SocialProvider.valueOf(socialProvider.uppercase(Locale.getDefault())),
