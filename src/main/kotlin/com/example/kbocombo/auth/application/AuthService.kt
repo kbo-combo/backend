@@ -2,12 +2,18 @@ package com.example.kbocombo.auth.application
 
 import com.example.kbocombo.auth.domain.MemberInfo
 import com.example.kbocombo.auth.infra.OAuthClients
+import com.example.kbocombo.member.domain.Member
 import com.example.kbocombo.member.domain.vo.SocialProvider
+import com.example.kbocombo.member.infra.MemberRepository
+import com.example.kbocombo.utils.UserRandomNameGenerator
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class AuthService(
-    private val oAuthClients: OAuthClients
+    private val oAuthClients: OAuthClients,
+    private val userRandomNameGenerator: UserRandomNameGenerator,
+    private val memberRepository: MemberRepository
 ) {
 
     fun getRedirectUri(socialProvider: SocialProvider, redirectUri: String): OAuthRedirectUriResponse {
@@ -18,7 +24,8 @@ class AuthService(
         return OAuthRedirectUriResponse(redirectUri = authorizedRedirectUri)
     }
 
-    fun getMemberInfo(
+    @Transactional
+    fun login(
         socialProvider: SocialProvider,
         code: String,
         redirectUri: String
@@ -28,7 +35,25 @@ class AuthService(
             code = code,
             redirectUri = redirectUri
         )
-        return OAuthMemberResponse.from(memberInfo)
+
+        val member = findMemberOrSignup(socialProvider, memberInfo)
+        return OAuthMemberResponse.from(member)
+    }
+
+    private fun findMemberOrSignup(
+        socialProvider: SocialProvider,
+        memberInfo: MemberInfo
+    ): Member {
+        val email = memberInfo.email
+
+        return memberRepository.findByEmail(email) ?: memberRepository.save(
+            Member(
+                email = email,
+                nickname = userRandomNameGenerator.generate(),
+                socialProvider = socialProvider,
+                socialId = memberInfo.socialId.toString()
+            )
+        )
     }
 }
 
@@ -37,16 +62,20 @@ data class OAuthRedirectUriResponse(
 )
 
 data class OAuthMemberResponse(
-    val socialId: Long,
+    val id: Long,
     val email: String,
-    val socialProvider: String,
+    val nickname: String,
+    val socialId: String?,
+    val socialProvider: String?
 ) {
     companion object {
-        fun from(memberInfo: MemberInfo): OAuthMemberResponse {
+        fun from(member: Member): OAuthMemberResponse {
             return OAuthMemberResponse(
-                socialId = memberInfo.socialId,
-                email = memberInfo.email,
-                socialProvider = memberInfo.socialProvider.name
+                id = member.id,
+                email = member.email,
+                nickname = member.nickname,
+                socialId = member.socialId,
+                socialProvider = member.socialProvider?.name
             )
         }
     }
