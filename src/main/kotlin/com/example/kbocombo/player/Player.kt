@@ -1,5 +1,6 @@
 package com.example.kbocombo.player
 
+import com.example.kbocombo.common.BaseEntity
 import com.example.kbocombo.player.vo.HittingHandType
 import com.example.kbocombo.player.vo.PitchingHandType
 import com.example.kbocombo.player.vo.PlayerDetailPosition
@@ -66,7 +67,7 @@ class Player(
 
     @Embedded
     var playerImage: PlayerImage
-) {
+) : BaseEntity() {
 
     @Column(name = "is_retired", nullable = false)
     var isRetired: Boolean = false

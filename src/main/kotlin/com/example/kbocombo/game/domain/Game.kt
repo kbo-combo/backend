@@ -1,5 +1,6 @@
 package com.example.kbocombo.game.domain
 
+import com.example.kbocombo.common.BaseEntity
 import com.example.kbocombo.game.domain.vo.GameType
 import com.example.kbocombo.player.vo.Team
 import jakarta.persistence.Column
@@ -31,4 +32,4 @@ class Game(
     @Enumerated(EnumType.STRING)
     @Column(name = "game_type", nullable = false)
     val gameType: GameType,
-)
+) : BaseEntity()

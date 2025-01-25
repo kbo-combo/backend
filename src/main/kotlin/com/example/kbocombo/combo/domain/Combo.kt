@@ -1,6 +1,7 @@
 package com.example.kbocombo.combo.domain
 
 import com.example.kbocombo.combo.domain.vo.ComboStatus
+import com.example.kbocombo.common.BaseEntity
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
@@ -27,4 +28,4 @@ class Combo(
     @Enumerated(EnumType.STRING)
     @Column(name = "combo_status", nullable = false)
     var comboStatus: ComboStatus = ComboStatus.PENDING,
-)
+) : BaseEntity()
