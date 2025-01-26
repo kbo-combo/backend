@@ -1,5 +1,6 @@
 package com.example.kbocombo.member.domain
 
+import com.example.kbocombo.common.BaseEntity
 import com.example.kbocombo.member.domain.vo.SocialProvider
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -29,4 +30,4 @@ class Member(
 
     @Column(name = "social_id")
     val socialId: String?
-)
+) : BaseEntity()
