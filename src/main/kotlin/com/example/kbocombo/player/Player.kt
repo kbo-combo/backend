@@ -16,11 +16,9 @@ import jakarta.persistence.Enumerated
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
-import jakarta.persistence.Table
 import java.time.LocalDate
 
-@Table(name = "PLAYER")
-@Entity
+@Entity(name = "PLAYER")
 class Player(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

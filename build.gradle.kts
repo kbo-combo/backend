@@ -4,10 +4,12 @@ plugins {
     id("org.springframework.boot") version "3.4.1"
     id("io.spring.dependency-management") version "1.1.7"
     kotlin("plugin.jpa") version "1.9.25"
+    kotlin("kapt") version "1.9.25"
 }
 
 group = "com.example"
 version = "0.0.1-SNAPSHOT"
+val querydslVersion = "5.0.0"
 
 java {
     toolchain {
@@ -29,6 +31,13 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation("com.querydsl:querydsl-jpa:$querydslVersion:jakarta")
+    implementation("com.querydsl:querydsl-sql:$querydslVersion")
+    kapt("com.querydsl:querydsl-apt:$querydslVersion:jakarta")
+    kapt("jakarta.persistence:jakarta.persistence-api")
+    kapt("jakarta.annotation:jakarta.annotation-api")
+
+
     implementation("org.jsoup:jsoup:$jsoupVersion")
     runtimeOnly("com.mysql:mysql-connector-j")
     runtimeOnly("com.h2database:h2")
@@ -63,3 +72,27 @@ allOpen {
 tasks.withType<Test> {
     useJUnitPlatform()
 }
+
+val generated = file("src/main/generated")
+
+tasks.withType<JavaCompile> {
+    options.generatedSourceOutputDirectory.set(generated)
+}
+
+sourceSets {
+    main {
+        kotlin.srcDirs += generated
+    }
+}
+
+tasks.named("clean") {
+    doLast {
+        generated.deleteRecursively()
+    }
+}
+
+
+kapt {
+    generateStubs = true
+}
+
