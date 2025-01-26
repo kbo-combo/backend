@@ -25,6 +25,8 @@ abstract class BaseFakeRepository<T : Any>(
         return newEntity
     }
 
+    fun findAll(): List<T> = db.toList()
+
     private fun getId(entity: T): Long {
         val idProperty = entityClass.memberProperties.find { it.name == idFieldName }
         idProperty?.isAccessible = true
