@@ -28,7 +28,7 @@ class ComboService(
         }
         comboRepository.save(Combo(
             memberId = member.id,
-            gameId = game.id,
+            game = game,
             playerId = request.playerId,
         ))
     }
