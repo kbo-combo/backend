@@ -30,6 +30,7 @@ class ComboService(
             memberId = member.id,
             game = game,
             playerId = request.playerId,
+            now = now,
         ))
     }
 }
