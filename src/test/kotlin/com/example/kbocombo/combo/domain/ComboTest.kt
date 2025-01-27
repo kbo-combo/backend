@@ -20,7 +20,7 @@ class ComboTest : StringSpec({
                 memberId = 1L,
                 game = game,
                 playerId = 1L,
-                now = startDateTime.minusDays(1)
+                now = LocalDateTime.parse("2025-03-27T18:30:00")
             )
         }
     }
@@ -28,15 +28,15 @@ class ComboTest : StringSpec({
     listOf(3L, 4L)
         .forEach { dayGap ->
             "게임 시작 2일 이내에만 콤보 생성이 가능하다" {
-                val stratDateTime = LocalDateTime.parse("2025-03-28T18:30:00")
-                val game = getGame(stratDateTime)
+                val startDateTime = LocalDateTime.parse("2025-03-28T18:30:00")
+                val game = getGame(startDateTime)
 
                 val exception = shouldThrow<IllegalArgumentException> {
                     Combo(
                         memberId = 1L,
                         playerId = 1L,
                         game = game,
-                        now = stratDateTime.minusDays(dayGap)
+                        now = startDateTime.minusDays(dayGap)
                     )
                 }
 
@@ -60,6 +60,25 @@ class ComboTest : StringSpec({
                 }
 
                 exception.message shouldContain "게임 시작 10분 이내에만 등록할 수 있습니다."
+            }
+        }
+
+    listOf(9L, 10L)
+        .forEach { minGap ->
+            "게임 시작 최소 10분전에만 콤보 삭제가 가능하다" {
+                val startDateTime = LocalDateTime.parse("2025-03-28T18:30:00")
+                val game = getGame(startDateTime)
+                val combo = Combo(
+                    memberId = 1L,
+                    playerId = 1L,
+                    game = game,
+                    now = startDateTime.minusMinutes(30)
+                )
+
+
+                val exception = shouldThrow<IllegalArgumentException> { combo.checkDelete(startDateTime.minusMinutes(minGap)) }
+
+                exception.message shouldContain "게임 시작 10분 이내에만 삭제할 수 있습니다."
             }
         }
 })
