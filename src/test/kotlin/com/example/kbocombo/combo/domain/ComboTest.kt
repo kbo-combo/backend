@@ -43,7 +43,7 @@ class ComboTest : StringSpec({
                     createCombo(game, startDateTime.minusMinutes(minGap))
                 }
 
-                exception.message shouldContain "게임 시작 10분 이내에만 등록할 수 있습니다."
+                exception.message shouldContain "게임 시작 10분 이전에만 등록할 수 있습니다."
             }
         }
 
@@ -58,7 +58,7 @@ class ComboTest : StringSpec({
                     combo.checkDelete(startDateTime.minusMinutes(minGap))
                 }
 
-                exception.message shouldContain "게임 시작 10분 이내에만 삭제할 수 있습니다."
+                exception.message shouldContain "게임 시작 10분 이전에만 삭제할 수 있습니다."
             }
         }
 })
