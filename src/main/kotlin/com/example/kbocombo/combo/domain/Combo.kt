@@ -16,7 +16,7 @@ import jakarta.persistence.ManyToOne
 import java.time.LocalDateTime
 
 @Entity(name = "COMBO")
-class Combo(
+class Combo private constructor(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0L,
@@ -47,13 +47,12 @@ class Combo(
         game = game,
         playerId = playerId,
     ) {
-
-        if (now >= game.startDateTime.minusDays(2)) {
-            throw IllegalArgumentException("게임 시작 2일 전부터 등록할 수 있습니다.")
+        if (now.plusMinutes(10) >= game.startDateTime) {
+            throw IllegalArgumentException("게임 시작 10분 이내에만 등록할 수 있습니다.")
         }
 
-        if (game.startDateTime.minusMinutes(10) < now) {
-            throw IllegalArgumentException("게임 시작 10분 전에는 등록할 수 없습니다.")
+        if (now.toLocalDate().plusDays(2) < game.startDateTime.toLocalDate()) {
+            throw IllegalArgumentException("게임 시작 2일 전부터 등록할 수 있습니다.")
         }
     }
 }
