@@ -47,12 +47,12 @@ class Combo private constructor(
         game = game,
         playerId = playerId,
     ) {
-        if (now.plusMinutes(10) >= game.startDateTime) {
-            throw IllegalArgumentException("게임 시작 10분 이내에만 등록할 수 있습니다.")
+        require(game.startDateTime > now.plusMinutes(10)) {
+            "게임 시작 10분 이내에만 등록할 수 있습니다."
         }
 
-        if (now.toLocalDate().plusDays(2) < game.startDateTime.toLocalDate()) {
-            throw IllegalArgumentException("게임 시작 2일 전부터 등록할 수 있습니다.")
+        require(game.startDateTime.toLocalDate().minusDays(2) >= now.toLocalDate()) {
+            "게임 시작 2일 전부터 등록할 수 있습니다."
         }
     }
 }
