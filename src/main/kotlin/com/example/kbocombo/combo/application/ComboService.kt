@@ -11,6 +11,7 @@ import com.example.kbocombo.player.infra.getById
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
+import java.time.LocalTime
 
 @Service
 @Transactional
@@ -23,6 +24,24 @@ class ComboService(
     fun createCombo(request: ComboCreateRequest, memberId: Long, now: LocalDateTime) {
         val game = gameRepository.getById(request.gameId)
         val player = playerRepository.getById(request.playerId)
+        val beforeCombo = comboRepository.findByMemberIdAndGameStartDateTime(
+            memberId,
+            game.startDateTime.toLocalDate().atStartOfDay(),
+            game.startDateTime.toLocalDate().atTime(LocalTime.MAX)
+        )
+
+        if (beforeCombo == null) {
+            val combo = Combo(
+                game = game,
+                memberId = memberId,
+                playerId = player.id,
+                now = now,
+            )
+            comboRepository.save(combo)
+            return
+        }
+
+        deleteCombo(beforeCombo.id, now)
         val combo = Combo(
             game = game,
             memberId = memberId,
