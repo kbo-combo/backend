@@ -16,7 +16,6 @@ interface ComboRepository : Repository<Combo, Long> {
 
     fun delete(combo: Combo)
 
-
     @Query(
         """
         select c
@@ -25,5 +24,5 @@ interface ComboRepository : Repository<Combo, Long> {
         where c.memberId = :memberId and g.startDateTime between :startDateTime and :endDateTime  
         """
     )
-    fun findByMemberIdAndGameStartDateTime(memberId: Long, startDateTime: LocalDateTime, endDateTime: LocalDateTime): Combo?
+    fun findByMemberIdAndGameStartDateTimeBetween(memberId: Long, startDateTime: LocalDateTime, endDateTime: LocalDateTime): Combo?
 }
