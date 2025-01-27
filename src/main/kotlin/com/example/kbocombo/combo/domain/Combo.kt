@@ -47,6 +47,21 @@ class Combo private constructor(
         game = game,
         playerId = playerId,
     ) {
+        checkCreate(game, now)
+    }
+
+    fun checkDelete(now: LocalDateTime) {
+        require(isAllowedTimeBefore(game, now)) { "게임 시작 ${ALLOWED_MINUTES_GAP}분 이내에만 삭제할 수 있습니다." }
+    }
+
+    fun update(game: Game, playerId: Long, now: LocalDateTime) {
+        require(isAllowedTimeBefore(game, now)) { "기존에 등록한 콤보가 게임 시작 ${ALLOWED_MINUTES_GAP}분 전 이라 삭제할 수 없습니다." }
+        checkCreate(game, now)
+        this.game = game
+        this.playerId = playerId
+    }
+
+    private fun checkCreate(game: Game, now: LocalDateTime) {
         require(isAllowedTimeBefore(game, now)) {
             "게임 시작 ${ALLOWED_MINUTES_GAP}분 이내에만 등록할 수 있습니다."
         }
@@ -54,10 +69,6 @@ class Combo private constructor(
         require(now.toLocalDate() >= game.startDateTime.toLocalDate().minusDays(ALLOWED_DAY_GAP)) {
             "게임 시작 ${ALLOWED_DAY_GAP}일 전부터 등록할 수 있습니다."
         }
-    }
-
-    fun checkDelete(now: LocalDateTime) {
-        require(isAllowedTimeBefore(game, now)) { "게임 시작 ${ALLOWED_MINUTES_GAP}분 이내에만 삭제할 수 있습니다." }
     }
 
     private fun isAllowedTimeBefore(game: Game, now: LocalDateTime) =

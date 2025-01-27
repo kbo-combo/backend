@@ -24,24 +24,17 @@ class ComboService(
     fun createCombo(request: ComboCreateRequest, memberId: Long, now: LocalDateTime) {
         val game = gameRepository.getById(request.gameId)
         val player = playerRepository.getById(request.playerId)
-        val beforeCombo = comboRepository.findByMemberIdAndGameStartDateTime(
+        val originCombo = comboRepository.findByMemberIdAndGameStartDateTime(
             memberId,
             game.startDateTime.toLocalDate().atStartOfDay(),
             game.startDateTime.toLocalDate().atTime(LocalTime.MAX)
         )
 
-        if (beforeCombo == null) {
-            val combo = Combo(
-                game = game,
-                memberId = memberId,
-                playerId = player.id,
-                now = now,
-            )
-            comboRepository.save(combo)
+        if (originCombo != null) {
+            originCombo.update(game = game, playerId = player.id, now = now)
             return
         }
 
-        deleteCombo(beforeCombo.id, now)
         val combo = Combo(
             game = game,
             memberId = memberId,
