@@ -24,8 +24,8 @@ class ComboService(
     fun createCombo(request: ComboCreateRequest, memberId: Long, now: LocalDateTime) {
         val game = gameRepository.getById(request.gameId)
         val player = playerRepository.getById(request.playerId)
-        val existingCombo = findExistingCombo(memberId, game.startDateTime)
-        val combo = existingCombo?.apply {
+        val sameDateCombo = findSameDateCombo(memberId, game.startDateTime)
+        val combo = sameDateCombo?.apply {
             update(game = game, playerId = player.id, now = now)
         } ?: Combo(
             game = game,
@@ -42,7 +42,7 @@ class ComboService(
         comboRepository.delete(combo)
     }
 
-    private fun findExistingCombo(memberId: Long, gameStartDateTime: LocalDateTime): Combo? {
+    private fun findSameDateCombo(memberId: Long, gameStartDateTime: LocalDateTime): Combo? {
         val startOfDay = gameStartDateTime.toLocalDate().atStartOfDay()
         val endOfDay = gameStartDateTime.toLocalDate().atTime(LocalTime.MAX)
         return comboRepository.findByMemberIdAndGameStartDateTimeBetween(memberId, startOfDay, endOfDay)
