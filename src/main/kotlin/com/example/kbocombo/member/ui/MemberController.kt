@@ -7,14 +7,16 @@ import jakarta.validation.constraints.NotBlank
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
+@RequestMapping("/members")
 class MemberController(
     private val memberService: MemberService
 ) {
 
-    @PutMapping("/members/nickname")
+    @PutMapping("/nickname")
     fun changeNickname(
         @MemberResolver member: Member,
         @Valid @RequestBody nicknameChangeRequest: NicknameChangeRequest
