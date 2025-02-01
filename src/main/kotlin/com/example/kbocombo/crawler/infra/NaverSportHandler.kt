@@ -27,20 +27,20 @@ class NaverSportHandler(
      */
     fun run(startDate: LocalDate) {
         val games = gameRepository.findAllByStartDate(startDate)
-        for (game in games) {
-            val homeTeam = game.homeTeam
-            val awayTeam = game.awayTeam
-            val gameCode = generateGameCode(homeTeam, awayTeam, startDate)
-            getGameRecord(game, gameCode)
+            .filter { it.isRunning() }
+
+        games.forEach { game ->
+            val gameCode = generateGameCode(game.homeTeam, game.awayTeam, startDate)
+            analyzeGameRecord(game, gameCode)
         }
     }
 
-    private fun getGameRecord(game: Game, gameCode: String) {
+    private fun analyzeGameRecord(game: Game, gameCode: String) {
         val gameRecordJsonData = naverSportClient.getLiveGameRecord(gameCode = gameCode)
         val gameRecord = Gson().fromJson(gameRecordJsonData, NaverSportApiResponse::class.java)
 
         if (gameRecord.isFailed()) {
-            logInfo("${gameCode}에 대한 기록 조회에 실패했습니다.")
+            logInfo("${gameCode}에 대한 경기 기록 조회에 실패했습니다.")
             return
         }
 
@@ -71,7 +71,7 @@ class NaverSportHandler(
     }
 
     private fun checkIfHitExist(batter: Batter, game: Game) {
-        if (batter.hit > 0) {
+        if (batter.isHitCompleted()) {
             val playerCode = batter.playerCode
             eventPublisher.publishEvent(HitterHitRecordedEvent(game.id, playerCode))
         }
@@ -143,7 +143,9 @@ data class Batter(
     val inn14: String,
     val name: String,
     val rbi: Int
-)
+) {
+    fun isHitCompleted(): Boolean = hit > 0
+}
 
 data class HitterHitRecordedEvent(
     val gameId: Long,

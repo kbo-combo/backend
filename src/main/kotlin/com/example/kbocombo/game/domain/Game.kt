@@ -43,7 +43,11 @@ class Game(
     val gameState: GameState,
 ) : BaseEntity() {
 
-    fun isGameRunning(): Boolean {
+    fun isRunning(): Boolean {
         return gameState == GameState.RUNNING
+    }
+
+    fun isCompleted(): Boolean {
+        return gameState == GameState.COMPLETED
     }
 }
