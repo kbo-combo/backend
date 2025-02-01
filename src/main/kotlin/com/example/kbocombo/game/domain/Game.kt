@@ -11,7 +11,8 @@ import jakarta.persistence.Enumerated
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
-import java.time.LocalDateTime
+import java.time.LocalDate
+import java.time.LocalTime
 
 @Entity(name = "GAME")
 class Game(
@@ -27,8 +28,11 @@ class Game(
     @Column(name = "away_team", nullable = false)
     val awayTeam: Team,
 
-    @Column(name = "start_datetime", nullable = false)
-    val startDateTime: LocalDateTime,
+    @Column(name = "start_date", nullable = false)
+    val startDate: LocalDate,
+
+    @Column(name = "start_time", nullable = false)
+    val startTime: LocalTime,
 
     @Enumerated(EnumType.STRING)
     @Column(name = "game_type", nullable = false)
@@ -37,4 +41,9 @@ class Game(
     @Enumerated(EnumType.STRING)
     @Column(name = "game_state", nullable = false)
     val gameState: GameState,
-) : BaseEntity()
+) : BaseEntity() {
+
+    fun isGameRunning(): Boolean {
+        return gameState == GameState.RUNNING
+    }
+}
