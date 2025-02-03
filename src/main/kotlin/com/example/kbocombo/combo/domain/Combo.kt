@@ -13,6 +13,7 @@ import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
+import java.time.LocalDate
 import java.time.LocalDateTime
 
 @Entity(name = "COMBO")
@@ -34,6 +35,9 @@ class Combo private constructor(
     @Enumerated(EnumType.STRING)
     @Column(name = "combo_status", nullable = false)
     var comboStatus: ComboStatus = ComboStatus.PENDING,
+
+    @Column(name = "game_date", nullable = false)
+    var gameDate: LocalDate,
 ) : BaseEntity() {
 
     constructor(
@@ -46,6 +50,7 @@ class Combo private constructor(
         memberId = memberId,
         game = game,
         playerId = playerId,
+        gameDate = game.startDateTime.toLocalDate()
     ) {
         checkCreate(game, now)
     }
@@ -59,6 +64,7 @@ class Combo private constructor(
         checkCreate(game, now)
         this.game = game
         this.playerId = playerId
+        this.gameDate = game.startDateTime.toLocalDate()
     }
 
     private fun checkCreate(game: Game, now: LocalDateTime) {
