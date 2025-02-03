@@ -5,17 +5,15 @@ import com.example.kbocombo.auth.application.OAuthMemberResponse
 import com.example.kbocombo.auth.application.OAuthRedirectUriResponse
 import com.example.kbocombo.member.domain.vo.SocialProvider
 import jakarta.servlet.http.HttpServletRequest
-import java.util.Locale
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import java.util.Locale
 
 
 @RestController
-@CrossOrigin(value = ["*"])
 class AuthController(
     private val authService: AuthService
 ) {
