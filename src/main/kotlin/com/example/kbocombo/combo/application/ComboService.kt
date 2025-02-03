@@ -1,9 +1,9 @@
 package com.example.kbocombo.combo.application
 
+import com.example.kbocombo.combo.application.request.ComboCreateRequest
 import com.example.kbocombo.combo.domain.Combo
 import com.example.kbocombo.combo.infra.ComboRepository
 import com.example.kbocombo.combo.infra.getById
-import com.example.kbocombo.combo.ui.request.ComboCreateRequest
 import com.example.kbocombo.game.domain.Game
 import com.example.kbocombo.game.infra.GameRepository
 import com.example.kbocombo.game.infra.getById

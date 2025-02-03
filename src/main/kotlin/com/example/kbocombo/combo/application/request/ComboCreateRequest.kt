@@ -1,4 +1,4 @@
-package com.example.kbocombo.combo.ui.request
+package com.example.kbocombo.combo.application.request
 
 class ComboCreateRequest(
     val gameId: Long,
