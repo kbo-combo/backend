@@ -4,6 +4,7 @@ import com.example.kbocombo.combo.domain.Combo
 import com.example.kbocombo.combo.infra.ComboRepository
 import com.example.kbocombo.combo.infra.getById
 import com.example.kbocombo.combo.ui.request.ComboCreateRequest
+import com.example.kbocombo.game.domain.Game
 import com.example.kbocombo.game.infra.GameRepository
 import com.example.kbocombo.game.infra.getById
 import com.example.kbocombo.player.infra.PlayerRepository
@@ -11,7 +12,6 @@ import com.example.kbocombo.player.infra.getById
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
-import java.time.LocalTime
 
 @Service
 @Transactional
@@ -24,7 +24,7 @@ class ComboService(
     fun createCombo(request: ComboCreateRequest, memberId: Long, now: LocalDateTime) {
         val game = gameRepository.getById(request.gameId)
         val player = playerRepository.getById(request.playerId)
-        val sameDateCombo = findSameDateCombo(memberId, game.startDateTime)
+        val sameDateCombo = findSameDateCombo(memberId, game)
         val combo = sameDateCombo?.apply {
             update(game = game, playerId = player.id, now = now)
         } ?: Combo(
@@ -42,9 +42,7 @@ class ComboService(
         comboRepository.delete(combo)
     }
 
-    private fun findSameDateCombo(memberId: Long, gameStartDateTime: LocalDateTime): Combo? {
-        val startOfDay = gameStartDateTime.toLocalDate().atStartOfDay()
-        val endOfDay = gameStartDateTime.toLocalDate().atTime(LocalTime.MAX)
-        return comboRepository.findByMemberIdAndGameStartDateTimeBetween(memberId, startOfDay, endOfDay)
+    private fun findSameDateCombo(memberId: Long, game: Game): Combo? {
+        return comboRepository.findByMemberIdAndGameDate(memberId, game.startDateTime.toLocalDate())
     }
 }
