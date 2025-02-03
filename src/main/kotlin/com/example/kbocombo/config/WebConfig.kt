@@ -22,7 +22,7 @@ class WebConfig(
             .allowedOrigins(
                 "https://www.kbo-dev.kro.kr",
                 "https://localhost:5173",
-                "https://localhost:5174"
+                "http://localhost:5173",
             )
             .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
             .allowCredentials(true)
