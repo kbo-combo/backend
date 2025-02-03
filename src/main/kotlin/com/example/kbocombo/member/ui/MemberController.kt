@@ -2,8 +2,8 @@ package com.example.kbocombo.member.ui
 
 import com.example.kbocombo.member.application.MemberQueryService
 import com.example.kbocombo.member.application.MemberService
+import com.example.kbocombo.member.application.response.MemberDetailResponse
 import com.example.kbocombo.member.domain.Member
-import com.example.kbocombo.member.ui.response.MemberDetailResponse
 import jakarta.validation.Valid
 import jakarta.validation.constraints.NotBlank
 import org.springframework.http.ResponseEntity

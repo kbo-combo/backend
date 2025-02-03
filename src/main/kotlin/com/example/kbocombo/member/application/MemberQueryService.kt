@@ -1,7 +1,7 @@
 package com.example.kbocombo.member.application
 
+import com.example.kbocombo.member.application.response.MemberDetailResponse
 import com.example.kbocombo.member.infra.MemberRepository
-import com.example.kbocombo.member.ui.response.MemberDetailResponse
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 

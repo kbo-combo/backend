@@ -1,4 +1,4 @@
-package com.example.kbocombo.member.ui.response
+package com.example.kbocombo.member.application.response
 
 import com.example.kbocombo.member.domain.Member
 
