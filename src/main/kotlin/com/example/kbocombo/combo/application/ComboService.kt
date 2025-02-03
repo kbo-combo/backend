@@ -14,13 +14,13 @@ import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
 
 @Service
-@Transactional
 class ComboService(
     private val gameRepository: GameRepository,
     private val playerRepository: PlayerRepository,
     private val comboRepository: ComboRepository,
 ) {
 
+    @Transactional
     fun createCombo(request: ComboCreateRequest, memberId: Long, now: LocalDateTime) {
         val game = gameRepository.getById(request.gameId)
         val player = playerRepository.getById(request.playerId)
@@ -36,6 +36,7 @@ class ComboService(
         comboRepository.save(combo)
     }
 
+    @Transactional
     fun deleteCombo(comboId: Long, now: LocalDateTime) {
         val combo = comboRepository.getById(comboId)
         combo.checkDelete(now)
