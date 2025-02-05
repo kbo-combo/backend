@@ -44,6 +44,6 @@ class ComboService(
     }
 
     private fun findSameDateCombo(memberId: Long, game: Game): Combo? {
-        return comboRepository.findByMemberIdAndGameDate(memberId, game.startDateTime.toLocalDate())
+        return comboRepository.findByMemberIdAndGameDate(memberId, game.startDate)
     }
 }

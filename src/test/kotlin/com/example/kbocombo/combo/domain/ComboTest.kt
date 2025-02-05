@@ -64,7 +64,8 @@ class ComboTest : StringSpec({
 })
 
 private fun getGame(startDateTime: LocalDateTime) = fixture.giveMeKotlinBuilder<Game>()
-    .setExp(Game::startDateTime, startDateTime)
+    .setExp(Game::startDate, startDateTime.toLocalDate())
+    .setExp(Game::startTime, startDateTime.toLocalTime())
     .sample()
 
 private fun createCombo(

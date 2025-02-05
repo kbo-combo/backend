@@ -50,7 +50,7 @@ class Combo private constructor(
         memberId = memberId,
         game = game,
         playerId = playerId,
-        gameDate = game.startDateTime.toLocalDate()
+        gameDate = game.startDate
     ) {
         checkCreate(game, now)
     }
@@ -64,7 +64,7 @@ class Combo private constructor(
         checkCreate(game, now)
         this.game = game
         this.playerId = playerId
-        this.gameDate = game.startDateTime.toLocalDate()
+        this.gameDate = game.startDate
     }
 
     private fun checkCreate(game: Game, now: LocalDateTime) {
@@ -72,13 +72,15 @@ class Combo private constructor(
             "게임 시작 ${ALLOWED_MINUTES_GAP}분 이전에만 등록할 수 있습니다."
         }
 
-        require(now.toLocalDate() >= game.startDateTime.toLocalDate().minusDays(ALLOWED_DAY_GAP)) {
+        require(now.toLocalDate() >= game.startDate.minusDays(ALLOWED_DAY_GAP)) {
             "게임 시작 ${ALLOWED_DAY_GAP}일 전부터 등록할 수 있습니다."
         }
     }
 
-    private fun isAllowedTimeBefore(game: Game, now: LocalDateTime) =
-        game.startDateTime > now.plusMinutes(ALLOWED_MINUTES_GAP)
+    private fun isAllowedTimeBefore(game: Game, now: LocalDateTime): Boolean {
+        val gameStartDateTime = LocalDateTime.of(game.startDate, game.startTime)
+        return gameStartDateTime > now.plusMinutes(ALLOWED_MINUTES_GAP)
+    }
 
     companion object {
         private const val ALLOWED_MINUTES_GAP = 10L
