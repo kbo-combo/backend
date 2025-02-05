@@ -22,4 +22,8 @@ class MemberSession(
     @Column(name = "expired_datetime", nullable = false, updatable = false)
     var expiredDateTime: LocalDateTime,
  ) {
+
+    fun isExpired(now: LocalDateTime): Boolean {
+        return expiredDateTime.isBefore(now)
+    }
 }
