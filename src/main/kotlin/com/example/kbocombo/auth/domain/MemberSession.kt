@@ -37,7 +37,14 @@ class MemberSession private constructor(
         return expiredDateTime.isBefore(now)
     }
 
+    fun extendIfEnable(now: LocalDateTime)  {
+        if (expiredDateTime.isBefore(now.plusDays(SESSION_EXTEND_DAY_GAP))) {
+            expiredDateTime = now.plusDays(SESSION_EXPIRED_DAY)
+        }
+    }
+
     companion object {
+        private const val SESSION_EXTEND_DAY_GAP = 1L
         private const val SESSION_EXPIRED_DAY = 7L
     }
 }

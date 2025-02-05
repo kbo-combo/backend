@@ -33,6 +33,7 @@ class MemberSessionService(
             return null
         }
 
+        memberSession.extendIfEnable(now)
         return memberRepository.findById(memberSession.memberId)
     }
 }
