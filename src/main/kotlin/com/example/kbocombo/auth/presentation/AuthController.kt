@@ -53,10 +53,14 @@ class AuthController(
     }
 
     private fun generateCookie(sessionResponse: MemberSessionResponse) =
-        ResponseCookie.from("JSESSIONID", sessionResponse.sessionKey)
+        ResponseCookie.from(COOKIE_SESSION_KEY, sessionResponse.sessionKey)
             .httpOnly(true)
             .secure(true)
             .sameSite("none")
             .path("/")
             .build()
+
+    companion object {
+        const val COOKIE_SESSION_KEY = "JSESSIONID"
+    }
 }
