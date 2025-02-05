@@ -1,8 +1,7 @@
-package com.example.kbocombo.combo.infra
+package com.example.kbocombo.mock.infra
 
 import com.example.kbocombo.game.domain.Game
 import com.example.kbocombo.game.infra.GameRepository
-import com.example.kbocombo.mock.infra.BaseFakeRepository
 import java.time.LocalDate
 
 class FakeGameRepository : BaseFakeRepository<Game>(Game::class), GameRepository {

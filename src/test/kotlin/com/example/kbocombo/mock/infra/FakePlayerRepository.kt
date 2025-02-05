@@ -1,9 +1,9 @@
-package com.example.kbocombo.player.infra
+package com.example.kbocombo.mock.infra
 
-import com.example.kbocombo.mock.infra.BaseFakeRepository
 import com.example.kbocombo.player.Player
+import com.example.kbocombo.player.infra.PlayerRepository
 
- class FakePlayerRepository : BaseFakeRepository<Player>(Player::class), PlayerRepository {
+class FakePlayerRepository : BaseFakeRepository<Player>(Player::class), PlayerRepository {
 
     override fun findAllByIsRetiredFalse(): List<Player> {
         return db.filterNot { it.isRetired }

@@ -1,7 +1,7 @@
 package com.example.kbocombo.crawler.application
 
+import com.example.kbocombo.mock.infra.FakePlayerRepository
 import com.example.kbocombo.player.Player
-import com.example.kbocombo.player.infra.FakePlayerRepository
 import com.example.kbocombo.player.infra.PlayerRepository
 import com.example.kbocombo.player.vo.PlayerImage
 import com.example.kbocombo.utils.fixture
