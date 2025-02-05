@@ -34,7 +34,7 @@ class MemberArgumentResolver(
         val sessionKey = request.cookies.find { it.name == AuthController.COOKIE_SESSION_KEY }?.value
             ?: throw IllegalStateException("세션 정보를 찾을 수 없습니다.")
 
-        return memberSessionService.findMemberBySessionKey(sessionKey, LocalDateTime.now())
+        return memberSessionService.findMemberOrDeleteSession(sessionKey, LocalDateTime.now())
             ?: throw IllegalStateException("세션 정보를 찾을 수 없습니다.")
     }
 }
