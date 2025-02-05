@@ -6,7 +6,9 @@ import com.example.kbocombo.crawler.utils.toTeamFilterCode
 import com.example.kbocombo.game.domain.Game
 import com.example.kbocombo.game.infra.GameRepository
 import com.example.kbocombo.player.vo.Team
-import com.google.gson.Gson
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import org.springframework.context.ApplicationEventPublisher
@@ -37,7 +39,10 @@ class NaverSportHandler(
 
     private fun analyzeGameRecord(game: Game, gameCode: String) {
         val gameRecordJsonData = naverSportClient.getLiveGameRecord(gameCode = gameCode)
-        val gameRecord = Gson().fromJson(gameRecordJsonData, NaverSportApiResponse::class.java)
+        val objectMapper = ObjectMapper()
+            .registerKotlinModule()
+            .registerModules(JavaTimeModule())
+        val gameRecord = objectMapper.readValue(gameRecordJsonData, NaverSportApiResponse::class.java)
 
         if (gameRecord.isFailed()) {
             logInfo("${gameCode}에 대한 경기 기록 조회에 실패했습니다.")

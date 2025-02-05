@@ -33,7 +33,6 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("com.querydsl:querydsl-jpa:$querydslVersion:jakarta")
     implementation("com.querydsl:querydsl-sql:$querydslVersion")
-    implementation("com.google.code.gson:gson:2.10.1")
     kapt("com.querydsl:querydsl-apt:$querydslVersion:jakarta")
     kapt("jakarta.persistence:jakarta.persistence-api")
     kapt("jakarta.annotation:jakarta.annotation-api")
