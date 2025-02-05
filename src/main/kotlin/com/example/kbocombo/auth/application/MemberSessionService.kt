@@ -5,6 +5,7 @@ import com.example.kbocombo.auth.infra.MemberSessionRepository
 import com.example.kbocombo.member.domain.Member
 import com.example.kbocombo.member.infra.MemberRepository
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
 
 @Service
@@ -13,6 +14,7 @@ class MemberSessionService(
     private val memberRepository: MemberRepository
 ) {
 
+    @Transactional
     fun saveSession(memberId: Long, now: LocalDateTime): MemberSessionResponse {
         val memberSession = sessionRepository.save(
             MemberSession(
@@ -23,6 +25,7 @@ class MemberSessionService(
         return MemberSessionResponse(sessionKey = memberSession.sessionKey)
     }
 
+    @Transactional
     fun findMemberBySessionKey(sessionKey: String, now: LocalDateTime): Member? {
         val memberSession = sessionRepository.findBySessionKey(sessionKey)
         requireNotNull(memberSession)
@@ -30,6 +33,7 @@ class MemberSessionService(
             sessionRepository.delete(memberSession)
             return null
         }
+
         return memberRepository.findById(memberSession.memberId)
     }
 }
