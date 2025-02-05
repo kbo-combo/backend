@@ -13,11 +13,14 @@ class MemberSessionService(
     private val memberRepository: MemberRepository
 ) {
 
-    fun saveSession(memberId: Long, now: LocalDateTime): MemberSession {
-        return sessionRepository.save(MemberSession(
-            memberId = memberId,
-            now = now
-        ))
+    fun saveSession(memberId: Long, now: LocalDateTime): MemberSessionResponse {
+        val memberSession = sessionRepository.save(
+            MemberSession(
+                memberId = memberId,
+                now = now
+            )
+        )
+        return MemberSessionResponse(sessionKey = memberSession.sessionKey)
     }
 
     fun findMemberBySessionKey(sessionKey: String, now: LocalDateTime): Member? {
@@ -30,3 +33,7 @@ class MemberSessionService(
         return memberRepository.findById(memberSession.memberId)
     }
 }
+
+data class MemberSessionResponse(
+    val sessionKey: String
+)
