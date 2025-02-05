@@ -1,6 +1,7 @@
 package com.example.kbocombo.game.infra
 
 import com.example.kbocombo.game.domain.Game
+import java.time.LocalDate
 import org.springframework.data.repository.Repository
 
 fun GameRepository.getById(gameId: Long): Game =
@@ -9,4 +10,6 @@ fun GameRepository.getById(gameId: Long): Game =
 interface GameRepository : Repository<Game, Long> {
 
     fun findById(gameId: Long): Game?
+
+    fun findAllByStartDate(startDate: LocalDate) : List<Game>
 }
