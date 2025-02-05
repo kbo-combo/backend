@@ -26,7 +26,7 @@ class MemberSessionService(
     }
 
     @Transactional
-    fun findMemberOrDeleteSession(sessionKey: String, now: LocalDateTime): Member? {
+    fun findMemberBySessionKey(sessionKey: String, now: LocalDateTime): Member? {
         val memberSession = sessionRepository.findBySessionKey(sessionKey) ?: return null
         if (memberSession.isExpired(now)) {
             sessionRepository.delete(memberSession)

@@ -28,7 +28,7 @@ class MemberSessionServiceTest : StringSpec({
     }
 
     "일치하는 세션이 없으면 null return" {
-        val actual = sut.findMemberOrDeleteSession(sessionKey = "절대없음", LocalDateTime.now())
+        val actual = sut.findMemberBySessionKey(sessionKey = "절대없음", LocalDateTime.now())
 
         actual shouldBe null
     }
@@ -41,7 +41,7 @@ class MemberSessionServiceTest : StringSpec({
                 now = today.minusYears(10))
         )
 
-        val actual = sut.findMemberOrDeleteSession(sessionKey = memberSession.sessionKey, today)
+        val actual = sut.findMemberBySessionKey(sessionKey = memberSession.sessionKey, today)
 
         memberSessionRepository.findBySessionKey(memberSession.sessionKey) shouldBe null
         actual shouldBe null
@@ -55,7 +55,7 @@ class MemberSessionServiceTest : StringSpec({
                 now = LocalDateTime.parse("2025-05-03T14:00:00")
         ))
 
-        sut.findMemberOrDeleteSession(sessionKey = memberSession.sessionKey,
+        sut.findMemberBySessionKey(sessionKey = memberSession.sessionKey,
             now = LocalDateTime.parse("2025-05-09T14:00:00"))
 
         memberSession.expiredDateTime.toLocalDate() shouldBe LocalDate.parse("2025-05-10")
@@ -67,7 +67,7 @@ class MemberSessionServiceTest : StringSpec({
         val memberSession = memberSessionRepository.save(
             MemberSession(memberId = member.id, now = now))
 
-        var actual = sut.findMemberOrDeleteSession(sessionKey = memberSession.sessionKey, now = now)
+        var actual = sut.findMemberBySessionKey(sessionKey = memberSession.sessionKey, now = now)
 
         actual shouldBe member
     }
