@@ -15,16 +15,16 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 
 @DisplayNameGeneration(ReplaceUnderscores::class)
-class MemberSessionServiceTest : StringSpec({
+class DatabaseMemberSessionServiceTest : StringSpec({
 
-    lateinit var sut: MemberSessionService
+    lateinit var sut: DatabaseMemberSessionService
     lateinit var memberRepository: MemberRepository
     lateinit var memberSessionRepository: MemberSessionRepository
 
     beforeTest {
         memberRepository = FakeMemberRepository()
         memberSessionRepository = FakeMemberSessionRepository()
-        sut = MemberSessionService(memberSessionRepository, memberRepository)
+        sut = DatabaseMemberSessionService(memberSessionRepository, memberRepository)
     }
 
     "일치하는 세션이 없으면 null return" {

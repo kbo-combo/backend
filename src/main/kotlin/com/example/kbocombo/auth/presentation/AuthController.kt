@@ -1,8 +1,8 @@
 package com.example.kbocombo.auth.presentation
 
 import com.example.kbocombo.auth.application.AuthService
+import com.example.kbocombo.auth.application.DatabaseMemberSessionService
 import com.example.kbocombo.auth.application.MemberSessionResponse
-import com.example.kbocombo.auth.application.MemberSessionService
 import com.example.kbocombo.auth.application.OAuthMemberResponse
 import com.example.kbocombo.auth.application.OAuthRedirectUriResponse
 import com.example.kbocombo.member.domain.vo.SocialProvider
@@ -20,7 +20,7 @@ import java.util.Locale
 @RestController
 class AuthController(
     private val authService: AuthService,
-    private val memberSessionService: MemberSessionService
+    private val memberSessionService: DatabaseMemberSessionService
 ) {
     @GetMapping("/oauth/{socialProvider}")
     fun getAuthRedirectUri(
