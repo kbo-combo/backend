@@ -56,6 +56,7 @@ class AuthController(
         ResponseCookie.from("JSESSIONID", sessionResponse.sessionKey)
             .httpOnly(true)
             .secure(true)
+            .sameSite("none")
             .path("/")
             .build()
 }
