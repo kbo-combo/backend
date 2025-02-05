@@ -14,7 +14,6 @@ import java.util.Locale
 
 
 @RestController
-//@CrossOrigin(origins = ["https://localhost:5173"], allowCredentials = "true")
 class AuthController(
     private val authService: AuthService
 ) {
