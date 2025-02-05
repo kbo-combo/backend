@@ -1,5 +1,6 @@
 package com.example.kbocombo.auth.application
 
+import com.example.kbocombo.auth.domain.MemberSession
 import com.example.kbocombo.auth.infra.MemberSessionRepository
 import com.example.kbocombo.member.domain.Member
 import com.example.kbocombo.member.infra.MemberRepository
@@ -11,6 +12,14 @@ class MemberSessionService(
     private val sessionRepository: MemberSessionRepository,
     private val memberRepository: MemberRepository
 ) {
+
+    fun saveSession(sessionKey: String, memberId: Long, now: LocalDateTime): MemberSession {
+        return sessionRepository.save(MemberSession(
+            memberId = memberId,
+            sessionKey = sessionKey,
+            expiredDateTime = now.plusMinutes(30)
+        ))
+    }
 
     fun findMemberBySessionKey(sessionKey: String, now: LocalDateTime): Member? {
         val memberSession = sessionRepository.findBySessionKey(sessionKey)
