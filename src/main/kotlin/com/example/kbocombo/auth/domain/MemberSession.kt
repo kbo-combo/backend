@@ -6,9 +6,10 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import java.time.LocalDateTime
+import java.util.UUID
 
 @Entity(name = "MEMBER_SESSION")
-class MemberSession(
+class MemberSession private constructor(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0L,
@@ -23,7 +24,20 @@ class MemberSession(
     var expiredDateTime: LocalDateTime,
  ) {
 
+    constructor(
+        memberId: Long,
+        now: LocalDateTime
+    ) : this(
+        memberId = memberId,
+        sessionKey = UUID.randomUUID().toString(),
+        expiredDateTime = now.plusDays(SESSION_EXPIRED_DAY),
+    )
+
     fun isExpired(now: LocalDateTime): Boolean {
         return expiredDateTime.isBefore(now)
+    }
+
+    companion object {
+        private const val SESSION_EXPIRED_DAY = 7L
     }
 }

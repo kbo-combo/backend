@@ -13,11 +13,10 @@ class MemberSessionService(
     private val memberRepository: MemberRepository
 ) {
 
-    fun saveSession(sessionKey: String, memberId: Long, now: LocalDateTime): MemberSession {
+    fun saveSession(memberId: Long, now: LocalDateTime): MemberSession {
         return sessionRepository.save(MemberSession(
             memberId = memberId,
-            sessionKey = sessionKey,
-            expiredDateTime = now.plusMinutes(30)
+            now = now
         ))
     }
 
