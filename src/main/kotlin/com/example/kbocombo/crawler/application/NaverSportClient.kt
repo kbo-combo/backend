@@ -26,4 +26,11 @@ interface NaverSportClient {
         @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) toDate: LocalDate,
         @RequestParam size: Int
     ): String
+
+    @GetExchange(
+        url = "/schedule/games/{gameCode}/preview"
+    )
+    fun getGamePreview(
+        @PathVariable gameCode: String
+    ): String
 }
