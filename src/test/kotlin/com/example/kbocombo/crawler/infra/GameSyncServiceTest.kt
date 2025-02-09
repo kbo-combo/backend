@@ -1,5 +1,6 @@
 package com.example.kbocombo.crawler.infra
 
+import com.example.kbocombo.crawler.application.GameSyncService
 import io.kotest.core.annotation.Ignored
 import io.kotest.core.spec.style.FunSpec
 import org.junit.jupiter.api.DisplayNameGeneration
@@ -11,8 +12,8 @@ import java.time.LocalDateTime
 @Ignored
 @DisplayNameGeneration(ReplaceUnderscores::class)
 @SpringBootTest
-class NaverSportGameHandlerTest(
-    private val sut: NaverSportGameHandler
+class GameSyncServiceTest(
+    private val sut: GameSyncService
 ) : FunSpec({
 
     context("Game을 저장한다") {
@@ -20,7 +21,7 @@ class NaverSportGameHandlerTest(
         val endDate = LocalDate.parse("2025-11-01")
 
         while (date.isBefore(endDate) || date.isEqual(endDate)) {
-            sut.renewGames(gameDate = date, now = LocalDateTime.now())
+            sut.syncGame(gameDate = date, now = LocalDateTime.now())
         }
     }
 })
