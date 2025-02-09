@@ -1,6 +1,6 @@
-package com.example.kbocombo.crawler.infra
+package com.example.kbocombo.crawler.player.infra
 
-import com.example.kbocombo.crawler.application.PlayerClient
+import com.example.kbocombo.crawler.player.application.PlayerClient
 import com.example.kbocombo.player.Player
 import org.springframework.stereotype.Component
 

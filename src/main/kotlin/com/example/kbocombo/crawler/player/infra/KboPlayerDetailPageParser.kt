@@ -1,4 +1,4 @@
-package com.example.kbocombo.crawler.infra
+package com.example.kbocombo.crawler.player.infra
 
 import com.example.kbocombo.common.logError
 import com.example.kbocombo.crawler.utils.toHittingHand

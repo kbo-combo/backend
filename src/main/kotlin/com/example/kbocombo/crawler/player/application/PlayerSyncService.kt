@@ -1,4 +1,4 @@
-package com.example.kbocombo.crawler.application
+package com.example.kbocombo.crawler.player.application
 
 import org.springframework.stereotype.Service
 

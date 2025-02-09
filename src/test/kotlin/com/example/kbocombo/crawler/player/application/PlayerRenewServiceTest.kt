@@ -1,4 +1,4 @@
-package com.example.kbocombo.crawler.application
+package com.example.kbocombo.crawler.player.application
 
 import com.example.kbocombo.mock.infra.FakePlayerRepository
 import com.example.kbocombo.player.Player
