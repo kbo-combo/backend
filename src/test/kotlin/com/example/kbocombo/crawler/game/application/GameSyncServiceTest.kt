@@ -16,7 +16,7 @@ class GameSyncServiceTest(
 ) : FunSpec({
 
     context("Game을 저장한다") {
-        var date = LocalDate.parse("2025-03-08")
+        var date = LocalDate.parse("2024-03-08")
         val endDate = LocalDate.parse("2025-11-01")
 
         while (date.isBefore(endDate) || date.isEqual(endDate)) {

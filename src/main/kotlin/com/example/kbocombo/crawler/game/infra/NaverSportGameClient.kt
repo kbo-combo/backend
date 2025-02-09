@@ -29,7 +29,7 @@ class NaverSportGameClient(
             upperCategoryId = "kbaseball",
             fromDate = gameDate,
             toDate = gameDate,
-            size = 10
+            size = 100
         )
         return objectMapper.readValue(
             gameJson,
