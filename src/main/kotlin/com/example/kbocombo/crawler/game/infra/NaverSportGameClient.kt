@@ -21,12 +21,16 @@ class NaverSportGameClient(
 
     override fun findGames(gameDate: LocalDate): List<Game> {
         val games = getGames(gameDate)
-        return games.map(::toGameEntity)
+        return games
+            .filterNot { it.isAllStartGame() }
+            .map { toGameEntity(it) }
     }
 
     private fun getGames(gameDate: LocalDate): List<GameResponse> {
         val gameJson = naverSportClient.getGameListByDate(
+            fields = "basic,schedule,baseball",
             upperCategoryId = "kbaseball",
+            categoryId = "kbo",
             fromDate = gameDate,
             toDate = gameDate,
             size = 100
@@ -36,9 +40,6 @@ class NaverSportGameClient(
             object : TypeReference<NaverApiResponse<GameListApiResponse>>() {}).result.games
     }
 
-    /**
-     * 선발투수 데이터가 있으면 preview API를 통해 선발 투수 데이터를 조회.
-     */
     private fun toGameEntity(game: GameResponse): Game {
         val previewData = if (game.hasStarter()) findPreview(game.gameId) else null
         return Game(
@@ -56,7 +57,8 @@ class NaverSportGameClient(
 
     private fun findPreview(gameCode: String): PreviewData {
         val jsonResponse = naverSportClient.getGamePreview(gameCode)
-        val apiResponseObject = objectMapper.readValue(jsonResponse, object : TypeReference<NaverApiResponse<PreviewResponse>>() {})
+        val apiResponseObject =
+            objectMapper.readValue(jsonResponse, object : TypeReference<NaverApiResponse<PreviewResponse>>() {})
         return apiResponseObject.result.previewData
     }
 }
@@ -82,12 +84,11 @@ data class GameResponse(
     val cancel: Boolean,
     val suspended: Boolean,
     val reversedHomeAway: Boolean,
-    val homeTeamEmblemUrl: String,
-    val awayTeamEmblemUrl: String,
+    val homeTeamEmblemUrl: String?,
+    val awayTeamEmblemUrl: String?,
     val widgetEnable: Boolean,
     val gameOnAir: Boolean,
-    val specialMatchInfo : String?,
-    val seriesOutcome: String?,
+    val specialMatchInfo: String?,
     val homeStarterName: String?,
     val awayStarterName: String?,
     val winPitcherName: String?,
@@ -96,11 +97,17 @@ data class GameResponse(
     val awayCurrentPitcherName: String?,
     val seriesGameNo: String?,
     val roundName: String?,
-    val roundGameNo: String?
+    val roundGameNo: String?,
+//    val seriesOutcome: List<Series>?
 ) {
 
     fun hasStarter(): Boolean {
         return !homeStarterName.isNullOrBlank() && !awayStarterName.isNullOrBlank()
+    }
+
+    // 올스타 TeamCode 드림 / 나눔 형식이라 에러 발생가능
+    fun isAllStartGame(): Boolean {
+        return gameId.startsWith("9999")
     }
 }
 

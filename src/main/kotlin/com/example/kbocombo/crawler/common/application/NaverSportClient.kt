@@ -21,7 +21,9 @@ interface NaverSportClient {
         url = "/schedule/games"
     )
     fun getGameListByDate(
+        @RequestParam fields: String,
         @RequestParam upperCategoryId: String,
+        @RequestParam categoryId: String,
         @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) fromDate: LocalDate,
         @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) toDate: LocalDate,
         @RequestParam size: Int
