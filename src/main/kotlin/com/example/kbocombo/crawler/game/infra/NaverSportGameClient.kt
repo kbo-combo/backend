@@ -6,7 +6,9 @@ import com.example.kbocombo.crawler.game.application.GameClient
 import com.example.kbocombo.game.domain.Game
 import com.example.kbocombo.game.domain.vo.GameState.PENDING
 import com.example.kbocombo.game.domain.vo.GameType
+import com.example.kbocombo.player.infra.PlayerRepository
 import com.example.kbocombo.player.vo.Team
+import com.example.kbocombo.player.vo.WebId
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.stereotype.Component
@@ -16,6 +18,7 @@ import java.time.LocalDateTime
 @Component
 class NaverSportGameClient(
     private val naverSportClient: NaverSportClient,
+    private val playerRepository: PlayerRepository,
     private val objectMapper: ObjectMapper
 ) : GameClient {
 
@@ -47,8 +50,8 @@ class NaverSportGameClient(
             gameCode = game.gameId,
             homeTeam = Team.fromTeamCode(game.homeTeamCode),
             awayTeam = Team.fromTeamCode(game.awayTeamCode),
-            homeStartingPitcherId = previewData?.homeStarter?.playerInfo?.pCode?.toLongOrNull(),
-            awayStartingPitcherId = previewData?.awayStarter?.playerInfo?.pCode?.toLongOrNull(),
+            homeStartingPitcherId = findPitcherId(previewData?.homeStarter),
+            awayStartingPitcherId = findPitcherId(previewData?.awayStarter),
             startDate = game.gameDate,
             startTime = game.gameDateTime.toLocalTime(),
             gameType = GameType.getGameTypeByDate(game.gameDate),
@@ -62,6 +65,9 @@ class NaverSportGameClient(
             objectMapper.readValue(jsonResponse, object : TypeReference<NaverApiResponse<PreviewResponse>>() {})
         return apiResponseObject.result.previewData
     }
+
+    private fun findPitcherId(starterInfo: StarterInfo?) =
+        starterInfo?.playerInfo?.pCode?.let { playerRepository.findByWebId(WebId(it)) }?.id
 }
 
 data class GameListApiResponse(
