@@ -1,7 +1,7 @@
 package com.example.kbocombo.member.ui
 
+import com.example.kbocombo.auth.application.CookieManager
 import com.example.kbocombo.auth.application.MemberSessionService
-import com.example.kbocombo.auth.presentation.AuthController
 import com.example.kbocombo.member.domain.Member
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.core.MethodParameter
@@ -32,7 +32,7 @@ class MemberArgumentResolver(
             ?: throw IllegalStateException("인증 요청을 처리할 수 없습니다.")
 
         return request.cookies
-            ?.find { it.name == AuthController.COOKIE_SESSION_KEY }
+            ?.find { it.name == CookieManager.COOKIE_SESSION_KEY }
             ?.value
             ?.let { memberSessionService.findMemberBySessionKey(it, LocalDateTime.now()) }
             ?: throw IllegalStateException("세션 정보를 찾을 수 없습니다.")
