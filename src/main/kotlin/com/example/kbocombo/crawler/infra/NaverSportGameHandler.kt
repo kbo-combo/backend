@@ -53,7 +53,6 @@ class NaverSportGameHandler(
         )
     }
 
-
     private fun findPreview(gameCode: String): PreviewData {
         val jsonResponse = naverSportClient.getGamePreview(gameCode)
         val apiResponseObject = objectMapper.readValue(jsonResponse, object : TypeReference<NaverApiResponse<PreviewResponse>>() {})
