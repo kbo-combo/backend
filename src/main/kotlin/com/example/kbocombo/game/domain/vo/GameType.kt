@@ -12,7 +12,6 @@ enum class GameType {
         private val REGULAR_SEASON_DATE = LocalDate.parse("2025-03-22")
 
         fun getGameTypeByDate(gameDate: LocalDate): GameType {
-            require(gameDate.year == 2025) { "게임연도가 2025년이 아닙니다."}
             if (gameDate >= REGULAR_SEASON_DATE) {
                 return REGULAR_SEASON
             }
