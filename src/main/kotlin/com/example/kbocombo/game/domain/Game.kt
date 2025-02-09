@@ -20,6 +20,9 @@ class Game(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0L,
 
+    @Column(name = "game_code", nullable = false)
+    val gameCode: String,
+
     @Enumerated(EnumType.STRING)
     @Column(name = "home_team", nullable = false)
     val homeTeam: Team,
