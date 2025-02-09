@@ -14,6 +14,7 @@ import java.time.LocalDateTime
 
 @Component
 class MemberArgumentResolver(
+    private val cookieManager: CookieManager,
     private val memberSessionService: MemberSessionService
 ) : HandlerMethodArgumentResolver {
 
@@ -31,9 +32,7 @@ class MemberArgumentResolver(
         val request = webRequest.getNativeRequest(HttpServletRequest::class.java)
             ?: throw IllegalStateException("인증 요청을 처리할 수 없습니다.")
 
-        return request.cookies
-            ?.find { it.name == CookieManager.COOKIE_SESSION_KEY }
-            ?.value
+        return cookieManager.getSessionKey(request)
             ?.let { memberSessionService.findMemberBySessionKey(it, LocalDateTime.now()) }
             ?: throw IllegalStateException("세션 정보를 찾을 수 없습니다.")
     }
