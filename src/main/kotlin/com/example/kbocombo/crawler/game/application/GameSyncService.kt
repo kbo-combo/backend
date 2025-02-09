@@ -11,7 +11,7 @@ class GameSyncService(
 ) {
 
     fun syncGame(gameDate: LocalDate, now: LocalDateTime) {
-        val games = gameClient.findGames(gameDate)
+        val games = gameClient.findGames(gameDate = gameDate)
         gameRenewService.renewGame(games = games, gameDate = gameDate, now = now)
     }
 }
