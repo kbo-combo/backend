@@ -21,7 +21,7 @@ class NaverSportGameClient(
 
     override fun findGames(gameDate: LocalDate): List<Game> {
         val games = getGames(gameDate)
-        return games.map(::toGameRequest)
+        return games.map(::toGameEntity)
     }
 
     private fun getGames(gameDate: LocalDate): List<GameResponse> {
@@ -36,7 +36,7 @@ class NaverSportGameClient(
             object : TypeReference<NaverApiResponse<GameListApiResponse>>() {}).result.games
     }
 
-    private fun toGameRequest(game: GameResponse): Game {
+    private fun toGameEntity(game: GameResponse): Game {
         val previewData = if (game.hasStarter()) findPreview(game.gameId) else null
         return Game(
             gameCode = game.gameId,
