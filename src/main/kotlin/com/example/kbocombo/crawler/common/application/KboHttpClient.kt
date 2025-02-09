@@ -1,4 +1,4 @@
-package com.example.kbocombo.crawler.infra
+package com.example.kbocombo.crawler.common.application
 
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType

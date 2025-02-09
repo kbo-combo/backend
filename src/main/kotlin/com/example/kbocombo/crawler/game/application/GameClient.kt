@@ -1,4 +1,4 @@
-package com.example.kbocombo.crawler.application
+package com.example.kbocombo.crawler.game.application
 
 import com.example.kbocombo.game.domain.Game
 import java.time.LocalDate

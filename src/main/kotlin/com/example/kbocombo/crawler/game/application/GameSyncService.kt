@@ -1,4 +1,4 @@
-package com.example.kbocombo.crawler.application
+package com.example.kbocombo.crawler.game.application
 
 import org.springframework.stereotype.Component
 import java.time.LocalDate

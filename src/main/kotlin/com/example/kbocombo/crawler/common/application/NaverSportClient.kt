@@ -1,4 +1,4 @@
-package com.example.kbocombo.crawler.application
+package com.example.kbocombo.crawler.common.application
 
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.web.bind.annotation.PathVariable

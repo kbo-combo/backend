@@ -1,6 +1,5 @@
-package com.example.kbocombo.crawler.infra
+package com.example.kbocombo.crawler.game.application
 
-import com.example.kbocombo.crawler.application.GameSyncService
 import io.kotest.core.annotation.Ignored
 import io.kotest.core.spec.style.FunSpec
 import org.junit.jupiter.api.DisplayNameGeneration

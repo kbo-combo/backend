@@ -1,8 +1,8 @@
-package com.example.kbocombo.crawler.infra
+package com.example.kbocombo.crawler.game.infra
 
-import com.example.kbocombo.crawler.application.GameClient
-import com.example.kbocombo.crawler.application.NaverSportClient
-import com.example.kbocombo.crawler.infra.dto.NaverApiResponse
+import com.example.kbocombo.crawler.common.application.NaverSportClient
+import com.example.kbocombo.crawler.game.application.GameClient
+import com.example.kbocombo.crawler.game.infra.dto.NaverApiResponse
 import com.example.kbocombo.game.domain.Game
 import com.example.kbocombo.game.domain.vo.GameState.PENDING
 import com.example.kbocombo.game.domain.vo.GameType

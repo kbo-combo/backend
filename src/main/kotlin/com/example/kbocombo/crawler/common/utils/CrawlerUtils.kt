@@ -1,4 +1,4 @@
-package com.example.kbocombo.crawler.utils
+package com.example.kbocombo.crawler.common.utils
 
 import com.example.kbocombo.player.vo.HittingHandType
 import com.example.kbocombo.player.vo.PitchingHandType

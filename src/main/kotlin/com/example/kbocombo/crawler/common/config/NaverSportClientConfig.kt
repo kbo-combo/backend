@@ -1,6 +1,6 @@
-package com.example.kbocombo.crawler.config
+package com.example.kbocombo.crawler.common.config
 
-import com.example.kbocombo.crawler.application.NaverSportClient
+import com.example.kbocombo.crawler.common.application.NaverSportClient
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.client.RestClient

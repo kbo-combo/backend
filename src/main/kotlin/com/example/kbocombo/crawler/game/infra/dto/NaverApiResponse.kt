@@ -1,4 +1,4 @@
-package com.example.kbocombo.crawler.infra.dto
+package com.example.kbocombo.crawler.game.infra.dto
 
 data class NaverApiResponse<T>(
     val code: Int,
