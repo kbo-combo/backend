@@ -1,22 +1,26 @@
 package com.example.kbocombo.auth.presentation
 
 import com.example.kbocombo.auth.application.AuthService
+import com.example.kbocombo.auth.application.CookieManager
+import com.example.kbocombo.auth.application.DatabaseMemberSessionService
 import com.example.kbocombo.auth.application.OAuthMemberResponse
 import com.example.kbocombo.auth.application.OAuthRedirectUriResponse
 import com.example.kbocombo.member.domain.vo.SocialProvider
-import jakarta.servlet.http.HttpServletRequest
+import org.springframework.http.HttpHeaders
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import java.time.LocalDateTime
 import java.util.Locale
 
 
 @RestController
-//@CrossOrigin(origins = ["https://localhost:5173"], allowCredentials = "true")
 class AuthController(
-    private val authService: AuthService
+    private val authService: AuthService,
+    private val cookieManager: CookieManager,
+    private val memberSessionService: DatabaseMemberSessionService
 ) {
     @GetMapping("/oauth/{socialProvider}")
     fun getAuthRedirectUri(
@@ -35,29 +39,16 @@ class AuthController(
         @PathVariable socialProvider: String,
         @RequestParam code: String,
         @RequestParam redirectUri: String,
-        request: HttpServletRequest
     ): ResponseEntity<OAuthMemberResponse> {
         val memberResponse = authService.login(
             socialProvider = SocialProvider.valueOf(socialProvider.uppercase(Locale.getDefault())),
             code = code,
             redirectUri = redirectUri
         )
-
-        setMemberSession(request, memberResponse)
-        return ResponseEntity.ok().body(memberResponse)
-    }
-
-    private fun setMemberSession(
-        request: HttpServletRequest,
-        memberResponse: OAuthMemberResponse
-    ) {
-        val session = request.session
-        session.setAttribute(SESSION_KEY, memberResponse.email)
-        session.maxInactiveInterval = EXPIRED_TIME
-    }
-
-    companion object {
-        private const val SESSION_KEY = "MEMBER_SESSION_KEY"
-        private const val EXPIRED_TIME = 21600
+        val sessionResponse = memberSessionService.saveSession(memberId = memberResponse.id, LocalDateTime.now())
+        val cookie = cookieManager.generateSessionCookie(sessionKey = sessionResponse.sessionKey)
+        return ResponseEntity.ok()
+            .header(HttpHeaders.SET_COOKIE, cookie.toString())
+            .body(memberResponse)
     }
 }
