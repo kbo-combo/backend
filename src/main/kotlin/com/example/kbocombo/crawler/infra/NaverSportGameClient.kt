@@ -1,9 +1,9 @@
 package com.example.kbocombo.crawler.infra
 
-import com.example.kbocombo.crawler.application.GameRequest
-import com.example.kbocombo.crawler.application.GameSyncService
+import com.example.kbocombo.crawler.application.GameClient
 import com.example.kbocombo.crawler.application.NaverSportClient
 import com.example.kbocombo.crawler.infra.dto.NaverApiResponse
+import com.example.kbocombo.game.domain.Game
 import com.example.kbocombo.game.domain.vo.GameState.PENDING
 import com.example.kbocombo.game.domain.vo.GameType
 import com.example.kbocombo.player.vo.Team
@@ -14,16 +14,14 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 
 @Component
-class NaverSportGameHandler(
+class NaverSportGameClient(
     private val naverSportClient: NaverSportClient,
-    private val gameSyncService: GameSyncService,
     private val objectMapper: ObjectMapper
-) {
+) : GameClient {
 
-    fun renewGames(gameDate: LocalDate, now: LocalDateTime)  {
+    override fun findGames(gameDate: LocalDate): List<Game> {
         val games = getGames(gameDate)
-        val gameRequests = games.map(::toGameRequest)
-        gameSyncService.renewGame(gameRequests, gameDate, now)
+        return games.map(::toGameRequest)
     }
 
     private fun getGames(gameDate: LocalDate): List<GameResponse> {
@@ -38,9 +36,9 @@ class NaverSportGameHandler(
             object : TypeReference<NaverApiResponse<GameListApiResponse>>() {}).result.games
     }
 
-    private fun toGameRequest(game: GameResponse): GameRequest {
+    private fun toGameRequest(game: GameResponse): Game {
         val previewData = if (game.hasStarter()) findPreview(game.gameId) else null
-        return GameRequest(
+        return Game(
             gameCode = game.gameId,
             homeTeam = Team.fromTeamCode(game.homeTeamCode),
             awayTeam = Team.fromTeamCode(game.awayTeamCode),
