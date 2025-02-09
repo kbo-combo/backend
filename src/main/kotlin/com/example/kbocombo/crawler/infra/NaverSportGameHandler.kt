@@ -26,7 +26,7 @@ class NaverSportGameHandler(
         gameSyncService.renewGame(gameRequests, gameDate, now)
     }
 
-    private fun getGames(gameDate: LocalDate): List<NaverGame> {
+    private fun getGames(gameDate: LocalDate): List<GameResponse> {
         val gameJson = naverSportClient.getGameListByDate(
             upperCategoryId = "kbaseball",
             fromDate = gameDate,
@@ -35,10 +35,10 @@ class NaverSportGameHandler(
         )
         return objectMapper.readValue(
             gameJson,
-            object : TypeReference<NaverApiResponse<GameListResponse>>() {}).result.games
+            object : TypeReference<NaverApiResponse<GameListApiResponse>>() {}).result.games
     }
 
-    private fun toGameRequest(game: NaverGame): GameRequest {
+    private fun toGameRequest(game: GameResponse): GameRequest {
         val previewData = if (game.hasStarter()) findPreview(game.gameId) else null
         return GameRequest(
             gameCode = game.gameId,
@@ -61,11 +61,11 @@ class NaverSportGameHandler(
     }
 }
 
-data class GameListResponse(
-    val games: List<NaverGame>
+data class GameListApiResponse(
+    val games: List<GameResponse>
 )
 
-data class NaverGame(
+data class GameResponse(
     val gameId: String,
     val categoryId: String,
     val gameDate: LocalDate,
@@ -88,19 +88,19 @@ data class NaverGame(
     val gameOnAir: Boolean,
     val specialMatchInfo : String?,
     val seriesOutcome: String?,
-    val homeStarterName: String,
-    val awayStarterName: String,
-    val winPitcherName: String,
-    val losePitcherName: String,
+    val homeStarterName: String?,
+    val awayStarterName: String?,
+    val winPitcherName: String?,
+    val losePitcherName: String?,
     val homeCurrentPitcherName: String?,
     val awayCurrentPitcherName: String?,
-    val seriesGameNo: String,
+    val seriesGameNo: String?,
     val roundName: String?,
-    val roundGameNo: String
+    val roundGameNo: String?
 ) {
 
     fun hasStarter(): Boolean {
-        return homeStarterName.isNotBlank() && awayStarterName.isNotBlank()
+        return !homeStarterName.isNullOrBlank() && !awayStarterName.isNullOrBlank()
     }
 }
 
