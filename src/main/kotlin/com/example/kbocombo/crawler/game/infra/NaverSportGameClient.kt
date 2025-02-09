@@ -40,6 +40,7 @@ class NaverSportGameClient(
             object : TypeReference<NaverApiResponse<GameListApiResponse>>() {}).result.games
     }
 
+    // 선발 투수 정보가 있다면, preview API를 통해 id 조회
     private fun toGameEntity(game: GameResponse): Game {
         val previewData = if (game.hasStarter()) findPreview(game.gameId) else null
         return Game(
@@ -98,6 +99,7 @@ data class GameResponse(
     val seriesGameNo: String?,
     val roundName: String?,
     val roundGameNo: String?,
+// 포스트시즌 시리즈 데이터
 //    val seriesOutcome: List<Series>?
 ) {
 
