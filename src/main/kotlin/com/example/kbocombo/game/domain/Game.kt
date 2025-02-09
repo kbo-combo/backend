@@ -12,6 +12,7 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
 
 @Entity(name = "GAME")
@@ -52,11 +53,20 @@ class Game(
     val gameState: GameState,
 ) : BaseEntity() {
 
+    fun updatePitcher(homeStartingPitcherId: Long?, awayStartingPitcherId: Long?) {
+        this.homeStartingPitcherId = homeStartingPitcherId
+        this.awayStartingPitcherId = awayStartingPitcherId
+    }
+
     fun isRunning(): Boolean {
         return gameState == GameState.RUNNING
     }
 
     fun isCompleted(): Boolean {
         return gameState == GameState.COMPLETED
+    }
+
+    fun isAfterGameStart(dateTime: LocalDateTime): Boolean {
+        return LocalDateTime.of(startDate, startTime) >= dateTime
     }
 }
