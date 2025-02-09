@@ -27,9 +27,15 @@ class Game(
     @Column(name = "home_team", nullable = false)
     val homeTeam: Team,
 
+    @Column(name = "home_starting_pitcher_id")
+    var homeStartingPitcherId: Long?,
+
     @Enumerated(EnumType.STRING)
     @Column(name = "away_team", nullable = false)
     val awayTeam: Team,
+
+    @Column(name = "away_starting_pitcher_id")
+    var awayStartingPitcherId: Long?,
 
     @Column(name = "start_date", nullable = false)
     val startDate: LocalDate,
