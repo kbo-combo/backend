@@ -27,10 +27,17 @@ class GameRenewService(
                 continue
             }
 
-            savedGame.updatePitcher(
+            updateStartingPitcher(
+                savedGame = savedGame,
                 homeStartingPitcherId = game.homeStartingPitcherId,
-                awayStartingPitcherId = game.awayStartingPitcherId,
-            )
+                awayStartingPitcherId = game.awayStartingPitcherId)
         }
+    }
+
+    private fun updateStartingPitcher(savedGame: Game, homeStartingPitcherId: Long?, awayStartingPitcherId: Long?) {
+        savedGame.updateStartingPitcher(
+            homeStartingPitcherId = homeStartingPitcherId,
+            awayStartingPitcherId = awayStartingPitcherId,
+        )
     }
 }

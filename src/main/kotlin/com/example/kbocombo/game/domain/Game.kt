@@ -53,7 +53,7 @@ class Game(
     val gameState: GameState,
 ) : BaseEntity() {
 
-    fun updatePitcher(homeStartingPitcherId: Long?, awayStartingPitcherId: Long?) {
+    fun updateStartingPitcher(homeStartingPitcherId: Long?, awayStartingPitcherId: Long?) {
         this.homeStartingPitcherId = homeStartingPitcherId
         this.awayStartingPitcherId = awayStartingPitcherId
     }
