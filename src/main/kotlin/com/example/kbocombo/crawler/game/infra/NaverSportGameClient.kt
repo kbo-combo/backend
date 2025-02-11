@@ -29,7 +29,7 @@ class NaverSportGameClient(
             .map { toGameEntity(it) }
     }
 
-    private fun getGames(gameDate: LocalDate): List<GameResponse> {
+    private fun getGames(gameDate: LocalDate): List<NaverGameResponse> {
         val gameJson = naverSportClient.getGameListByDate(
             fields = "basic,schedule,baseball",
             upperCategoryId = "kbaseball",
@@ -40,11 +40,11 @@ class NaverSportGameClient(
         )
         return objectMapper.readValue(
             gameJson,
-            object : TypeReference<NaverApiResponse<GameListApiResponse>>() {}).result.games
+            object : TypeReference<NaverApiResponse<NaverGameListApiResponse>>() {}).result.games
     }
 
     // 선발 투수 정보가 있다면, preview API를 통해 id 조회
-    private fun toGameEntity(game: GameResponse): Game {
+    private fun toGameEntity(game: NaverGameResponse): Game {
         val previewData = if (game.hasStarter()) findPreview(game.gameId) else null
         return Game(
             gameCode = game.gameId,
@@ -70,11 +70,11 @@ class NaverSportGameClient(
         starterInfo?.playerInfo?.pCode?.let { playerRepository.findByWebId(WebId(it)) }?.id
 }
 
-data class GameListApiResponse(
-    val games: List<GameResponse>
+data class NaverGameListApiResponse(
+    val games: List<NaverGameResponse>
 )
 
-data class GameResponse(
+data class NaverGameResponse(
     val gameId: String,
     val categoryId: String,
     val gameDate: LocalDate,
