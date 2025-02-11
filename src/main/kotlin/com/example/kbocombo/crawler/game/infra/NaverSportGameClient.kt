@@ -45,7 +45,7 @@ class NaverSportGameClient(
 
     // 선발 투수 정보가 있다면, preview API를 통해 id 조회
     private fun toGameEntity(naverGameResponse: NaverGameResponse): Game {
-        val previewData = if (naverGameResponse.hasStarter()) findPreview(naverGameResponse.gameId) else null
+        val previewData = if (naverGameResponse.hasStartingPitcher()) findPreview(naverGameResponse.gameId) else null
         return Game(
             gameCode = naverGameResponse.gameId,
             homeTeam = Team.fromTeamCode(naverGameResponse.homeTeamCode),
@@ -109,7 +109,7 @@ data class NaverGameResponse(
 //    val seriesOutcome: List<Series>?
 ) {
 
-    fun hasStarter(): Boolean {
+    fun hasStartingPitcher(): Boolean {
         return !homeStarterName.isNullOrBlank() && !awayStarterName.isNullOrBlank()
     }
 
