@@ -28,15 +28,14 @@ class Game(
     @Column(name = "home_team", nullable = false)
     val homeTeam: Team,
 
-    @Column(name = "home_starting_pitcher_id")
-    var homeStartingPitcherId: Long?,
+    homeStartingPitcherId: Long?,
+
+    awayStartingPitcherId: Long?,
 
     @Enumerated(EnumType.STRING)
     @Column(name = "away_team", nullable = false)
     val awayTeam: Team,
 
-    @Column(name = "away_starting_pitcher_id")
-    var awayStartingPitcherId: Long?,
 
     @Column(name = "start_date", nullable = false)
     val startDate: LocalDate,
@@ -52,6 +51,14 @@ class Game(
     @Column(name = "game_state", nullable = false)
     val gameState: GameState,
 ) : BaseEntity() {
+
+    @Column(name = "home_starting_pitcher_id")
+    var homeStartingPitcherId: Long? = homeStartingPitcherId
+        protected set
+
+    @Column(name = "away_starting_pitcher_id")
+    var awayStartingPitcherId: Long? = awayStartingPitcherId
+        protected set
 
     fun updateStartingPitcher(homeStartingPitcherId: Long?, awayStartingPitcherId: Long?) {
         this.homeStartingPitcherId = homeStartingPitcherId
