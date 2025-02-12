@@ -2,6 +2,7 @@ package com.example.kbocombo.member.ui
 
 import com.example.kbocombo.auth.application.CookieManager
 import com.example.kbocombo.auth.application.MemberSessionService
+import com.example.kbocombo.exception.AuthenticationException
 import com.example.kbocombo.member.domain.Member
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.core.MethodParameter
@@ -34,6 +35,6 @@ class MemberArgumentResolver(
 
         return cookieManager.getSessionKey(request)
             ?.let { memberSessionService.findMemberBySessionKey(it, LocalDateTime.now()) }
-            ?: throw IllegalStateException("세션 정보를 찾을 수 없습니다.")
+            ?: throw AuthenticationException("로그인에 실패했습니다.")
     }
 }
