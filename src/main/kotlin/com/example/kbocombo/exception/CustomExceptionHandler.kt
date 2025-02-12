@@ -27,7 +27,7 @@ class CustomExceptionHandler : ResponseEntityExceptionHandler() {
         .body(ExceptionResponse.from(status, e))
 }
 
-class ExceptionResponse(
+data class ExceptionResponse(
     val status: Int,
     val msg: String?
 ) {
