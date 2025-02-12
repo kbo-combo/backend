@@ -28,7 +28,7 @@ class ComboController(
     fun findCombo(
         @MemberResolver member: Member,
         @RequestParam gameDate: LocalDate,
-    ): ComboResponse {
+    ): ComboResponse? {
         return comboQueryService.findByGameDate(gameDate)
     }
 

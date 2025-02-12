@@ -10,8 +10,7 @@ class ComboQueryService(
     private val comboQueryRepository: ComboQueryRepository
 ) {
 
-    fun findByGameDate(gameDate: LocalDate): ComboResponse {
+    fun findByGameDate(gameDate: LocalDate): ComboResponse? {
         return comboQueryRepository.findByGameDate(gameDate)
-            ?: throw IllegalArgumentException("콤보가 존재하지 않습니다.")
     }
 }
