@@ -2,11 +2,13 @@ package com.example.kbocombo.combo.infra
 
 import com.example.kbocombo.combo.domain.QCombo.combo
 import com.example.kbocombo.combo.domain.vo.ComboStatus
+import com.example.kbocombo.game.domain.QGame.game
 import com.example.kbocombo.player.QPlayer.player
 import com.querydsl.core.annotations.QueryProjection
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.stereotype.Repository
 import java.time.LocalDate
+import java.time.LocalTime
 
 @Repository
 class ComboQueryRepository(
@@ -20,9 +22,12 @@ class ComboQueryRepository(
                 player.id,
                 player.name,
                 player.playerImage.imageUrl,
-                combo.comboStatus
+                combo.comboStatus,
+                game.startDate,
+                game.startTime
             ))
             .from(combo)
+            .leftJoin(combo.game, game)
             .leftJoin(player).on(player.id.eq(combo.playerId))
             .where(combo.gameDate.eq(gameDate)
                 .and(combo.memberId.eq(memberId)))
@@ -35,5 +40,7 @@ data class ComboResponse @QueryProjection constructor(
     val playerId: Long,
     val playerName: String,
     val playerImageUrl: String?,
-    val comboStatus: ComboStatus
+    val comboStatus: ComboStatus,
+    val gameStartDate: LocalDate,
+    val gameStartTime: LocalTime,
 )
