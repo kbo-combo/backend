@@ -2,8 +2,8 @@ package com.example.kbocombo.member.ui
 
 import com.example.kbocombo.auth.application.CookieManager
 import com.example.kbocombo.auth.application.MemberSessionService
-import com.example.kbocombo.exception.AuthenticationException
-import com.example.kbocombo.exception.InternalServerException
+import com.example.kbocombo.exception.type.AuthenticationException
+import com.example.kbocombo.exception.type.InternalServerException
 import com.example.kbocombo.member.domain.Member
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.core.MethodParameter

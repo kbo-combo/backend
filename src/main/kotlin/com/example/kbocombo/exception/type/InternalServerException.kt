@@ -1,4 +1,4 @@
-package com.example.kbocombo.exception
+package com.example.kbocombo.exception.type
 
 class InternalServerException(
     message: String
