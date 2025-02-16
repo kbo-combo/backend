@@ -1,5 +1,6 @@
 package com.example.kbocombo.exception
 
+import com.example.kbocombo.common.logError
 import com.example.kbocombo.exception.type.AuthenticationException
 import com.example.kbocombo.exception.type.BadRequestException
 import com.example.kbocombo.exception.type.InternalServerException
@@ -20,6 +21,7 @@ class CustomExceptionHandler : ResponseEntityExceptionHandler() {
 
     @ExceptionHandler(InternalServerException::class, Exception::class)
     fun handle(e: InternalServerException, request: HttpServletRequest): ResponseEntity<ExceptionResponse> {
+        logError(message = e.message, e = e)
         return createResponse(HttpStatus.INTERNAL_SERVER_ERROR, e)
     }
 
