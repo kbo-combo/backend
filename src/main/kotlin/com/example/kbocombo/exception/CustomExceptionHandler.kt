@@ -1,6 +1,7 @@
 package com.example.kbocombo.exception
 
 import com.example.kbocombo.exception.type.AuthenticationException
+import com.example.kbocombo.exception.type.BadRequestException
 import com.example.kbocombo.exception.type.InternalServerException
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.http.HttpStatus
@@ -22,20 +23,18 @@ class CustomExceptionHandler : ResponseEntityExceptionHandler() {
         return createResponse(HttpStatus.INTERNAL_SERVER_ERROR, e)
     }
 
+    @ExceptionHandler(BadRequestException::class)
+    fun handle(e: BadRequestException, request: HttpServletRequest): ResponseEntity<ExceptionResponse> {
+        return createResponse(HttpStatus.BAD_REQUEST, e)
+    }
+
     private fun createResponse(
         status: HttpStatus,
         e: Exception
     ) = ResponseEntity.status(status)
-        .body(ExceptionResponse.from(status, e))
+        .body(ExceptionResponse(e.message))
 }
 
 data class ExceptionResponse(
-    val status: Int,
     val msg: String?
-) {
-    companion object {
-        fun from(status: HttpStatus, e: Exception): ExceptionResponse {
-            return ExceptionResponse(status.value(), e.message)
-        }
-    }
-}
+)
