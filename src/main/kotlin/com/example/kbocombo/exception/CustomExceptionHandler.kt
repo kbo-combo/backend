@@ -18,7 +18,7 @@ class CustomExceptionHandler : ResponseEntityExceptionHandler() {
         return createResponse(HttpStatus.UNAUTHORIZED, e)
     }
 
-    @ExceptionHandler(InternalServerException::class)
+    @ExceptionHandler(InternalServerException::class, Exception::class)
     fun handle(e: InternalServerException, request: HttpServletRequest): ResponseEntity<ExceptionResponse> {
         return createResponse(HttpStatus.INTERNAL_SERVER_ERROR, e)
     }
