@@ -39,8 +39,8 @@ data class ExceptionResponse(
     val msg: String?
 )
 
-fun requireOrThrow(condition: Boolean, lazyMessage: () -> String) {
+fun requireOrThrow(condition: Boolean, lazyMessage: () -> Any) {
     if (!condition) {
-        throw BadRequestException(lazyMessage.toString())
+        throw BadRequestException(lazyMessage().toString())
     }
 }
