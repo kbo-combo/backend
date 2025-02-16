@@ -1,6 +1,8 @@
 package com.example.kbocombo.combo.infra
 
 import com.example.kbocombo.combo.domain.Combo
+import com.example.kbocombo.combo.domain.vo.ComboStatus
+import com.example.kbocombo.game.domain.Game
 import org.springframework.data.repository.Repository
 import java.time.LocalDate
 
@@ -16,4 +18,8 @@ interface ComboRepository : Repository<Combo, Long> {
     fun delete(combo: Combo)
 
     fun findByMemberIdAndGameDate(memberId: Long, gameDate: LocalDate) : Combo?
+
+    fun findAllByGameAndPlayerIdAndComboStatus(game: Game, playerId: Long, comboStatus: ComboStatus): List<Combo>
+
+    fun findAllByGameAndComboStatus(game: Game, comboStatus: ComboStatus): List<Combo>
 }

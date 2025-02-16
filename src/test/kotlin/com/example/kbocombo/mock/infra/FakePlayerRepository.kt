@@ -12,4 +12,8 @@ class FakePlayerRepository : BaseFakeRepository<Player>(Player::class), PlayerRe
      override fun findById(playerId: Long): Player? {
          return db.find { it.id == playerId }
      }
- }
+
+    override fun findByWebId(webId: Long): Player? {
+        return db.find { it.webId.value == webId }
+    }
+}
