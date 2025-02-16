@@ -23,11 +23,11 @@ class GameController(
         return gameQueryService.findAllGamesByDate(gameDate)
     }
 
-    @GetMapping("/games/{year}/{month}")
+    @GetMapping("/{year}/{month}")
     fun findGamesByYearAndMonth(
         @PathVariable year: Year,
-        @PathVariable month: Month
+        @PathVariable month: Int,
     ): List<GameYearMonthResponse> {
-        return gameQueryService.findAllByYearAndMonth(year = year, month = month)
+        return gameQueryService.findAllByYearAndMonth(year = year, month = Month.of(month))
     }
 }
