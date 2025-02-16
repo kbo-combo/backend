@@ -22,7 +22,7 @@ class GameQueryRepository(
 
     fun findAllGameByBetweenDate(start: LocalDate, end: LocalDate): List<LocalDate> {
         return queryFactory
-            .select(game.startDate)
+            .select(game.startDate).distinct()
             .from(game)
             .where(game.startDate.between(start, end))
             .orderBy(game.startDate.asc())
