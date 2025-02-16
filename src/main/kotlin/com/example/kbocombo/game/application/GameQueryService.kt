@@ -18,13 +18,13 @@ class GameQueryService(
 ) {
 
     @Transactional(readOnly = true)
-    fun findAllGamesByDate(gameDate: LocalDate): List<GameResponse> {
+    fun findAllGamesByDate(gameDate: LocalDate): List<GameByDateResponse> {
         val games = gameQueryRepository.findAllGamesByDate(gameDate)
         val playerIds = games
             .flatMap { listOfNotNull(it.homeStartingPitcherId, it.awayStartingPitcherId) }
         val playersById = gameQueryRepository.findAllPlayerIdIn(playerIds)
             .associateBy { it.id }
-        return GameResponse.toList(games, playersById)
+        return GameByDateResponse.toList(games, playersById)
     }
 
     @Transactional(readOnly = true)
@@ -36,7 +36,7 @@ class GameQueryService(
     }
 }
 
-data class GameResponse(
+data class GameByDateResponse(
     val id: Long,
     val homeTeam: Team,
     val awayTeam: Team,
@@ -49,9 +49,9 @@ data class GameResponse(
 
     companion object {
 
-        fun toList(games: List<Game>, playersById: Map<Long, Player>): List<GameResponse> {
+        fun toList(games: List<Game>, playersById: Map<Long, Player>): List<GameByDateResponse> {
             return games.map {
-                GameResponse(
+                GameByDateResponse(
                     id = it.id,
                     homeTeam = it.homeTeam,
                     awayTeam = it.awayTeam,

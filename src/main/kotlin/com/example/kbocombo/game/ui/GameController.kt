@@ -1,7 +1,7 @@
 package com.example.kbocombo.game.ui
 
+import com.example.kbocombo.game.application.GameByDateResponse
 import com.example.kbocombo.game.application.GameQueryService
-import com.example.kbocombo.game.application.GameResponse
 import com.example.kbocombo.game.application.GameYearMonthResponse
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -19,7 +19,7 @@ class GameController(
 ) {
 
     @GetMapping("/daily")
-    fun findGamesByDate(@RequestParam gameDate: LocalDate): List<GameResponse> {
+    fun findGamesByDate(@RequestParam gameDate: LocalDate): List<GameByDateResponse> {
         return gameQueryService.findAllGamesByDate(gameDate)
     }
 
