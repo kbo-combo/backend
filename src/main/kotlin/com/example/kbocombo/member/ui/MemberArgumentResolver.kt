@@ -2,6 +2,8 @@ package com.example.kbocombo.member.ui
 
 import com.example.kbocombo.auth.application.CookieManager
 import com.example.kbocombo.auth.application.MemberSessionService
+import com.example.kbocombo.exception.type.AuthenticationException
+import com.example.kbocombo.exception.type.InternalServerException
 import com.example.kbocombo.member.domain.Member
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.core.MethodParameter
@@ -30,10 +32,10 @@ class MemberArgumentResolver(
         binderFactory: WebDataBinderFactory?
     ): Any? {
         val request = webRequest.getNativeRequest(HttpServletRequest::class.java)
-            ?: throw IllegalStateException("인증 요청을 처리할 수 없습니다.")
+            ?: throw InternalServerException("인증 요청을 처리할 수 없습니다.")
 
         return cookieManager.getSessionKey(request)
             ?.let { memberSessionService.findMemberBySessionKey(it, LocalDateTime.now()) }
-            ?: throw IllegalStateException("세션 정보를 찾을 수 없습니다.")
+            ?: throw AuthenticationException("로그인에 실패했습니다.")
     }
 }
