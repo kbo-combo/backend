@@ -18,8 +18,8 @@ class GameController(
 ) {
 
     @GetMapping("/daily")
-    fun findGameByDate(@RequestParam gameDate: LocalDate): List<GameResponse> {
-        return gameQueryService.findByGameDate(gameDate)
+    fun findGamesByDate(@RequestParam gameDate: LocalDate): List<GameResponse> {
+        return gameQueryService.findAllGamesByDate(gameDate)
     }
 
     @GetMapping("/games/{year}/{month}")

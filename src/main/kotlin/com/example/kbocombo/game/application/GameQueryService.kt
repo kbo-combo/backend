@@ -16,8 +16,8 @@ class GameQueryService(
     private val gameQueryRepository: GameQueryRepository
 ) {
 
-    fun findByGameDate(gameDate: LocalDate): List<GameResponse> {
-        val games = gameQueryRepository.findAllGameByDate(gameDate)
+    fun findAllGamesByDate(gameDate: LocalDate): List<GameResponse> {
+        val games = gameQueryRepository.findAllGamesByDate(gameDate)
         val playerIds = games
             .flatMap { listOfNotNull(it.homeStartingPitcherId, it.awayStartingPitcherId) }
         val playersById = gameQueryRepository.findAllPlayerIdIn(playerIds)
