@@ -6,6 +6,7 @@ import com.example.kbocombo.game.infra.GameQueryRepository
 import com.example.kbocombo.player.Player
 import com.example.kbocombo.player.vo.Team
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.Month
@@ -16,6 +17,7 @@ class GameQueryService(
     private val gameQueryRepository: GameQueryRepository
 ) {
 
+    @Transactional(readOnly = true)
     fun findAllGamesByDate(gameDate: LocalDate): List<GameResponse> {
         val games = gameQueryRepository.findAllGamesByDate(gameDate)
         val playerIds = games
@@ -25,6 +27,7 @@ class GameQueryService(
         return GameResponse.toList(games, playersById)
     }
 
+    @Transactional(readOnly = true)
     fun findAllByYearAndMonth(year: Year, month: Month): List<GameYearMonthResponse> {
         val start = year.atMonth(month).atDay(1)
         val end = year.atMonth(month).atEndOfMonth()
