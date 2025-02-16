@@ -8,6 +8,8 @@ import com.example.kbocombo.player.vo.Team
 import org.springframework.stereotype.Service
 import java.time.LocalDate
 import java.time.LocalTime
+import java.time.Month
+import java.time.Year
 
 @Service
 class GameQueryService(
@@ -23,7 +25,12 @@ class GameQueryService(
         return GameResponse.toList(games, playersById)
     }
 
-    fun findAllByMonth(month: Int)
+    fun findAllByYearAndMonth(year: Year, month: Month): List<GameYearMonthResponse> {
+        val start = year.atMonth(month).atDay(1)
+        val end = year.atMonth(month).atEndOfMonth()
+        val gameDates = gameQueryRepository.findAllGameByBetweenDate(start = start, end = end)
+        return GameYearMonthResponse.toList(gameDates)
+    }
 }
 
 data class GameResponse(
@@ -67,6 +74,18 @@ data class StartingPitcherResponse(
                 return null
             }
             return StartingPitcherResponse(pitcherId = player.id, name = player.name)
+        }
+    }
+}
+
+data class GameYearMonthResponse(
+    val gameDate: LocalDate
+) {
+    companion object {
+        fun toList(dates: List<LocalDate>): List<GameYearMonthResponse> {
+            return dates.map {
+                GameYearMonthResponse(gameDate = it)
+            }
         }
     }
 }

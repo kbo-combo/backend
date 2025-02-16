@@ -20,6 +20,15 @@ class GameQueryRepository(
             .fetch()
     }
 
+    fun findAllGameByBetweenDate(start: LocalDate, end: LocalDate): List<LocalDate> {
+        return queryFactory
+            .select(game.startDate)
+            .from(game)
+            .where(game.startDate.between(start, end))
+            .orderBy(game.startDate.asc())
+            .fetch()
+    }
+
     fun findAllPlayerIdIn(ids: List<Long>): List<Player> {
         return queryFactory
             .selectFrom(player)
