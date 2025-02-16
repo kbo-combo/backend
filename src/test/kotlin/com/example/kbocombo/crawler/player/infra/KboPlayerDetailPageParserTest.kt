@@ -1,8 +1,8 @@
-package com.example.kbocombo.crawler.infra
+package com.example.kbocombo.crawler.player.infra
 
 import com.example.kbocombo.player.vo.PlayerDetailPosition
-import com.example.kbocombo.player.vo.PlayerPosition
-import com.example.kbocombo.player.vo.Team
+import com.example.kbocombo.player.vo.PlayerPosition.HITTER
+import com.example.kbocombo.player.vo.Team.NC
 import com.example.kbocombo.player.vo.WebId
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
@@ -17,7 +17,7 @@ class KboPlayerDetailPageParserTest : StringSpec({
 
     "플레이어 프로필을 성공적으로 조회한다" {
         // given
-        val webPlayerInfo = WebPlayerInfo(WebId(51907), PlayerPosition.HITTER, Team.NC)
+        val webPlayerInfo = WebPlayerInfo(WebId(51907), HITTER, NC)
 
         // when
         val actual = sut.getPlayerProfile(webPlayerInfo)!!

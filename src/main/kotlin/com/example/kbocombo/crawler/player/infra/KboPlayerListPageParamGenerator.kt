@@ -1,6 +1,6 @@
-package com.example.kbocombo.crawler.infra
+package com.example.kbocombo.crawler.player.infra
 
-import com.example.kbocombo.crawler.utils.toTeamFilterCode
+import com.example.kbocombo.crawler.common.utils.toTeamFilterCode
 import com.example.kbocombo.player.vo.Team
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
