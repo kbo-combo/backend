@@ -2,6 +2,7 @@ package com.example.kbocombo.game.ui
 
 import com.example.kbocombo.game.application.GameQueryService
 import com.example.kbocombo.game.application.GameResponse
+import com.example.kbocombo.game.application.GameYearMonthResponse
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
@@ -26,7 +27,7 @@ class GameController(
     fun findGamesByYearAndMonth(
         @PathVariable year: Year,
         @PathVariable month: Month
-    ): List<GameResponse> {
-        return listOf()
+    ): List<GameYearMonthResponse> {
+        return gameQueryService.findAllByYearAndMonth(year = year, month = month)
     }
 }

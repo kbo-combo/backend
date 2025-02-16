@@ -13,7 +13,7 @@ class GameQueryRepository(
     private val queryFactory: JPAQueryFactory
 ) {
 
-    fun findAllGameByDate(date: LocalDate): List<Game> {
+    fun findAllGamesByDate(date: LocalDate): List<Game> {
         return queryFactory
             .selectFrom(game)
             .where(game.startDate.eq(date))
