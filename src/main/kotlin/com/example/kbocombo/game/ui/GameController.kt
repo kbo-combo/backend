@@ -14,8 +14,8 @@ class GameController(
     private val gameQueryService: GameQueryService
 ) {
 
-    @GetMapping
-    fun findGame(@RequestParam gameDate: LocalDate): List<GameResponse> {
-        return gameQueryService.findAll(gameDate)
+    @GetMapping("/daily")
+    fun findGameByDate(@RequestParam gameDate: LocalDate): List<GameResponse> {
+        return gameQueryService.findByGameDate(gameDate)
     }
 }
