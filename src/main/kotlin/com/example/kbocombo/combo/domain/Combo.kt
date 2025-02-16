@@ -67,6 +67,14 @@ class Combo private constructor(
         this.gameDate = game.startDate
     }
 
+    fun success() {
+        this.comboStatus = ComboStatus.SUCCESS
+    }
+
+    fun fail() {
+        this.comboStatus = ComboStatus.FAIL
+    }
+
     private fun checkCreate(game: Game, now: LocalDateTime) {
         require(isAllowedTimeBefore(game, now)) {
             "게임 시작 ${ALLOWED_MINUTES_GAP}분 이전에만 등록할 수 있습니다."
