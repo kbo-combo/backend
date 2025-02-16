@@ -38,3 +38,9 @@ class CustomExceptionHandler : ResponseEntityExceptionHandler() {
 data class ExceptionResponse(
     val msg: String?
 )
+
+fun requireOrThrow(condition: Boolean, lazyMessage: () -> String) {
+    if (!condition) {
+        throw BadRequestException(lazyMessage.toString())
+    }
+}
