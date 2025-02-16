@@ -13,7 +13,7 @@ class ComboQueryRepository(
     private val queryFactory: JPAQueryFactory
 ) {
 
-    fun findByGameDate(comboDate: LocalDate): ComboResponse? {
+    fun findByGameDate(memberId: Long, gameDate: LocalDate): ComboResponse? {
         return queryFactory
             .select(QComboResponse(
                 combo.id,
@@ -24,7 +24,8 @@ class ComboQueryRepository(
             ))
             .from(combo)
             .leftJoin(player).on(player.id.eq(combo.playerId))
-            .where(combo.gameDate.eq(comboDate))
+            .where(combo.gameDate.eq(gameDate)
+                .and(combo.memberId.eq(memberId)))
             .fetchOne()
     }
 }

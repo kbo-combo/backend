@@ -10,7 +10,7 @@ class ComboQueryService(
     private val comboQueryRepository: ComboQueryRepository
 ) {
 
-    fun findByGameDate(gameDate: LocalDate): ComboResponse? {
-        return comboQueryRepository.findByGameDate(gameDate)
+    fun findByGameDate(memberId: Long, gameDate: LocalDate): ComboResponse? {
+        return comboQueryRepository.findByGameDate(memberId = memberId, gameDate = gameDate)
     }
 }

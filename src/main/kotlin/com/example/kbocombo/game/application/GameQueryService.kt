@@ -35,7 +35,6 @@ data class GameResponse(
     val awayStartingPitcher: StartingPitcherResponse?
 ) {
 
-
     companion object {
 
         fun toList(games: List<Game>, playersById: Map<Long, Player>): List<GameResponse> {

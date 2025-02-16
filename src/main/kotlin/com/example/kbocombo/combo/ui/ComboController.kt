@@ -29,7 +29,7 @@ class ComboController(
         @MemberResolver member: Member,
         @RequestParam gameDate: LocalDate,
     ): ComboResponse? {
-        return comboQueryService.findByGameDate(gameDate)
+        return comboQueryService.findByGameDate(memberId = member.id, gameDate = gameDate)
     }
 
     @PostMapping
