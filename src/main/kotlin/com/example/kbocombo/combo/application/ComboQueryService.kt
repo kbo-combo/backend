@@ -14,13 +14,13 @@ class ComboQueryService(
 ) {
 
     @Transactional(readOnly = true)
-    fun findByGameDate(memberId: Long, gameDate: LocalDate?, gameId: Long?): ComboResponse? {
+    fun findByGameDate(memberId: Long, gameDate: LocalDate?, gameId: Long?): ComboDetailResponse? {
         val dto = comboQueryRepository.findComboByParams(memberId = memberId, gameDate = gameDate, gameId = gameId)
-        return dto?.let {  ComboResponse.of(dto)}
+        return dto?.let {  ComboDetailResponse.of(dto)}
     }
 }
 
-data class ComboResponse(
+data class ComboDetailResponse(
     val comboId: Long,
     val playerId: Long,
     val playerName: String,
@@ -31,11 +31,11 @@ data class ComboResponse(
 ) {
     companion object {
 
-        fun of(queryDto: ComboQueryDto): ComboResponse {
+        fun of(queryDto: ComboQueryDto): ComboDetailResponse {
             val combo = queryDto.combo
             val game = combo.game
             val player = queryDto.player
-            return ComboResponse(
+            return ComboDetailResponse(
                 comboId = combo.id,
                 playerId = player.id,
                 playerName = player.name,

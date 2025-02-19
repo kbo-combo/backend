@@ -1,7 +1,7 @@
 package com.example.kbocombo.combo.ui
 
+import com.example.kbocombo.combo.application.ComboDetailResponse
 import com.example.kbocombo.combo.application.ComboQueryService
-import com.example.kbocombo.combo.application.ComboResponse
 import com.example.kbocombo.combo.application.ComboService
 import com.example.kbocombo.combo.application.request.ComboCreateRequest
 import com.example.kbocombo.member.domain.Member
@@ -30,7 +30,7 @@ class ComboController(
         @MemberResolver member: Member,
         @RequestParam(required = false) gameDate: LocalDate?,
         @RequestParam(required = false) gameId: Long?,
-    ): ResponseEntity<ComboResponse> {
+    ): ResponseEntity<ComboDetailResponse> {
         val response = comboQueryService.findByGameDate(memberId = member.id, gameDate = gameDate, gameId = gameId)
         return ResponseEntity.ok(response)
     }
