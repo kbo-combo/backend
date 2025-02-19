@@ -28,9 +28,10 @@ class ComboController(
     @GetMapping
     fun findCombo(
         @MemberResolver member: Member,
-        @RequestParam gameDate: LocalDate,
+        @RequestParam(required = false) gameDate: LocalDate?,
+        @RequestParam(required = false) gameId: Long?,
     ): ResponseEntity<ComboResponse> {
-        val response = comboQueryService.findByGameDate(memberId = member.id, gameDate = gameDate)
+        val response = comboQueryService.findByGameDate(memberId = member.id, gameDate = gameDate, gameId = gameId)
         return ResponseEntity.ok(response)
     }
 

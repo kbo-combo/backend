@@ -5,6 +5,8 @@ import com.example.kbocombo.combo.domain.QCombo.combo
 import com.example.kbocombo.game.domain.QGame.game
 import com.example.kbocombo.player.Player
 import com.example.kbocombo.player.QPlayer.player
+import com.example.kbocombo.utils.eq
+import com.querydsl.core.BooleanBuilder
 import com.querydsl.core.annotations.QueryProjection
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.stereotype.Repository
@@ -15,17 +17,18 @@ class ComboQueryRepository(
     private val queryFactory: JPAQueryFactory
 ) {
 
-    fun findByGameDate(memberId: Long, gameDate: LocalDate): ComboQueryDto? {
+    fun findComboByParams(memberId: Long, gameDate: LocalDate?, gameId: Long?): ComboQueryDto? {
         return queryFactory
-            .select(QComboQueryDto(
-                combo,
-                player
-            ))
+            .select(QComboQueryDto(combo, player))
             .from(combo)
             .leftJoin(combo.game, game).fetchJoin()
             .leftJoin(player).on(player.id.eq(combo.playerId))
-            .where(combo.gameDate.eq(gameDate)
-                .and(combo.memberId.eq(memberId)))
+            .where(
+                BooleanBuilder()
+                    .and(combo.memberId.eq(memberId))
+                    .and(eq(combo.game.id, gameId))
+                    .and(eq(combo.gameDate, gameDate))
+            )
             .fetchOne()
     }
 }

@@ -14,8 +14,8 @@ class ComboQueryService(
 ) {
 
     @Transactional(readOnly = true)
-    fun findByGameDate(memberId: Long, gameDate: LocalDate): ComboResponse? {
-        val dto = comboQueryRepository.findByGameDate(memberId = memberId, gameDate = gameDate)
+    fun findByGameDate(memberId: Long, gameDate: LocalDate?, gameId: Long?): ComboResponse? {
+        val dto = comboQueryRepository.findComboByParams(memberId = memberId, gameDate = gameDate, gameId = gameId)
         return dto?.let {  ComboResponse.of(dto)}
     }
 }
