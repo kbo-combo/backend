@@ -17,9 +17,9 @@ class ComboQueryRepository(
     private val queryFactory: JPAQueryFactory
 ) {
 
-    fun findComboByParams(memberId: Long, gameDate: LocalDate?, gameId: Long?): ComboQueryDto? {
+    fun findComboByParams(memberId: Long, gameDate: LocalDate?, gameId: Long?): ComboDetailQueryDto? {
         return queryFactory
-            .select(QComboQueryDto(combo, player))
+            .select(QComboDetailQueryDto(combo, player))
             .from(combo)
             .leftJoin(combo.game, game).fetchJoin()
             .leftJoin(player).on(player.id.eq(combo.playerId))
@@ -33,7 +33,7 @@ class ComboQueryRepository(
     }
 }
 
-data class ComboQueryDto @QueryProjection constructor(
+data class ComboDetailQueryDto @QueryProjection constructor(
     val combo: Combo,
     val player: Player
 )

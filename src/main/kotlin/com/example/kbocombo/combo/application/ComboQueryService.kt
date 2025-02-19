@@ -1,7 +1,7 @@
 package com.example.kbocombo.combo.application
 
 import com.example.kbocombo.combo.domain.vo.ComboStatus
-import com.example.kbocombo.combo.infra.ComboQueryDto
+import com.example.kbocombo.combo.infra.ComboDetailQueryDto
 import com.example.kbocombo.combo.infra.ComboQueryRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -31,7 +31,7 @@ data class ComboDetailResponse(
 ) {
     companion object {
 
-        fun of(queryDto: ComboQueryDto): ComboDetailResponse {
+        fun of(queryDto: ComboDetailQueryDto): ComboDetailResponse {
             val combo = queryDto.combo
             val game = combo.game
             val player = queryDto.player
