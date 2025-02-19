@@ -5,7 +5,6 @@ import com.example.kbocombo.game.application.GameQueryService
 import com.example.kbocombo.game.application.GameYearMonthResponse
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
@@ -25,10 +24,10 @@ class GameController(
         return ResponseEntity.ok(response)
     }
 
-    @GetMapping("/{year}/{month}")
+    @GetMapping
     fun findGamesByYearAndMonth(
-        @PathVariable year: Year,
-        @PathVariable month: Int,
+        @RequestParam year: Year,
+        @RequestParam month: Int,
     ): ResponseEntity<List<GameYearMonthResponse>> {
         val response = gameQueryService.findAllByYearAndMonth(year = year, month = Month.of(month))
         return ResponseEntity.ok(response)
