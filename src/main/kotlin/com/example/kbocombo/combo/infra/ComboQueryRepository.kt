@@ -17,7 +17,7 @@ class ComboQueryRepository(
 
     fun findByGameDate(memberId: Long, gameDate: LocalDate): ComboQueryDto? {
         return queryFactory
-            .select(QComboResponse(
+            .select(QComboQueryDto(
                 combo,
                 player
             ))
