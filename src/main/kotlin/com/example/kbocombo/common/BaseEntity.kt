@@ -9,8 +9,8 @@ import java.time.LocalDateTime
 class BaseEntity(
 
     @CreatedDate
-    val createdDate: LocalDateTime = LocalDateTime.now(),
+    val createdDateTime: LocalDateTime = LocalDateTime.now(),
 
     @LastModifiedDate
-    val updatedDate: LocalDateTime = LocalDateTime.now()
+    val updatedDateTime: LocalDateTime = LocalDateTime.now()
 )
