@@ -9,4 +9,6 @@ interface GameEndEventJobRepository : Repository<GameEndEventJob, Long> {
     fun save(gameEndEventJob: GameEndEventJob): GameEndEventJob
 
     fun findAllByProcessedAndGameDate(processed: Boolean, gameDate: LocalDate): List<GameEndEventJob>
+
+    fun findById(id: Long): GameEndEventJob
 }

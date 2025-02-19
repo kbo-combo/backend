@@ -81,6 +81,24 @@ class ComboService(
         }
     }
 
+    @Transactional
+    fun updateComboToPass(gameId: Long) {
+        val game = gameRepository.getById(gameId)
+        if (game.isCompleted().not()) {
+            throw IllegalArgumentException("게임이 종료되지 않은 경우, 콤보 실패 처리를 할 수 없습니다.")
+        }
+
+        val combos = comboRepository.findAllByGameAndComboStatus(
+            game = game,
+            comboStatus = ComboStatus.PENDING
+        )
+
+        combos.forEach {
+            it.pass()
+            comboRepository.save(it)
+        }
+    }
+
     private fun findSameDateCombo(memberId: Long, game: Game): Combo? {
         return comboRepository.findByMemberIdAndGameDate(memberId, game.startDate)
     }
