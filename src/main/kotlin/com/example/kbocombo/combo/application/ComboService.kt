@@ -85,7 +85,7 @@ class ComboService(
     fun updateComboToPass(gameId: Long) {
         val game = gameRepository.getById(gameId)
         if (game.isCompleted().not()) {
-            throw IllegalArgumentException("게임이 종료되지 않은 경우, 콤보 실패 처리를 할 수 없습니다.")
+            throw IllegalArgumentException("게임이 종료되지 않은 경우, 콤보 패스 처리를 할 수 없습니다.")
         }
 
         val combos = comboRepository.findAllByGameAndComboStatus(
