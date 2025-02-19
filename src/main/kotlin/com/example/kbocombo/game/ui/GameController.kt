@@ -3,6 +3,7 @@ package com.example.kbocombo.game.ui
 import com.example.kbocombo.game.application.GameByDateResponse
 import com.example.kbocombo.game.application.GameQueryService
 import com.example.kbocombo.game.application.GameYearMonthResponse
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
@@ -19,15 +20,17 @@ class GameController(
 ) {
 
     @GetMapping("/daily")
-    fun findGamesByDate(@RequestParam gameDate: LocalDate): List<GameByDateResponse> {
-        return gameQueryService.findAllGamesByDate(gameDate)
+    fun findGamesByDate(@RequestParam gameDate: LocalDate): ResponseEntity<List<GameByDateResponse>> {
+        val response = gameQueryService.findAllGamesByDate(gameDate)
+        return ResponseEntity.ok(response)
     }
 
     @GetMapping("/{year}/{month}")
     fun findGamesByYearAndMonth(
         @PathVariable year: Year,
         @PathVariable month: Int,
-    ): List<GameYearMonthResponse> {
-        return gameQueryService.findAllByYearAndMonth(year = year, month = Month.of(month))
+    ): ResponseEntity<List<GameYearMonthResponse>> {
+        val response = gameQueryService.findAllByYearAndMonth(year = year, month = Month.of(month))
+        return ResponseEntity.ok(response)
     }
 }

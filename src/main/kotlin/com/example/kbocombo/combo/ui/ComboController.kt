@@ -6,6 +6,7 @@ import com.example.kbocombo.combo.application.request.ComboCreateRequest
 import com.example.kbocombo.combo.infra.ComboResponse
 import com.example.kbocombo.member.domain.Member
 import com.example.kbocombo.member.ui.MemberResolver
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -28,8 +29,9 @@ class ComboController(
     fun findCombo(
         @MemberResolver member: Member,
         @RequestParam gameDate: LocalDate,
-    ): ComboResponse? {
-        return comboQueryService.findByGameDate(memberId = member.id, gameDate = gameDate)
+    ): ResponseEntity<ComboResponse> {
+        val response = comboQueryService.findByGameDate(memberId = member.id, gameDate = gameDate)
+        return ResponseEntity.ok(response)
     }
 
     @PostMapping
@@ -40,7 +42,8 @@ class ComboController(
         comboService.createCombo(
             request = request,
             memberId = member.id,
-            now = LocalDateTime.now())
+            now = LocalDateTime.now()
+        )
     }
 
     @DeleteMapping("/{comboId}")
