@@ -1,9 +1,9 @@
 package com.example.kbocombo.combo.ui
 
 import com.example.kbocombo.combo.application.ComboQueryService
+import com.example.kbocombo.combo.application.ComboResponse
 import com.example.kbocombo.combo.application.ComboService
 import com.example.kbocombo.combo.application.request.ComboCreateRequest
-import com.example.kbocombo.combo.infra.ComboResponse
 import com.example.kbocombo.member.domain.Member
 import com.example.kbocombo.member.ui.MemberResolver
 import org.springframework.http.ResponseEntity

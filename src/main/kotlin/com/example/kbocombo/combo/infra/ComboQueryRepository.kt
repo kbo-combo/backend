@@ -1,33 +1,28 @@
 package com.example.kbocombo.combo.infra
 
+import com.example.kbocombo.combo.domain.Combo
 import com.example.kbocombo.combo.domain.QCombo.combo
-import com.example.kbocombo.combo.domain.vo.ComboStatus
 import com.example.kbocombo.game.domain.QGame.game
+import com.example.kbocombo.player.Player
 import com.example.kbocombo.player.QPlayer.player
 import com.querydsl.core.annotations.QueryProjection
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.stereotype.Repository
 import java.time.LocalDate
-import java.time.LocalTime
 
 @Repository
 class ComboQueryRepository(
     private val queryFactory: JPAQueryFactory
 ) {
 
-    fun findByGameDate(memberId: Long, gameDate: LocalDate): ComboResponse? {
+    fun findByGameDate(memberId: Long, gameDate: LocalDate): ComboQueryDto? {
         return queryFactory
             .select(QComboResponse(
-                combo.id,
-                player.id,
-                player.name,
-                player.playerImage.imageUrl,
-                combo.comboStatus,
-                game.startDate,
-                game.startTime
+                combo,
+                player
             ))
             .from(combo)
-            .leftJoin(combo.game, game)
+            .leftJoin(combo.game, game).fetchJoin()
             .leftJoin(player).on(player.id.eq(combo.playerId))
             .where(combo.gameDate.eq(gameDate)
                 .and(combo.memberId.eq(memberId)))
@@ -35,12 +30,7 @@ class ComboQueryRepository(
     }
 }
 
-data class ComboResponse @QueryProjection constructor(
-    val comboId: Long,
-    val playerId: Long,
-    val playerName: String,
-    val playerImageUrl: String?,
-    val comboStatus: ComboStatus,
-    val gameStartDate: LocalDate,
-    val gameStartTime: LocalTime,
+data class ComboQueryDto @QueryProjection constructor(
+    val combo: Combo,
+    val player: Player
 )
