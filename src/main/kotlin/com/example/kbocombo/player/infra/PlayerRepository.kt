@@ -7,6 +7,9 @@ import org.springframework.data.repository.Repository
 fun PlayerRepository.getById(playerId: Long): Player =
     findById(playerId) ?: throw IllegalArgumentException("존재하지 않는 선수입니다.")
 
+fun PlayerRepository.getByWebId(webId: WebId): Player =
+    findByWebId(webId) ?: throw IllegalArgumentException("WebId $webId 값에 해당하는 선수는 존재하지 않습니다.")
+
 interface PlayerRepository : Repository<Player, Long> {
 
     fun save(player: Player) : Player
