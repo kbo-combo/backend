@@ -2,6 +2,7 @@ package com.example.kbocombo.mock.infra
 
 import com.example.kbocombo.player.Player
 import com.example.kbocombo.player.infra.PlayerRepository
+import com.example.kbocombo.player.vo.WebId
 
 class FakePlayerRepository : BaseFakeRepository<Player>(Player::class), PlayerRepository {
 
@@ -13,7 +14,7 @@ class FakePlayerRepository : BaseFakeRepository<Player>(Player::class), PlayerRe
          return db.find { it.id == playerId }
      }
 
-    override fun findByWebId(webId: Long): Player? {
-        return db.find { it.webId.value == webId }
+    override fun findByWebId(webId: WebId): Player? {
+        return db.find { it.webId == webId }
     }
 }

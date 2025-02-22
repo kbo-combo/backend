@@ -1,5 +1,6 @@
 package com.example.kbocombo.combo.domain
 
+import com.example.kbocombo.exception.type.BadRequestException
 import com.example.kbocombo.game.domain.Game
 import com.example.kbocombo.utils.fixture
 import com.navercorp.fixturemonkey.kotlin.giveMeKotlinBuilder
@@ -24,7 +25,7 @@ class ComboTest : StringSpec({
                 val startDateTime = LocalDateTime.parse("2025-03-28T18:30:00")
                 val game = getGame(startDateTime)
 
-                val exception = shouldThrow<IllegalArgumentException> {
+                val exception = shouldThrow<BadRequestException> {
                     createCombo(game, startDateTime.minusDays(dayGap))
 
                 }
@@ -39,7 +40,7 @@ class ComboTest : StringSpec({
                 val startDateTime = LocalDateTime.parse("2025-03-28T18:30:00")
                 val game = getGame(startDateTime)
 
-                val exception = shouldThrow<IllegalArgumentException> {
+                val exception = shouldThrow<BadRequestException> {
                     createCombo(game, startDateTime.minusMinutes(minGap))
                 }
 
@@ -54,7 +55,7 @@ class ComboTest : StringSpec({
                 val game = getGame(startDateTime)
                 val combo = createCombo(game, startDateTime.minusDays(1))
 
-                val exception = shouldThrow<IllegalArgumentException> {
+                val exception = shouldThrow<BadRequestException> {
                     combo.checkDelete(startDateTime.minusMinutes(minGap))
                 }
 

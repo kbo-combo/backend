@@ -12,6 +12,7 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
 
 @Entity(name = "GAME")
@@ -20,13 +21,21 @@ class Game(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0L,
 
+    @Column(name = "game_code", nullable = false)
+    val gameCode: String,
+
     @Enumerated(EnumType.STRING)
     @Column(name = "home_team", nullable = false)
     val homeTeam: Team,
 
+    homeStartingPitcherId: Long?,
+
+    awayStartingPitcherId: Long?,
+
     @Enumerated(EnumType.STRING)
     @Column(name = "away_team", nullable = false)
     val awayTeam: Team,
+
 
     @Column(name = "start_date", nullable = false)
     val startDate: LocalDate,
@@ -43,11 +52,28 @@ class Game(
     val gameState: GameState,
 ) : BaseEntity() {
 
+    @Column(name = "home_starting_pitcher_id")
+    var homeStartingPitcherId: Long? = homeStartingPitcherId
+        protected set
+
+    @Column(name = "away_starting_pitcher_id")
+    var awayStartingPitcherId: Long? = awayStartingPitcherId
+        protected set
+
+    fun updateStartingPitcher(homeStartingPitcherId: Long?, awayStartingPitcherId: Long?) {
+        this.homeStartingPitcherId = homeStartingPitcherId
+        this.awayStartingPitcherId = awayStartingPitcherId
+    }
+
     fun isRunning(): Boolean {
         return gameState == GameState.RUNNING
     }
 
     fun isCompleted(): Boolean {
         return gameState == GameState.COMPLETED
+    }
+
+    fun isAfterGameStart(dateTime: LocalDateTime): Boolean {
+        return LocalDateTime.of(startDate, startTime) >= dateTime
     }
 }

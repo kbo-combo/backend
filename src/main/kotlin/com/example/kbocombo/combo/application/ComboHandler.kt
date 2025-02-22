@@ -1,7 +1,7 @@
 package com.example.kbocombo.combo.application
 
 import com.example.kbocombo.common.logInfo
-import com.example.kbocombo.crawler.infra.HitterHitRecordedEvent
+import com.example.kbocombo.crawler.combo.infra.HitterHitRecordedEvent
 import org.springframework.context.event.EventListener
 import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Component

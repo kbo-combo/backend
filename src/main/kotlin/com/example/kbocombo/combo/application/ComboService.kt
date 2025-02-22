@@ -11,6 +11,7 @@ import com.example.kbocombo.game.infra.getById
 import com.example.kbocombo.player.infra.PlayerRepository
 import com.example.kbocombo.player.infra.getById
 import com.example.kbocombo.player.infra.getByWebId
+import com.example.kbocombo.player.vo.WebId
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
@@ -51,7 +52,7 @@ class ComboService(
         if (game.isRunning().not()) {
             throw IllegalArgumentException("진행 중인 게임이 아닌 경우, 콤보 성공 처리를 할 수 없습니다.")
         }
-        val player = playerRepository.getByWebId(webId = playerWebId)
+        val player = playerRepository.getByWebId(webId = WebId(playerWebId))
         val combos = comboRepository.findAllByGameAndPlayerIdAndComboStatus(
             game = game,
             playerId = player.id,

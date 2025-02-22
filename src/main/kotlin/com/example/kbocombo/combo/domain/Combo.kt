@@ -2,6 +2,7 @@ package com.example.kbocombo.combo.domain
 
 import com.example.kbocombo.combo.domain.vo.ComboStatus
 import com.example.kbocombo.common.BaseEntity
+import com.example.kbocombo.exception.requireOrThrow
 import com.example.kbocombo.game.domain.Game
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -56,11 +57,11 @@ class Combo private constructor(
     }
 
     fun checkDelete(now: LocalDateTime) {
-        require(isAllowedTimeBefore(game, now)) { "게임 시작 ${ALLOWED_MINUTES_GAP}분 이전에만 삭제할 수 있습니다." }
+        requireOrThrow(isAllowedTimeBefore(game, now)) { "게임 시작 ${ALLOWED_MINUTES_GAP}분 이전에만 삭제할 수 있습니다." }
     }
 
     fun update(game: Game, playerId: Long, now: LocalDateTime) {
-        require(isAllowedTimeBefore(game, now)) { "기존에 등록한 콤보가 게임 시작 ${ALLOWED_MINUTES_GAP}분 전 이라 삭제할 수 없습니다." }
+        requireOrThrow(isAllowedTimeBefore(game, now)) { "기존에 등록한 콤보가 게임 시작 ${ALLOWED_MINUTES_GAP}분 전 이라 삭제할 수 없습니다." }
         checkCreate(game, now)
         this.game = game
         this.playerId = playerId
@@ -80,11 +81,11 @@ class Combo private constructor(
     }
 
     private fun checkCreate(game: Game, now: LocalDateTime) {
-        require(isAllowedTimeBefore(game, now)) {
+        requireOrThrow(isAllowedTimeBefore(game, now)) {
             "게임 시작 ${ALLOWED_MINUTES_GAP}분 이전에만 등록할 수 있습니다."
         }
 
-        require(now.toLocalDate() >= game.startDate.minusDays(ALLOWED_DAY_GAP)) {
+        requireOrThrow(now.toLocalDate() >= game.startDate.minusDays(ALLOWED_DAY_GAP)) {
             "게임 시작 ${ALLOWED_DAY_GAP}일 전부터 등록할 수 있습니다."
         }
     }
