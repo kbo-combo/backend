@@ -10,7 +10,7 @@ permissions:
 jobs:
   deploy:
     name: Deploy
-    runs-on: ubuntu-latest-4-cores
+    runs-on: ubuntu-22.04
 
     steps:
       - name: Checkout
