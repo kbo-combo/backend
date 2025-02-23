@@ -31,4 +31,4 @@ class GameHandler(
     }
 }
 
-data class GameEndedEvent(val gameId: Long)
+

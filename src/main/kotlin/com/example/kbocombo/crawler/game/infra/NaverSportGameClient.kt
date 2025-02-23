@@ -4,7 +4,7 @@ import com.example.kbocombo.crawler.common.application.NaverSportClient
 import com.example.kbocombo.crawler.common.infra.dto.NaverApiResponse
 import com.example.kbocombo.crawler.game.application.GameClient
 import com.example.kbocombo.game.domain.Game
-import com.example.kbocombo.game.domain.vo.GameState.PENDING
+import com.example.kbocombo.game.domain.vo.GameState
 import com.example.kbocombo.game.domain.vo.GameType
 import com.example.kbocombo.player.infra.PlayerRepository
 import com.example.kbocombo.player.vo.Team
@@ -46,6 +46,9 @@ class NaverSportGameClient(
     // 선발 투수 정보가 있다면, preview API를 통해 id 조회
     private fun toGameEntity(naverGameResponse: NaverGameResponse): Game {
         val previewData = if (naverGameResponse.hasStartingPitcher()) findPreview(naverGameResponse.gameId) else null
+        val statusCode = naverGameResponse.statusCode
+        val statusInfo = naverGameResponse.statusInfo
+
         return Game(
             gameCode = naverGameResponse.gameId,
             homeTeam = Team.fromTeamCode(naverGameResponse.homeTeamCode),
@@ -55,7 +58,7 @@ class NaverSportGameClient(
             startDate = naverGameResponse.gameDate,
             startTime = naverGameResponse.gameDateTime.toLocalTime(),
             gameType = GameType.getGameTypeByDate(naverGameResponse.gameDate),
-            gameState = PENDING
+            gameState = convertToGameStatus(statusCode = statusCode, statusInfo = statusInfo)
         )
     }
 
@@ -68,6 +71,15 @@ class NaverSportGameClient(
 
     private fun findPitcherId(starterInfo: StarterInfo?) =
         starterInfo?.playerInfo?.pCode?.let { playerRepository.findByWebId(WebId(it)) }?.id
+
+    private fun convertToGameStatus(statusCode: String, statusInfo: String): GameState {
+        return when (statusCode) {
+            "BEFORE" -> if (statusInfo == "경기취소") GameState.CANCEL else GameState.PENDING
+            "STARTED" -> GameState.RUNNING
+            "RESULT" -> GameState.COMPLETED
+            else -> throw IllegalArgumentException("일치하는 ${statusCode}가 존재하지 않습니다.")
+        }
+    }
 }
 
 data class NaverGameListApiResponse(
