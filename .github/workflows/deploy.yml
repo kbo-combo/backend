@@ -2,7 +2,7 @@ name: Deploy Develop to Amazon ECS
 
 on:
   push:
-    branches: [ "develop", "build/backend-deploy" ]
+    branches: [ "develop"]
 
 permissions:
   contents: read
