@@ -65,3 +65,21 @@ jobs:
             docker rmi ${{ secrets.DOCKER_REPO }}/kbo-combo-app
             docker-compose -p kbocombo -f docker-compose.yml up -d
             docker image prune -f
+
+  notification:
+    name: Notification
+    runs-on: ubuntu-22.04
+    if: ${{ always() }}
+    needs: [ deploy ]
+    steps:
+      - uses: martialonline/workflow-status@v3
+        id: check
+      - name: action-slack
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ steps.check.outputs.status }}
+          author_name: Github Action Bot
+          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_DEPLOY_WEBHOOK_URL }}
+        if: always()
