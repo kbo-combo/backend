@@ -32,6 +32,8 @@ class Game(
 
     awayStartingPitcherId: Long?,
 
+    gameState: GameState = GameState.PENDING,
+
     @Enumerated(EnumType.STRING)
     @Column(name = "away_team", nullable = false)
     val awayTeam: Team,
@@ -46,11 +48,11 @@ class Game(
     @Column(name = "game_type", nullable = false)
     val gameType: GameType,
 
-) : BaseEntity() {
+    ) : BaseEntity() {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "game_state", nullable = false)
-    var gameState: GameState = GameState.PENDING
+    var gameState: GameState = gameState
         protected set
 
     @Column(name = "home_starting_pitcher_id")
