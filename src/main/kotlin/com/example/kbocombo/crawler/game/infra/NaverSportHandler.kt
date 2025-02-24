@@ -1,10 +1,11 @@
-package com.example.kbocombo.crawler.combo.infra
+package com.example.kbocombo.crawler.game.infra
 
 import com.example.kbocombo.common.logInfo
 import com.example.kbocombo.crawler.common.application.NaverSportClient
 import com.example.kbocombo.crawler.common.utils.toTeamFilterCode
 import com.example.kbocombo.game.domain.Game
 import com.example.kbocombo.game.infra.GameRepository
+import com.example.kbocombo.game.infra.getById
 import com.example.kbocombo.player.vo.Team
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
@@ -27,14 +28,10 @@ class NaverSportHandler(
      * 3. 생성한 게임 코드를 기반으로 오늘 경기 기록 조회
      * 4. 안타를 기록한 선수가 있으면 기록지에 추가. -> 오늘의 안타 이벤트 발행 -> 해당 선수를 투표한 사용자 콤보 달성
      */
-    fun run(startDate: LocalDate) {
-        val games = gameRepository.findAllByStartDate(startDate)
-            .filter { it.isRunning() }
-
-        games.forEach { game ->
-            val gameCode = generateGameCode(game.homeTeam, game.awayTeam, startDate)
-            analyzeGameRecord(game, gameCode)
-        }
+    fun run(gameId: Long) {
+        val game = gameRepository.getById(gameId)
+        val gameCode = generateGameCode(game.homeTeam, game.awayTeam, game.startDate)
+        analyzeGameRecord(game, gameCode)
     }
 
     private fun analyzeGameRecord(game: Game, gameCode: String) {
