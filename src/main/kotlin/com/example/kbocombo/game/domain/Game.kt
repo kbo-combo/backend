@@ -36,7 +36,6 @@ class Game(
     @Column(name = "away_team", nullable = false)
     val awayTeam: Team,
 
-
     @Column(name = "start_date", nullable = false)
     val startDate: LocalDate,
 
@@ -47,10 +46,12 @@ class Game(
     @Column(name = "game_type", nullable = false)
     val gameType: GameType,
 
+) : BaseEntity() {
+
     @Enumerated(EnumType.STRING)
     @Column(name = "game_state", nullable = false)
-    val gameState: GameState,
-) : BaseEntity() {
+    var gameState: GameState = GameState.PENDING
+        protected set
 
     @Column(name = "home_starting_pitcher_id")
     var homeStartingPitcherId: Long? = homeStartingPitcherId
@@ -75,5 +76,13 @@ class Game(
 
     fun isAfterGameStart(dateTime: LocalDateTime): Boolean {
         return LocalDateTime.of(startDate, startTime) >= dateTime
+    }
+
+    fun cancel() {
+        this.gameState = GameState.CANCEL
+    }
+
+    fun complete() {
+        this.gameState = GameState.COMPLETED
     }
 }
