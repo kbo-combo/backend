@@ -35,9 +35,9 @@ class ComboQueryRepository(
     }
 
 
-    fun findAllComboByParams(memberId: Long, gameDate: LocalDate?, gameType: GameType?): List<ComboDetailQueryDto> {
+    fun findAllComboByParams(memberId: Long, gameDate: LocalDate?, gameType: GameType?): List<ComboListQueryDto> {
         return queryFactory
-            .select(QComboDetailQueryDto(combo, player))
+            .select(QComboListQueryDto(combo, player))
             .from(combo)
             .leftJoin(combo.game, game).fetchJoin()
             .leftJoin(player).on(player.id.eq(combo.playerId))
@@ -54,6 +54,11 @@ class ComboQueryRepository(
 }
 
 data class ComboDetailQueryDto @QueryProjection constructor(
+    val combo: Combo,
+    val player: Player
+)
+
+data class ComboListQueryDto @QueryProjection constructor(
     val combo: Combo,
     val player: Player
 )
