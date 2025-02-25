@@ -1,5 +1,6 @@
 package com.example.kbocombo.member.application
 
+import com.example.kbocombo.exception.type.BadRequestException
 import com.example.kbocombo.member.domain.Member
 import com.example.kbocombo.member.infra.MemberRepository
 import org.springframework.stereotype.Service
@@ -13,6 +14,7 @@ class MemberService(
     @Transactional
     fun updateNickname(memberId: Long, nickname: String) {
         val member = memberRepository.findById(memberId)
+        checkDuplicate(nickname)
 
         val updateMember = Member(
             id = member.id,
@@ -22,5 +24,11 @@ class MemberService(
             nickname = nickname,
         )
         memberRepository.save(updateMember)
+    }
+
+    private fun checkDuplicate(nickname: String) {
+        if (memberRepository.existsByNickname(nickname)) {
+            throw BadRequestException("{$nickname}은(는) 중복된 닉네임입니다.")
+        }
     }
 }
