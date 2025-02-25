@@ -1,9 +1,12 @@
 package com.example.kbocombo.member.application 
+import com.example.kbocombo.exception.type.BadRequestException
 import com.example.kbocombo.member.domain.Member
 import com.example.kbocombo.member.domain.vo.SocialProvider
 import com.example.kbocombo.member.infra.MemberRepository
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.ExpectSpec
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.shouldContain
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.transaction.annotation.Transactional
 
@@ -29,6 +32,29 @@ class MemberServiceTest(
 
             val foundMember = memberRepository.findById(savedMember.id)
             foundMember.nickname shouldBe updateNickname
+        }
+
+        expect("중복된 닉네임이면 예외가 발생한다.") {
+            val duplicateNameMember = memberRepository.save(Member(
+                email = "kbocombo@example.com",
+                nickname = "duplicateNickname",
+                socialProvider = SocialProvider.KAKAO,
+                socialId = "456"
+            ))
+            val savedMember = memberRepository.save(Member(
+                email = "kbocombo@example.co.kr",
+                nickname = "originMember",
+                socialProvider = SocialProvider.KAKAO,
+                socialId = "123"
+            ))
+
+            val updateNickname = duplicateNameMember.nickname
+
+            val exception = shouldThrow<BadRequestException> {
+                memberService.updateNickname(memberId = savedMember.id, nickname = updateNickname)
+            }
+
+            exception.message shouldContain "중복된 닉네임"
         }
     }
 })

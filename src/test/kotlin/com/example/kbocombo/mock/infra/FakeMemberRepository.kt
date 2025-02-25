@@ -13,4 +13,8 @@ class FakeMemberRepository : BaseFakeRepository<Member>(Member::class), MemberRe
     override fun findById(id: Long): Member {
         return db.find { it.id == id } ?: fixture.giveMeOne(Member::class.java)
     }
+
+    override fun existsByNickname(nickname: String): Boolean {
+        return db.find { it.nickname == nickname } != null
+    }
 }
