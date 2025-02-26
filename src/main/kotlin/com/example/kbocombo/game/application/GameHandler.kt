@@ -36,6 +36,7 @@ class GameHandler(
         )
 
         gameEndEventJobRepository.save(gameEndEventJob)
+        naverSportHandler.run(gameId = game.id)
     }
 
     /**
