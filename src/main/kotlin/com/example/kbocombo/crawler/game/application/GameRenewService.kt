@@ -1,5 +1,7 @@
 package com.example.kbocombo.crawler.game.application
 
+import com.example.kbocombo.crawler.game.infra.GameDto
+import com.example.kbocombo.crawler.game.infra.toEntity
 import com.example.kbocombo.game.domain.Game
 import com.example.kbocombo.game.infra.GameRepository
 import org.springframework.stereotype.Component
@@ -13,13 +15,13 @@ class GameRenewService(
 ) {
 
     @Transactional
-    fun renewGame(games: List<Game>, gameDate: LocalDate, now: LocalDateTime) {
+    fun renewGame(gameDtos: List<GameDto>, gameDate: LocalDate, now: LocalDateTime) {
         val savedGameByCode = gameRepository.findAllByStartDate(gameDate)
             .associateBy { it.gameCode }
-        for (game in games) {
-            val savedGame = savedGameByCode[game.gameCode]
+        for (gameDto in gameDtos) {
+            val savedGame = savedGameByCode[gameDto.gameCode]
             if (savedGame == null) {
-                gameRepository.save(game)
+                gameRepository.save(gameDto.toEntity())
                 continue
             }
 
@@ -29,8 +31,9 @@ class GameRenewService(
 
             updateStartingPitcher(
                 savedGame = savedGame,
-                homeStartingPitcherId = game.homeStartingPitcherId,
-                awayStartingPitcherId = game.awayStartingPitcherId)
+                homeStartingPitcherId = gameDto.homeStartingPitcherId,
+                awayStartingPitcherId = gameDto.awayStartingPitcherId
+            )
         }
     }
 

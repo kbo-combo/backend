@@ -166,3 +166,17 @@ data class GameDto(
     val gameType: GameType,
     val gameState: GameState? = null,
 )
+
+fun GameDto.toEntity(): Game {
+    return Game(
+        gameCode = gameCode,
+        homeTeam = homeTeam,
+        awayTeam = awayTeam,
+        homeStartingPitcherId = homeStartingPitcherId,
+        awayStartingPitcherId = awayStartingPitcherId,
+        gameType = gameType,
+        gameState = gameState ?: GameState.PENDING,
+        startDate = startDate,
+        startTime = startTime,
+    )
+}
