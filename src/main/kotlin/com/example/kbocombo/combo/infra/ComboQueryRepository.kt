@@ -35,7 +35,7 @@ class ComboQueryRepository(
     }
 
 
-    fun findAllComboByParams(memberId: Long, gameDate: LocalDate?, gameType: GameType?): List<ComboListQueryDto> {
+    fun findAllComboByParams(memberId: Long, beforeGameDate: LocalDate?, gameType: GameType?): List<ComboListQueryDto> {
         return queryFactory
             .select(QComboListQueryDto(combo, player))
             .from(combo)
@@ -45,7 +45,7 @@ class ComboQueryRepository(
                 BooleanBuilder()
                     .and(combo.memberId.eq(memberId))
                     .and(eq(combo.game.gameType, gameType))
-                    .and(before(combo.gameDate, gameDate))
+                    .and(before(combo.gameDate, beforeGameDate))
             )
             .limit(15)
             .orderBy(combo.gameDate.desc())

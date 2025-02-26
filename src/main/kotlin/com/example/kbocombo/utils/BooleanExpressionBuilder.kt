@@ -21,3 +21,8 @@ fun <T : Comparable<*>?> after(expression: TemporalExpression<T>, start: T?): Bo
 fun <T : Comparable<*>?> before(expression: TemporalExpression<T>, before: T?): BooleanExpression? {
     return if (before != null) expression.before(before) else null
 }
+
+fun <T : Comparable<*>?> between(expression: TemporalExpression<T>, before: T?, after: T?): BooleanExpression? {
+    if (before == null || after == null) return null
+    return expression.between(before, after)
+}

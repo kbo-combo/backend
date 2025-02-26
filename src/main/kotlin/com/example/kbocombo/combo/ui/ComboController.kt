@@ -1,9 +1,11 @@
 package com.example.kbocombo.combo.ui
 
 import com.example.kbocombo.combo.application.ComboDetailResponse
+import com.example.kbocombo.combo.application.ComboListResponse
 import com.example.kbocombo.combo.application.ComboQueryService
 import com.example.kbocombo.combo.application.ComboService
 import com.example.kbocombo.combo.application.request.ComboCreateRequest
+import com.example.kbocombo.game.domain.vo.GameType
 import com.example.kbocombo.member.domain.Member
 import com.example.kbocombo.member.ui.MemberResolver
 import org.springframework.http.ResponseEntity
@@ -32,6 +34,16 @@ class ComboController(
         @RequestParam(required = false) gameId: Long?,
     ): ResponseEntity<ComboDetailResponse> {
         val response = comboQueryService.findByGameDate(memberId = member.id, gameDate = gameDate, gameId = gameId)
+        return ResponseEntity.ok(response)
+    }
+
+    @GetMapping("/list")
+    fun findComboList(
+        @MemberResolver member: Member,
+        @RequestParam beforeGameDate: LocalDate?,
+        @RequestParam gameType: GameType?,
+    ): ResponseEntity<List<ComboListResponse>> {
+        val response = comboQueryService.findAllComboByParams(memberId = member.id, beforeGameDate = beforeGameDate, gameType = gameType)
         return ResponseEntity.ok(response)
     }
 
