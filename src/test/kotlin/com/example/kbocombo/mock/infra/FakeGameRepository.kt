@@ -13,4 +13,8 @@ class FakeGameRepository : BaseFakeRepository<Game>(Game::class), GameRepository
     override fun findAllByStartDate(startDate: LocalDate): List<Game> {
         return db.filter { it.startDate == startDate }
     }
+
+    override fun findByGameCode(gameCode: String): Game? {
+        return db.find { it.gameCode == gameCode }
+    }
 }
