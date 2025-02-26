@@ -8,4 +8,6 @@ interface MemberRepository : Repository<Member, Long> {
     fun save(member: Member): Member
     fun findByEmail(email: String): Member?
     fun findById(id: Long): Member
+
+    fun existsByNickname(nickname: String): Boolean
 }

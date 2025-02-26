@@ -21,7 +21,7 @@ class Member(
     @Column(name = "email", nullable = false, updatable = false, unique = true)
     val email: String,
 
-    @Column(name = "nickname", nullable = false)
+    @Column(name = "nickname", nullable = false, unique = true)
     val nickname: String,
 
     @Enumerated(value = EnumType.STRING)
