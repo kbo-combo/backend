@@ -41,7 +41,7 @@ class GameScheduler(
 
             when (gameState) {
                 GameState.RUNNING -> publisher.publishEvent(GameRunningEvent(gameId = todayGame.id))
-                GameState.COMPLETED -> publisher.publishEvent(GamCompletedEvent(gameId = todayGame.id))
+                GameState.COMPLETED -> publisher.publishEvent(GameCompletedEvent(gameId = todayGame.id))
                 GameState.CANCEL -> publisher.publishEvent(GameCanceledEvent(gameId = todayGame.id))
                 GameState.PENDING -> {}
             }
@@ -53,7 +53,7 @@ data class GameRunningEvent(
     val gameId: Long
 )
 
-data class GamCompletedEvent(
+data class GameCompletedEvent(
     val gameId: Long
 )
 

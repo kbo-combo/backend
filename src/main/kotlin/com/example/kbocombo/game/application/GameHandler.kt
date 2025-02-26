@@ -22,8 +22,8 @@ class GameHandler(
     @Async
     @EventListener
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    fun handleGameEndedEvent(gamCompletedEvent: GamCompletedEvent) {
-        val gameId = gamCompletedEvent.gameId
+    fun handleGameCompletedEvent(gameCompletedEvent: GameCompletedEvent) {
+        val gameId = gameCompletedEvent.gameId
         logInfo("Game ended: $gameId ")
 
         val game = gameRepository.getById(gameId)
