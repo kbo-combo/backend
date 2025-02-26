@@ -24,9 +24,12 @@ class GameHandler(
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     fun handleGameCompletedEvent(gameCompletedEvent: GameCompletedEvent) {
         val gameId = gameCompletedEvent.gameId
-        logInfo("Game ended: $gameId ")
-
         val game = gameRepository.getById(gameId)
+        if (game.isCompleted()) {
+            return
+        }
+
+        logInfo("Game ended: $gameId ")
         game.complete()
         gameRepository.save(game)
 
@@ -61,11 +64,14 @@ class GameHandler(
     @Async
     @EventListener
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    fun handleGameCanceledEvent(gameCanceledEvent: GameCanceledEvent) {
-        val gameId = gameCanceledEvent.gameId
-        logInfo("Game is canceled: $gameId")
-
+    fun handleGameCanceledEvent(gameCancelledEvent: GameCancelledEvent) {
+        val gameId = gameCancelledEvent.gameId
         val game = gameRepository.getById(gameId)
+        if (game.isCancelled()) {
+            return
+        }
+
+        logInfo("Game is canceled: $gameId")
         game.cancel()
         gameRepository.save(game)
 

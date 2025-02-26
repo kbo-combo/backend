@@ -76,6 +76,10 @@ class Game(
         return gameState == GameState.COMPLETED
     }
 
+    fun isCancelled(): Boolean {
+        return gameState == GameState.CANCEL
+    }
+
     fun isAfterGameStart(dateTime: LocalDateTime): Boolean {
         return LocalDateTime.of(startDate, startTime) >= dateTime
     }
