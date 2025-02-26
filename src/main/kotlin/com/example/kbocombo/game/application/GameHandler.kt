@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional
 
 @Component
 class GameHandler(
-    private val gameRepository: GameRepository,
+    private val gameService: GameService,
     private val gameEndEventJobRepository: GameEndEventJobRepository,
     private val naverSportHandler: NaverSportHandler
 ) {
@@ -24,22 +24,18 @@ class GameHandler(
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     fun handleGameCompletedEvent(gameCompletedEvent: GameCompletedEvent) {
         val gameId = gameCompletedEvent.gameId
-        val game = gameRepository.getById(gameId)
-        if (game.isCompleted()) {
-            return
-        }
-
+        val gameDate = gameCompletedEvent.gameDate
         logInfo("Game ended: $gameId ")
-        game.complete()
-        gameRepository.save(game)
+
+        gameService.complete(gameId)
 
         val gameEndEventJob = GameEndEventJob(
             gameId = gameId,
-            gameDate = game.startDate,
+            gameDate = gameDate,
         )
 
         gameEndEventJobRepository.save(gameEndEventJob)
-        naverSportHandler.run(gameId = game.id)
+        naverSportHandler.run(gameId = gameId)
     }
 
     /**
@@ -53,12 +49,7 @@ class GameHandler(
         val gameId = gameRunningEvent.gameId
         logInfo("Game is Running: $gameId")
 
-        val game = gameRepository.getById(gameId)
-        if (game.isRunning().not()) {
-            game.start()
-            gameRepository.save(game)
-        }
-
+        gameService.run(gameId)
         naverSportHandler.run(gameId = gameId)
     }
 
@@ -72,18 +63,14 @@ class GameHandler(
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     fun handleGameCanceledEvent(gameCancelledEvent: GameCancelledEvent) {
         val gameId = gameCancelledEvent.gameId
-        val game = gameRepository.getById(gameId)
-        if (game.isCancelled()) {
-            return
-        }
+        val gameDate = gameCancelledEvent.gameDate
 
+        gameService.cancel(gameId)
         logInfo("Game is canceled: $gameId")
-        game.cancel()
-        gameRepository.save(game)
 
         val gameEndEventJob = GameEndEventJob(
             gameId = gameId,
-            gameDate = game.startDate,
+            gameDate = gameDate,
         )
 
         gameEndEventJobRepository.save(gameEndEventJob)

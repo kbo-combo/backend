@@ -5,6 +5,7 @@ import com.example.kbocombo.crawler.game.application.GameClient
 import com.example.kbocombo.game.domain.vo.GameState
 import com.example.kbocombo.game.infra.GameEndEventJobRepository
 import com.example.kbocombo.game.infra.GameRepository
+import java.time.LocalDate
 import org.springframework.context.ApplicationEventPublisher
 import java.time.LocalDateTime
 import org.springframework.scheduling.annotation.Scheduled
@@ -48,8 +49,8 @@ class GameScheduler(
             val currentGameState = todayGameDto.gameState ?: savedTodayGame.gameState
             when (currentGameState) {
                 GameState.RUNNING -> publisher.publishEvent(GameRunningEvent(gameId = savedTodayGame.id))
-                GameState.COMPLETED -> publisher.publishEvent(GameCompletedEvent(gameId = savedTodayGame.id))
-                GameState.CANCEL -> publisher.publishEvent(GameCancelledEvent(gameId = savedTodayGame.id))
+                GameState.COMPLETED -> publisher.publishEvent(GameCompletedEvent(gameId = savedTodayGame.id, gameDate = savedTodayGame.startDate))
+                GameState.CANCEL -> publisher.publishEvent(GameCancelledEvent(gameId = savedTodayGame.id, gameDate = savedTodayGame.startDate))
                 GameState.PENDING -> {}
             }
         }
@@ -61,9 +62,11 @@ data class GameRunningEvent(
 )
 
 data class GameCompletedEvent(
-    val gameId: Long
+    val gameId: Long,
+    val gameDate: LocalDate
 )
 
 data class GameCancelledEvent(
-    val gameId: Long
+    val gameId: Long,
+    val gameDate: LocalDate
 )
