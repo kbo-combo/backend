@@ -4,7 +4,7 @@ import com.example.kbocombo.crawler.common.application.NaverSportClient
 import com.example.kbocombo.crawler.common.infra.dto.NaverApiResponse
 import com.example.kbocombo.crawler.game.application.GameClient
 import com.example.kbocombo.game.domain.Game
-import com.example.kbocombo.game.domain.vo.GameState.PENDING
+import com.example.kbocombo.game.domain.vo.GameState
 import com.example.kbocombo.game.domain.vo.GameType
 import com.example.kbocombo.player.infra.PlayerRepository
 import com.example.kbocombo.player.vo.Team
@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.stereotype.Component
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.LocalTime
 
 @Component
 class NaverSportGameClient(
@@ -22,11 +23,11 @@ class NaverSportGameClient(
     private val objectMapper: ObjectMapper
 ) : GameClient {
 
-    override fun findGames(gameDate: LocalDate): List<Game> {
+    override fun findGames(gameDate: LocalDate): List<GameDto> {
         val games = getGames(gameDate)
         return games
             .filterNot { it.isAllStartGame() }
-            .map { toGameEntity(it) }
+            .map { toGameDto(it) }
     }
 
     private fun getGames(gameDate: LocalDate): List<NaverGameResponse> {
@@ -44,9 +45,12 @@ class NaverSportGameClient(
     }
 
     // 선발 투수 정보가 있다면, preview API를 통해 id 조회
-    private fun toGameEntity(naverGameResponse: NaverGameResponse): Game {
+    private fun toGameDto(naverGameResponse: NaverGameResponse): GameDto {
         val previewData = if (naverGameResponse.hasStartingPitcher()) findPreview(naverGameResponse.gameId) else null
-        return Game(
+        val statusCode = naverGameResponse.statusCode
+        val statusInfo = naverGameResponse.statusInfo
+
+        return GameDto(
             gameCode = naverGameResponse.gameId,
             homeTeam = Team.fromTeamCode(naverGameResponse.homeTeamCode),
             awayTeam = Team.fromTeamCode(naverGameResponse.awayTeamCode),
@@ -55,7 +59,7 @@ class NaverSportGameClient(
             startDate = naverGameResponse.gameDate,
             startTime = naverGameResponse.gameDateTime.toLocalTime(),
             gameType = GameType.getGameTypeByDate(naverGameResponse.gameDate),
-            gameState = PENDING
+            gameState = convertToGameStatus(statusCode = statusCode, statusInfo = statusInfo)
         )
     }
 
@@ -68,6 +72,15 @@ class NaverSportGameClient(
 
     private fun findPitcherId(starterInfo: StarterInfo?) =
         starterInfo?.playerInfo?.pCode?.let { playerRepository.findByWebId(WebId(it)) }?.id
+
+    private fun convertToGameStatus(statusCode: String, statusInfo: String): GameState? {
+        return when (statusCode) {
+            "BEFORE" -> if (statusInfo == "경기취소") GameState.CANCEL else GameState.PENDING
+            "STARTED" -> GameState.RUNNING
+            "RESULT" -> GameState.COMPLETED
+            else -> null
+        }
+    }
 }
 
 data class NaverGameListApiResponse(
@@ -141,3 +154,29 @@ data class StarterPlayerInfo(
     val weight: String?,
     val height: String?,
 )
+
+data class GameDto(
+    val gameCode: String,
+    val homeTeam: Team,
+    val awayTeam: Team,
+    val homeStartingPitcherId: Long?,
+    val awayStartingPitcherId: Long?,
+    val startDate: LocalDate,
+    val startTime: LocalTime,
+    val gameType: GameType,
+    val gameState: GameState? = null,
+)
+
+fun GameDto.toEntity(): Game {
+    return Game(
+        gameCode = gameCode,
+        homeTeam = homeTeam,
+        awayTeam = awayTeam,
+        homeStartingPitcherId = homeStartingPitcherId,
+        awayStartingPitcherId = awayStartingPitcherId,
+        gameType = gameType,
+        gameState = gameState ?: GameState.PENDING,
+        startDate = startDate,
+        startTime = startTime,
+    )
+}

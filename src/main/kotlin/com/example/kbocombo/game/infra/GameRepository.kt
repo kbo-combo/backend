@@ -14,4 +14,6 @@ interface GameRepository : Repository<Game, Long> {
     fun findAllByStartDate(startDate: LocalDate) : List<Game>
 
     fun save(game: Game): Game
+
+    fun findByGameCode(gameCode: String): Game?
 }
