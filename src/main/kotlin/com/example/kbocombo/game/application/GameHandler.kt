@@ -4,8 +4,6 @@ import com.example.kbocombo.common.logInfo
 import com.example.kbocombo.crawler.game.infra.NaverSportHandler
 import com.example.kbocombo.game.domain.GameEndEventJob
 import com.example.kbocombo.game.infra.GameEndEventJobRepository
-import com.example.kbocombo.game.infra.GameRepository
-import com.example.kbocombo.game.infra.getById
 import org.springframework.context.event.EventListener
 import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Component
