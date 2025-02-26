@@ -1,6 +1,5 @@
 package com.example.kbocombo.game.application
 
-import com.example.kbocombo.common.logInfo
 import com.example.kbocombo.game.infra.GameRepository
 import com.example.kbocombo.game.infra.getById
 import org.springframework.stereotype.Service
