@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.stereotype.Component
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.LocalTime
 
 @Component
 class NaverSportGameClient(
@@ -22,11 +23,11 @@ class NaverSportGameClient(
     private val objectMapper: ObjectMapper
 ) : GameClient {
 
-    override fun findGames(gameDate: LocalDate): List<Game> {
+    override fun findGames(gameDate: LocalDate): List<GameDto> {
         val games = getGames(gameDate)
         return games
             .filterNot { it.isAllStartGame() }
-            .map { toGameEntity(it) }
+            .map { toGameDto(it) }
     }
 
     private fun getGames(gameDate: LocalDate): List<NaverGameResponse> {
@@ -44,12 +45,12 @@ class NaverSportGameClient(
     }
 
     // 선발 투수 정보가 있다면, preview API를 통해 id 조회
-    private fun toGameEntity(naverGameResponse: NaverGameResponse): Game {
+    private fun toGameDto(naverGameResponse: NaverGameResponse): GameDto {
         val previewData = if (naverGameResponse.hasStartingPitcher()) findPreview(naverGameResponse.gameId) else null
         val statusCode = naverGameResponse.statusCode
         val statusInfo = naverGameResponse.statusInfo
 
-        return Game(
+        return GameDto(
             gameCode = naverGameResponse.gameId,
             homeTeam = Team.fromTeamCode(naverGameResponse.homeTeamCode),
             awayTeam = Team.fromTeamCode(naverGameResponse.awayTeamCode),
@@ -72,12 +73,12 @@ class NaverSportGameClient(
     private fun findPitcherId(starterInfo: StarterInfo?) =
         starterInfo?.playerInfo?.pCode?.let { playerRepository.findByWebId(WebId(it)) }?.id
 
-    private fun convertToGameStatus(statusCode: String, statusInfo: String): GameState {
+    private fun convertToGameStatus(statusCode: String, statusInfo: String): GameState? {
         return when (statusCode) {
             "BEFORE" -> if (statusInfo == "경기취소") GameState.CANCEL else GameState.PENDING
             "STARTED" -> GameState.RUNNING
             "RESULT" -> GameState.COMPLETED
-            else -> throw IllegalArgumentException("일치하는 ${statusCode}가 존재하지 않습니다.")
+            else -> null
         }
     }
 }
@@ -152,4 +153,16 @@ data class StarterPlayerInfo(
     val birth: String?,
     val weight: String?,
     val height: String?,
+)
+
+data class GameDto(
+    val gameCode: String,
+    val homeTeam: Team,
+    val awayTeam: Team,
+    val homeStartingPitcherId: Long?,
+    val awayStartingPitcherId: Long?,
+    val startDate: LocalDate,
+    val startTime: LocalTime,
+    val gameType: GameType,
+    val gameState: GameState? = null,
 )
