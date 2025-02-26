@@ -91,4 +91,8 @@ class Game(
     fun complete() {
         this.gameState = GameState.COMPLETED
     }
+
+    fun start() {
+        this.gameState = GameState.RUNNING
+    }
 }

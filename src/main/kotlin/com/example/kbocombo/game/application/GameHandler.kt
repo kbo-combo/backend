@@ -53,6 +53,12 @@ class GameHandler(
         val gameId = gameRunningEvent.gameId
         logInfo("Game is Running: $gameId")
 
+        val game = gameRepository.getById(gameId)
+        if (game.isRunning().not()) {
+            game.start()
+            gameRepository.save(game)
+        }
+
         naverSportHandler.run(gameId = gameId)
     }
 
