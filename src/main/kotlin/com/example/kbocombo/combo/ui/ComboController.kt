@@ -5,6 +5,7 @@ import com.example.kbocombo.combo.application.ComboListResponse
 import com.example.kbocombo.combo.application.ComboQueryService
 import com.example.kbocombo.combo.application.ComboService
 import com.example.kbocombo.combo.application.request.ComboCreateRequest
+import com.example.kbocombo.common.dto.SliceResponse
 import com.example.kbocombo.game.domain.vo.GameType
 import com.example.kbocombo.member.domain.Member
 import com.example.kbocombo.member.ui.MemberResolver
@@ -40,10 +41,16 @@ class ComboController(
     @GetMapping("/list")
     fun findComboList(
         @MemberResolver member: Member,
-        @RequestParam beforeGameDate: LocalDate?,
-        @RequestParam gameType: GameType?,
-    ): ResponseEntity<List<ComboListResponse>> {
-        val response = comboQueryService.findAllComboByParams(memberId = member.id, beforeGameDate = beforeGameDate, gameType = gameType)
+        @RequestParam(required = false) beforeGameDate: LocalDate?,
+        @RequestParam(required = false) gameType: GameType?,
+        @RequestParam pageSize: Long,
+    ): ResponseEntity<SliceResponse<ComboListResponse>> {
+        val response = comboQueryService.findAllComboByParams(
+            memberId = member.id,
+            beforeGameDate = beforeGameDate,
+            gameType = gameType,
+            pageSize = pageSize
+        )
         return ResponseEntity.ok(response)
     }
 

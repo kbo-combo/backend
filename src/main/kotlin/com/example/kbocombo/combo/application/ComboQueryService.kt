@@ -4,6 +4,7 @@ import com.example.kbocombo.combo.domain.vo.ComboStatus
 import com.example.kbocombo.combo.infra.ComboDetailQueryDto
 import com.example.kbocombo.combo.infra.ComboListQueryDto
 import com.example.kbocombo.combo.infra.ComboQueryRepository
+import com.example.kbocombo.common.dto.SliceResponse
 import com.example.kbocombo.game.domain.vo.GameType
 import com.example.kbocombo.player.vo.Team
 import org.springframework.stereotype.Service
@@ -23,9 +24,9 @@ class ComboQueryService(
     }
 
     @Transactional(readOnly = true)
-    fun findAllComboByParams(memberId: Long, beforeGameDate: LocalDate?, gameType: GameType?): List<ComboListResponse> {
-        val dtos = comboQueryRepository.findAllComboByParams(memberId = memberId, beforeGameDate = beforeGameDate, gameType = gameType)
-        return ComboListResponse.toList(dtos)
+    fun findAllComboByParams(memberId: Long, beforeGameDate: LocalDate?, gameType: GameType?, pageSize: Long): SliceResponse<ComboListResponse> {
+        val dtos = comboQueryRepository.findAllComboByParams(memberId = memberId, beforeGameDate = beforeGameDate, gameType = gameType, pageSize = pageSize + 1)
+        return SliceResponse.of(ComboListResponse.toList(dtos), pageSize)
     }
 }
 
