@@ -35,7 +35,7 @@ class ComboQueryRepository(
     }
 
 
-    fun findAllComboByParams(memberId: Long, beforeGameDate: LocalDate?, gameType: GameType?): List<ComboListQueryDto> {
+    fun findAllComboByParams(memberId: Long, beforeGameDate: LocalDate?, gameType: GameType?, pageSize: Long): List<ComboListQueryDto> {
         return queryFactory
             .select(QComboListQueryDto(combo, player))
             .from(combo)
@@ -47,7 +47,7 @@ class ComboQueryRepository(
                     .and(eq(combo.game.gameType, gameType))
                     .and(before(combo.gameDate, beforeGameDate))
             )
-            .limit(15)
+            .limit(pageSize)
             .orderBy(combo.gameDate.desc())
             .fetch()
     }
