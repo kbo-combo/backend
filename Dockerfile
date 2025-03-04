@@ -1,4 +1,4 @@
-FROM openjdk:21-jdk-slim
+FROM --platform=linux/arm64 openjdk:21-jdk-slim
 
 RUN ln -sf /usr/share/zoneinfo/Asia/Seoul /etc/localtime
 
@@ -10,4 +10,4 @@ ENV SPRING_PROFILES_ACTIVE=dev
 
 EXPOSE 8080
 
-CMD ["java", "-jar", "app.jar"]
+CMD ["java", "-Duser.timezone=Asia/Seoul", "-jar", "app.jar"]
