@@ -1,4 +1,4 @@
-FROM openjdk:21-jdk-slim
+FROM --platform=linux/arm64 openjdk:21-jdk-slim
 
 RUN ln -sf /usr/share/zoneinfo/Asia/Seoul /etc/localtime
 
