@@ -1,4 +1,4 @@
-FROM amazoncorretto:21-alpine-jdk
+FROM --platform=linux/arm64 amazoncorretto:21-alpine-jdk
 
 RUN ln -sf /usr/share/zoneinfo/Asia/Seoul /etc/localtime
 
