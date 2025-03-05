@@ -29,12 +29,12 @@ class ComboController(
 ) {
 
     @GetMapping("/detail")
-    fun findComboDetail(
+    fun findOneByParams(
         @MemberResolver member: Member,
         @RequestParam(required = false) gameDate: LocalDate?,
         @RequestParam(required = false) gameId: Long?,
     ): ResponseEntity<ComboDetailResponse> {
-        val response = comboQueryService.findByGameDate(memberId = member.id, gameDate = gameDate, gameId = gameId)
+        val response = comboQueryService.findOneByParams(memberId = member.id, gameDate = gameDate, gameId = gameId)
         return ResponseEntity.ok(response)
     }
 

@@ -19,7 +19,7 @@ class ComboQueryRepository(
     private val queryFactory: JPAQueryFactory
 ) {
 
-    fun findComboByParams(memberId: Long, gameDate: LocalDate?, gameId: Long?): ComboDetailQueryDto? {
+    fun findOneByParams(memberId: Long, gameDate: LocalDate?, gameId: Long?): ComboDetailQueryDto? {
         return queryFactory
             .select(QComboDetailQueryDto(combo, player))
             .from(combo)
