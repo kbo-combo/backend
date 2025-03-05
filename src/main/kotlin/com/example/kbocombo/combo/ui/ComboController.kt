@@ -1,9 +1,12 @@
 package com.example.kbocombo.combo.ui
 
 import com.example.kbocombo.combo.application.ComboDetailResponse
+import com.example.kbocombo.combo.application.ComboListResponse
 import com.example.kbocombo.combo.application.ComboQueryService
 import com.example.kbocombo.combo.application.ComboService
 import com.example.kbocombo.combo.application.request.ComboCreateRequest
+import com.example.kbocombo.common.dto.SliceResponse
+import com.example.kbocombo.game.domain.vo.GameType
 import com.example.kbocombo.member.domain.Member
 import com.example.kbocombo.member.ui.MemberResolver
 import org.springframework.http.ResponseEntity
@@ -25,13 +28,29 @@ class ComboController(
     private val comboService: ComboService
 ) {
 
-    @GetMapping
-    fun findCombo(
+    @GetMapping("/detail")
+    fun findOneByParams(
         @MemberResolver member: Member,
         @RequestParam(required = false) gameDate: LocalDate?,
         @RequestParam(required = false) gameId: Long?,
     ): ResponseEntity<ComboDetailResponse> {
-        val response = comboQueryService.findByGameDate(memberId = member.id, gameDate = gameDate, gameId = gameId)
+        val response = comboQueryService.findOneByParams(memberId = member.id, gameDate = gameDate, gameId = gameId)
+        return ResponseEntity.ok(response)
+    }
+
+    @GetMapping
+    fun findComboList(
+        @MemberResolver member: Member,
+        @RequestParam(required = false) beforeGameDate: LocalDate?,
+        @RequestParam(required = false) gameType: GameType?,
+        @RequestParam pageSize: Long,
+    ): ResponseEntity<SliceResponse<ComboListResponse>> {
+        val response = comboQueryService.findAllComboByParams(
+            memberId = member.id,
+            beforeGameDate = beforeGameDate,
+            gameType = gameType,
+            pageSize = pageSize
+        )
         return ResponseEntity.ok(response)
     }
 

@@ -3,8 +3,10 @@ package com.example.kbocombo.combo.infra
 import com.example.kbocombo.combo.domain.Combo
 import com.example.kbocombo.combo.domain.QCombo.combo
 import com.example.kbocombo.game.domain.QGame.game
+import com.example.kbocombo.game.domain.vo.GameType
 import com.example.kbocombo.player.Player
 import com.example.kbocombo.player.QPlayer.player
+import com.example.kbocombo.utils.before
 import com.example.kbocombo.utils.eq
 import com.querydsl.core.BooleanBuilder
 import com.querydsl.core.annotations.QueryProjection
@@ -17,7 +19,7 @@ class ComboQueryRepository(
     private val queryFactory: JPAQueryFactory
 ) {
 
-    fun findComboByParams(memberId: Long, gameDate: LocalDate?, gameId: Long?): ComboDetailQueryDto? {
+    fun findOneByParams(memberId: Long, gameDate: LocalDate?, gameId: Long?): ComboDetailQueryDto? {
         return queryFactory
             .select(QComboDetailQueryDto(combo, player))
             .from(combo)
@@ -31,9 +33,32 @@ class ComboQueryRepository(
             )
             .fetchOne()
     }
+
+
+    fun findAllComboByParams(memberId: Long, beforeGameDate: LocalDate?, gameType: GameType?, pageSize: Long): List<ComboListQueryDto> {
+        return queryFactory
+            .select(QComboListQueryDto(combo, player))
+            .from(combo)
+            .leftJoin(combo.game, game).fetchJoin()
+            .leftJoin(player).on(player.id.eq(combo.playerId))
+            .where(
+                BooleanBuilder()
+                    .and(combo.memberId.eq(memberId))
+                    .and(eq(combo.game.gameType, gameType))
+                    .and(before(combo.gameDate, beforeGameDate))
+            )
+            .limit(pageSize)
+            .orderBy(combo.gameDate.desc())
+            .fetch()
+    }
 }
 
 data class ComboDetailQueryDto @QueryProjection constructor(
+    val combo: Combo,
+    val player: Player
+)
+
+data class ComboListQueryDto @QueryProjection constructor(
     val combo: Combo,
     val player: Player
 )
