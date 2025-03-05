@@ -28,8 +28,8 @@ class ComboController(
     private val comboService: ComboService
 ) {
 
-    @GetMapping
-    fun findCombo(
+    @GetMapping("/detail")
+    fun findComboDetail(
         @MemberResolver member: Member,
         @RequestParam(required = false) gameDate: LocalDate?,
         @RequestParam(required = false) gameId: Long?,
@@ -38,7 +38,7 @@ class ComboController(
         return ResponseEntity.ok(response)
     }
 
-    @GetMapping("/list")
+    @GetMapping
     fun findComboList(
         @MemberResolver member: Member,
         @RequestParam(required = false) beforeGameDate: LocalDate?,
