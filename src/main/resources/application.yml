@@ -1,0 +1,13 @@
+server:
+  shutdown: graceful
+spring:
+  profiles:
+    active: local
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
