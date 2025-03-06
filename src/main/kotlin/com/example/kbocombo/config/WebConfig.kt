@@ -20,6 +20,8 @@ class WebConfig(
     override fun addCorsMappings(registry: CorsRegistry) {
         registry.addMapping("/**")
             .allowedOrigins(
+                "https://haruhanta.com",
+                "https://www.haruhanta.com",
                 "https://www.kbo-dev.kro.kr",
                 "https://localhost:5173",
                 "http://localhost:5173",
