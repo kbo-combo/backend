@@ -22,7 +22,7 @@ class GameScheduler(
     private val gameRepository: GameRepository
 ) {
 
-    @Scheduled(fixedDelay = 600000L)
+    @Scheduled(cron = "0 0/10 * * * ?")
     fun scheduleGameEndEventJob() {
         val now = LocalDateTime.now()
         val today = now.toLocalDate()
@@ -35,7 +35,7 @@ class GameScheduler(
         processableJobIds.forEach { gameEndEventJobService.process(it!!) }
     }
 
-    @Scheduled(fixedDelay = 600000L)
+    @Scheduled(cron = "0 0/10 * * * ?")
     fun scheduleTodayGames() {
         val now = LocalDateTime.now()
         val today = now.toLocalDate()
@@ -58,7 +58,7 @@ class GameScheduler(
         }
     }
 
-    @Scheduled(fixedDelay = 1000L * 60L * 60L)
+    @Scheduled(cron = "0 0/30 * * * ?")
     fun schedulePostDateGame() {
         val today = LocalDate.now()
         val now = LocalDateTime.now()
