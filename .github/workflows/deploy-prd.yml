@@ -2,7 +2,7 @@ name: Deploy Develop to Amazon ECS
 
 on:
   push:
-    branches: ["develop"]
+    branches: ["main"]
 
 permissions:
   contents: read
@@ -54,14 +54,14 @@ jobs:
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           docker buildx build --platform=linux/arm64 \
             -f Dockerfile \
-            -t ${{ secrets.DOCKER_REPO }}/kbo-combo-app:latest \
-            --build-arg SPRING_PROFILE=dev \
+            -t ${{ secrets.DOCKER_REPO }}/kbo-combo-app-prd:latest \
+            --build-arg SPRING_PROFILE=prd \
             --push .
       - name: Deploy to ec2
         uses: appleboy/ssh-action@master
         id: deploy-develop
         with:
-          host: ${{ secrets.HOST_EC2 }}
+          host: ${{ secrets.HOST_EC2_PRD }}
           username: ubuntu
           key: ${{ secrets.PRIVATE_KEY }}
           envs: GITHUB_SHA
