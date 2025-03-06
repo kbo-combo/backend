@@ -52,8 +52,11 @@ jobs:
       - name: Docker build & push to DockerHub (ARM64)
         run: |
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker buildx build --platform=linux/arm64 -f Dockerfile -t ${{ secrets.DOCKER_REPO }}/kbo-combo-app:latest --push .
-
+          docker buildx build --platform=linux/arm64 \
+            -f Dockerfile \
+            -t ${{ secrets.DOCKER_REPO }}/kbo-combo-app:latest \
+            --build-arg SPRING_PROFILE=dev \
+            --push .
       - name: Deploy to ec2
         uses: appleboy/ssh-action@master
         id: deploy-develop
