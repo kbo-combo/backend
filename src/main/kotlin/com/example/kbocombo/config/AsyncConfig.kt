@@ -12,8 +12,8 @@ class AsyncConfig : AsyncConfigurer {
 
     override fun getAsyncExecutor(): Executor {
         val executor = ThreadPoolTaskExecutor()
-        executor.corePoolSize = 1
-        executor.maxPoolSize = 3
+        executor.corePoolSize = 8
+        executor.maxPoolSize = 30
         executor.queueCapacity = 100
         executor.setThreadNamePrefix("async-executor-")
         executor.setWaitForTasksToCompleteOnShutdown(true)
