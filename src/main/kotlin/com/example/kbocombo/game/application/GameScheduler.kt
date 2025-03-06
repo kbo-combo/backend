@@ -2,25 +2,27 @@ package com.example.kbocombo.game.application
 
 import com.example.kbocombo.common.logInfo
 import com.example.kbocombo.crawler.game.application.GameClient
+import com.example.kbocombo.crawler.game.application.GameSyncService
 import com.example.kbocombo.game.domain.vo.GameState
 import com.example.kbocombo.game.infra.GameEndEventJobRepository
 import com.example.kbocombo.game.infra.GameRepository
-import java.time.LocalDate
 import org.springframework.context.ApplicationEventPublisher
-import java.time.LocalDateTime
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
+import java.time.LocalDate
+import java.time.LocalDateTime
 
 @Component
 class GameScheduler(
     private val gameEndEventJobRepository: GameEndEventJobRepository,
     private val gameEndEventJobService: GameEndEventJobService,
     private val gameClient: GameClient,
+    private val gameSyncService: GameSyncService,
     private val publisher: ApplicationEventPublisher,
     private val gameRepository: GameRepository
 ) {
 
-    @Scheduled(fixedDelay = 600000L)
+    @Scheduled(cron = "0 0/10 * * * ?")
     fun scheduleGameEndEventJob() {
         val now = LocalDateTime.now()
         val today = now.toLocalDate()
@@ -33,7 +35,7 @@ class GameScheduler(
         processableJobIds.forEach { gameEndEventJobService.process(it!!) }
     }
 
-    @Scheduled(fixedDelay = 600000L)
+    @Scheduled(cron = "0 0/10 * * * ?")
     fun scheduleTodayGames() {
         val now = LocalDateTime.now()
         val today = now.toLocalDate()
@@ -53,6 +55,17 @@ class GameScheduler(
                 GameState.CANCEL -> publisher.publishEvent(GameCancelledEvent(gameId = savedTodayGame.id, gameDate = savedTodayGame.startDate))
                 GameState.PENDING -> {}
             }
+        }
+    }
+
+    @Scheduled(cron = "0 0/30 * * * ?")
+    fun schedulePostDateGame() {
+        val today = LocalDate.now()
+        val now = LocalDateTime.now()
+        for (i in 0..6) {
+            val targetDate = today.plusDays(i.toLong())
+            gameSyncService.syncGame(targetDate, now)
+            logInfo("renew post date game, game date is $targetDate")
         }
     }
 }
