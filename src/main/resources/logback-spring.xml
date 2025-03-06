@@ -21,7 +21,6 @@
 
         <root level="INFO">
             <appender-ref ref="FILE-INFO"/>
-            <appender-ref ref="ASYNC_SLACK"/>
         </root>
 
         <logger level="DEBUG" name="org.hibernate.SQL">
@@ -31,6 +30,11 @@
         <logger level="TRACE" name="org.hibernate.type.descriptor.sql.BasicBinder">
             <appender-ref ref="FILE-INFO"/>
         </logger>
+
+        <logger level="ERROR" name="com.example">
+            <appender-ref ref="ASYNC_SLACK"/>
+        </logger>
+
     </springProfile>
 
     <!--prd-->
@@ -49,6 +53,10 @@
 
         <logger level="TRACE" name="org.hibernate.type.descriptor.sql.BasicBinder">
             <appender-ref ref="FILE-INFO"/>
+        </logger>
+
+        <logger level="ERROR" name="com.example">
+            <appender-ref ref="ASYNC_SLACK"/>
         </logger>
     </springProfile>
 
