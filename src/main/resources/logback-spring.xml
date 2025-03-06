@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
+
+    <property name="CONSOLE_LOG_PATTERN"
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %clr(%5level) %cyan(%logger) - %msg%n"/>
+    <property name="FILE_LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %5level %logger - %msg%n"/>
+
+    <!--local-->
+    <include resource="console-appender.xml"/>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
+    <!--dev-->
+    <springProfile name="dev">
+        <include resource="file-info-appender.xml"/>
+        <include resource="slack-notification-dev-appender.xml"/>
+
+        <root level="INFO">
+            <appender-ref ref="FILE-INFO"/>
+            <appender-ref ref="ASYNC_SLACK"/>
+        </root>
+
+        <logger level="DEBUG" name="org.hibernate.SQL">
+            <appender-ref ref="FILE-INFO"/>
+        </logger>
+
+        <logger level="TRACE" name="org.hibernate.type.descriptor.sql.BasicBinder">
+            <appender-ref ref="FILE-INFO"/>
+        </logger>
+    </springProfile>
+
+    <!--prd-->
+    <springProfile name="prd">
+        <include resource="file-info-appender.xml"/>
+        <include resource="slack-notification-prd-appender.xml"/>
+
+        <root level="INFO">
+            <appender-ref ref="FILE-INFO"/>
+            <appender-ref ref="ASYNC_SLACK"/>
+        </root>
+
+        <logger level="DEBUG" name="org.hibernate.SQL">
+            <appender-ref ref="FILE-INFO"/>
+        </logger>
+
+        <logger level="TRACE" name="org.hibernate.type.descriptor.sql.BasicBinder">
+            <appender-ref ref="FILE-INFO"/>
+        </logger>
+    </springProfile>
+
+</configuration>
