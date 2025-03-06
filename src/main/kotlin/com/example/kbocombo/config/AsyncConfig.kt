@@ -1,20 +1,19 @@
 package com.example.kbocombo.config
 
-import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.scheduling.annotation.AsyncConfigurer
 import org.springframework.scheduling.annotation.EnableAsync
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor
 import java.util.concurrent.Executor
 
-@Configuration
 @EnableAsync
-class AsyncConfig {
+@Configuration
+class AsyncConfig : AsyncConfigurer {
 
-    @Bean
-    fun asyncExecutor(): Executor {
+    override fun getAsyncExecutor(): Executor {
         val executor = ThreadPoolTaskExecutor()
-        executor.corePoolSize = 8
-        executor.maxPoolSize = 20
+        executor.corePoolSize = 1
+        executor.maxPoolSize = 3
         executor.queueCapacity = 100
         executor.setThreadNamePrefix("async-executor-")
         executor.setWaitForTasksToCompleteOnShutdown(true)
