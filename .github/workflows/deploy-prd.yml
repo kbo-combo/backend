@@ -1,4 +1,4 @@
-name: Deploy Develop to Amazon ECS
+name: Deploy PRD to Amazon ECS
 
 on:
   push:
