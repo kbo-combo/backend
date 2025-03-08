@@ -1,6 +1,7 @@
 package com.example.kbocombo.combo.ui
 
 import com.example.kbocombo.combo.application.ComboRankService
+import com.example.kbocombo.combo.application.ComboRankStatisticResponse
 import com.example.kbocombo.combo.application.MemberComboRankResponse
 import com.example.kbocombo.member.domain.Member
 import com.example.kbocombo.member.ui.MemberResolver
@@ -22,6 +23,15 @@ class ComboRankController(
         @RequestParam targetMemberId: Long,
     ): ResponseEntity<MemberComboRankResponse> {
         val response = comboRankService.getMemberComboRank(memberId = targetMemberId)
+        return ResponseEntity.ok(response)
+    }
+
+    @GetMapping("/statistic")
+    fun findTopRankStatistic(
+        @MemberResolver member: Member,
+        @RequestParam size: Int = 20
+    ): ResponseEntity<ComboRankStatisticResponse> {
+        val response = comboRankService.getComboRankStatistic(count = size)
         return ResponseEntity.ok(response)
     }
 }

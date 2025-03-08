@@ -84,6 +84,27 @@ class ComboRankServiceTest(
             successAppliedComboRank.passCount shouldBe priorComboRank.passCount + 1
         }
     }
+
+    context("콤보 랭크 통계 조회") {
+        expect("상위 N명을 조회하고 동점자 처리를 통해 순위를 결정한다.") {
+            val memberA = memberRepository.save(getMember().sample())
+            val memberB = memberRepository.save(getMember().sample())
+            val memberC = memberRepository.save(getMember().sample())
+            val comboRankA = ComboRank.init(memberId = memberA.id)
+            val comboRankB = ComboRank.init(memberId = memberB.id)
+            val comboRankC = ComboRank.init(memberId = memberC.id)
+            comboRankB.recordComboSuccess()
+            comboRankC.recordComboSuccess()
+            comboRankRepository.saveAll(listOf(comboRankA, comboRankB, comboRankC)) // memberB, memberC 동률
+
+            val comboRankStatistic = comboRankService.getComboRankStatistic(3)
+
+            comboRankStatistic.topRanks.size shouldBe 3
+            comboRankStatistic.topRanks[0].rank shouldBe 1
+            comboRankStatistic.topRanks[1].rank shouldBe 1
+            comboRankStatistic.topRanks[2].rank shouldBe 3
+        }
+    }
 })
 
 private fun getMember() =
