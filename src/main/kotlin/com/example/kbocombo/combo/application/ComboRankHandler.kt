@@ -36,6 +36,7 @@ class ComboRankHandler(
         comboRankService.recordPass(memberId = comboPassedEvent.memberId)
     }
 
+    @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     fun handleMemberSignupedEvent(memberSignupedEvent: MemberSignupedEvent) {
         logInfo("Handle MemberSignuped event, memberId = ${memberSignupedEvent.memberId}")
