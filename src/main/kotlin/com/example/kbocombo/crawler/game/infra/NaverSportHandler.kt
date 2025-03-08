@@ -8,8 +8,6 @@ import com.example.kbocombo.game.infra.GameRepository
 import com.example.kbocombo.game.infra.getById
 import com.example.kbocombo.player.vo.Team
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
-import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Component
 import java.time.LocalDate
@@ -19,6 +17,7 @@ import java.time.format.DateTimeFormatter
 class NaverSportHandler(
     private val naverSportClient: NaverSportClient,
     private val gameRepository: GameRepository,
+    private val objectMapper: ObjectMapper,
     private val eventPublisher: ApplicationEventPublisher
 ) {
     /**
@@ -36,9 +35,6 @@ class NaverSportHandler(
 
     private fun analyzeGameRecord(game: Game, gameCode: String) {
         val gameRecordJsonData = naverSportClient.getLiveGameRecord(gameCode = gameCode)
-        val objectMapper = ObjectMapper()
-            .registerKotlinModule()
-            .registerModules(JavaTimeModule())
         val gameRecord = objectMapper.readValue(gameRecordJsonData, NaverSportApiResponse::class.java)
 
         if (gameRecord.isFailed()) {
