@@ -9,7 +9,8 @@
             <pattern>${FILE_LOG_PATTERN}</pattern>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>./log/error/haruhanta-error-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <springProperty scope="context" name="APP_NAME" source="APP_NAME"/>
+            <fileNamePattern>./log/error/haruhanta-error-${APP_NAME}-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <maxFileSize>50MB</maxFileSize>
             <maxHistory>50</maxHistory>
             <totalSizeCap>3GB</totalSizeCap>

@@ -7,12 +7,29 @@
               value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %clr(%5level) %cyan(%logger) - %msg%n"/>
     <property name="FILE_LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %5level %logger - %msg%n"/>
 
-    <!--local-->
-    <include resource="console-appender.xml"/>
 
-    <root level="INFO">
-        <appender-ref ref="CONSOLE"/>
-    </root>
+    <!--local-->
+    <springProfile name="local">
+        <include resource="console-appender.xml"/>
+        <include resource="file-info-appender.xml"/>
+        <include resource="file-error-appender.xml"/>
+        <include resource="slack-notification-dev-appender.xml"/>
+
+        <root level="INFO">
+            <appender-ref ref="FILE-INFO"/>
+            <appender-ref ref="FILE-ERROR"/>
+            <appender-ref ref="CONSOLE"/>
+            <!--            <appender-ref ref="ASYNC_SLACK"/>-->
+        </root>
+
+        <logger level="DEBUG" name="org.hibernate.SQL">
+            <appender-ref ref="FILE-INFO"/>
+        </logger>
+
+        <logger level="TRACE" name="org.hibernate.type.descriptor.sql.BasicBinder">
+            <appender-ref ref="FILE-INFO"/>
+        </logger>
+    </springProfile>
 
     <!--dev-->
     <springProfile name="dev">
@@ -23,7 +40,7 @@
         <root level="INFO">
             <appender-ref ref="FILE-INFO"/>
             <appender-ref ref="FILE-ERROR"/>
-            <appender-ref ref="ASYNC_SLACK"/>
+<!--            <appender-ref ref="ASYNC_SLACK"/>-->
         </root>
 
         <logger level="DEBUG" name="org.hibernate.SQL">
