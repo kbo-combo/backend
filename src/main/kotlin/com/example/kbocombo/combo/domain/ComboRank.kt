@@ -17,25 +17,64 @@ class ComboRank(
     @Column(name = "member_id", updatable = false, unique = true)
     val memberId: Long,
 
+    currentRecord: Int,
+    successCount: Int,
+    failCount: Int,
+    passCount: Int,
+    totalCount: Int,
+    firstSuccessDate: LocalDate? = null,
+    lastSuccessDate: LocalDate? = null
+) : BaseEntity() {
+
     @Column(name = "current_record")
-    val currentRecord: Int,
+    var currentRecord: Int = currentRecord
+        protected set
 
     @Column(name = "success_count")
-    val successCount: Int,
+    var successCount: Int = successCount
+        protected set
 
     @Column(name = "fail_count")
-    val failCount: Int,
+    var failCount: Int = failCount
+        protected set
 
     @Column(name = "pass_count")
-    val passCount: Int,
+    var passCount: Int = passCount
+        protected set
 
     @Column(name = "total_count")
-    val totalCount: Int,
+    var totalCount: Int = totalCount
+        protected set
 
     @Column(name = "first_success_date")
-    val firstSuccessDate: LocalDate,
+    var firstSuccessDate: LocalDate? = firstSuccessDate
+        protected set
 
     @Column(name = "last_success_date")
-    val lastSuccessDate: LocalDate
-) : BaseEntity() {
+    var lastSuccessDate: LocalDate? = lastSuccessDate
+        protected set
+
+
+    fun recordComboSuccess() {
+        this.currentRecord += 1
+        this.successCount += 1
+        this.totalCount += 1
+        if (this.firstSuccessDate == null) {
+            this.firstSuccessDate = LocalDate.now()
+        }
+        this.lastSuccessDate = LocalDate.now()
+    }
+
+    fun recordComboFail() {
+        this.currentRecord = 0
+        this.failCount += 1
+        this.totalCount += 1
+        this.firstSuccessDate = null
+        this.lastSuccessDate = null
+    }
+
+    fun recordComboPass() {
+        this.passCount += 1
+        this.totalCount += 1
+    }
 }
