@@ -19,7 +19,6 @@
             <appender-ref ref="FILE-INFO"/>
             <appender-ref ref="FILE-ERROR"/>
             <appender-ref ref="CONSOLE"/>
-            <!--            <appender-ref ref="ASYNC_SLACK"/>-->
         </root>
 
         <logger level="DEBUG" name="org.hibernate.SQL">
@@ -40,7 +39,7 @@
         <root level="INFO">
             <appender-ref ref="FILE-INFO"/>
             <appender-ref ref="FILE-ERROR"/>
-<!--            <appender-ref ref="ASYNC_SLACK"/>-->
+            <appender-ref ref="ASYNC_SLACK"/>
         </root>
 
         <logger level="DEBUG" name="org.hibernate.SQL">
