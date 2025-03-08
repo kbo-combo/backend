@@ -77,4 +77,19 @@ class ComboRank(
         this.passCount += 1
         this.totalCount += 1
     }
+
+    companion object {
+        fun init(memberId: Long): ComboRank {
+            return ComboRank(
+                memberId = memberId,
+                currentRecord = 0,
+                successCount = 0,
+                totalCount = 0,
+                failCount = 0,
+                passCount = 0,
+                firstSuccessDate = null,
+                lastSuccessDate = null
+            )
+        }
+    }
 }

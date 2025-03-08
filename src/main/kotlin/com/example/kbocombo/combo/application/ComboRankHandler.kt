@@ -1,5 +1,6 @@
 package com.example.kbocombo.combo.application
 
+import com.example.kbocombo.auth.application.MemberSignupedEvent
 import com.example.kbocombo.combo.domain.ComboFailedEvent
 import com.example.kbocombo.combo.domain.ComboPassedEvent
 import com.example.kbocombo.combo.domain.ComboSucceedEvent
@@ -33,5 +34,11 @@ class ComboRankHandler(
     fun handlerComboPassedEvent(comboPassedEvent: ComboPassedEvent) {
         logInfo("Handle Combo passed event, memberId = ${comboPassedEvent.memberId}")
         comboRankService.recordPass(memberId = comboPassedEvent.memberId)
+    }
+
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    fun handleMemberSignupedEvent(memberSignupedEvent: MemberSignupedEvent) {
+        logInfo("Handle MemberSignuped event, memberId = ${memberSignupedEvent.memberId}")
+        comboRankService.create(memberId = memberSignupedEvent.memberId)
     }
 }
