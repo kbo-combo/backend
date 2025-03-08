@@ -3,6 +3,7 @@ package com.example.kbocombo.auth.application
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.http.ResponseCookie
 import org.springframework.stereotype.Component
+import java.time.Duration
 
 @Component
 class CookieManager {
@@ -18,6 +19,7 @@ class CookieManager {
             .httpOnly(true)
             .secure(true)
             .sameSite("none")
+            .maxAge(Duration.ofDays(7))
             .path("/")
             .build()
 
