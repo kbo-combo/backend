@@ -17,10 +17,13 @@
     <!--dev-->
     <springProfile name="dev">
         <include resource="file-info-appender.xml"/>
+        <include resource="file-error-appender.xml"/>
         <include resource="slack-notification-dev-appender.xml"/>
 
         <root level="INFO">
             <appender-ref ref="FILE-INFO"/>
+            <appender-ref ref="FILE-ERROR"/>
+            <appender-ref ref="ASYNC_SLACK"/>
         </root>
 
         <logger level="DEBUG" name="org.hibernate.SQL">
@@ -30,20 +33,17 @@
         <logger level="TRACE" name="org.hibernate.type.descriptor.sql.BasicBinder">
             <appender-ref ref="FILE-INFO"/>
         </logger>
-
-        <logger level="ERROR" name="com.example">
-            <appender-ref ref="ASYNC_SLACK"/>
-        </logger>
-
     </springProfile>
 
     <!--prd-->
     <springProfile name="prd">
         <include resource="file-info-appender.xml"/>
+        <include resource="file-error-appender.xml"/>
         <include resource="slack-notification-prd-appender.xml"/>
 
         <root level="INFO">
             <appender-ref ref="FILE-INFO"/>
+            <appender-ref ref="FILE-ERROR"/>
             <appender-ref ref="ASYNC_SLACK"/>
         </root>
 
@@ -53,10 +53,6 @@
 
         <logger level="TRACE" name="org.hibernate.type.descriptor.sql.BasicBinder">
             <appender-ref ref="FILE-INFO"/>
-        </logger>
-
-        <logger level="ERROR" name="com.example">
-            <appender-ref ref="ASYNC_SLACK"/>
         </logger>
     </springProfile>
 
