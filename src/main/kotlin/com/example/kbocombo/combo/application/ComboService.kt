@@ -89,10 +89,8 @@ class ComboService(
             throw IllegalArgumentException("게임이 종료되지 않은 경우, 콤보 패스 처리를 할 수 없습니다.")
         }
 
-        val combos = comboRepository.findAllByGameAndComboStatus(
-            game = game,
-            comboStatus = ComboStatus.PENDING
-        )
+        val combos = comboRepository.findAllByGame(game = game)
+            .filter { it.isPassed().not()  }
 
         combos.forEach {
             it.pass()

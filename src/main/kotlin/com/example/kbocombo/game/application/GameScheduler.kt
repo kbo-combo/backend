@@ -25,10 +25,9 @@ class GameScheduler(
     @Scheduled(cron = "0 0/10 * * * ?")
     fun scheduleGameEndEventJob() {
         val now = LocalDateTime.now()
-        val today = now.toLocalDate()
 
         val processableJobIds = gameEndEventJobRepository
-            .findAllByProcessedAndGameDate(processed = false, gameDate = today)
+            .findAllByProcessed(processed = false)
             .filter { it.createdDateTime.isBefore(now.minusMinutes(10)) }
             .map { it.id }
 

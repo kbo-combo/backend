@@ -18,8 +18,8 @@ import com.navercorp.fixturemonkey.kotlin.giveMeKotlinBuilder
 import io.kotest.assertions.throwables.shouldThrowWithMessage
 import io.kotest.core.spec.style.ExpectSpec
 import io.kotest.matchers.shouldBe
-import java.time.LocalDateTime
 import org.springframework.boot.test.context.SpringBootTest
+import java.time.LocalDateTime
 
 @SpringBootTest
 class ComboServiceTest(
@@ -128,6 +128,27 @@ class ComboServiceTest(
                 comboService.updateComboToFail(gameId = game.id)
             }
         }
+
+        expect("PASS가 아닌 모든 게임을 PASS로 변경한다") {
+            val memberA = memberRepository.save(getMember().sample())
+            val memberB = memberRepository.save(getMember().sample())
+            val memberC = memberRepository.save(getMember().sample())
+            val game = gameRepository.save(
+                getGame(
+                    gameState = GameState.COMPLETED,
+                    gameStartDateTime = gameStartDateTime
+                ).sample()
+            )
+            val comboA = comboRepository.save(getCombo(game = game, member = memberA, comboStatus = ComboStatus.PENDING).sample())
+            val comboB = comboRepository.save(getCombo(game = game, member = memberB, comboStatus = ComboStatus.SUCCESS).sample())
+            val comboC = comboRepository.save(getCombo(game = game, member = memberC, comboStatus = ComboStatus.PASS).sample())
+
+            comboService.updateComboToPass(gameId = game.id)
+
+            comboRepository.getById(comboA.id).comboStatus shouldBe ComboStatus.PASS
+            comboRepository.getById(comboB.id).comboStatus shouldBe ComboStatus.PASS
+            comboRepository.getById(comboC.id).comboStatus shouldBe ComboStatus.PASS
+        }
     }
 
 }) {
@@ -152,3 +173,14 @@ private fun getGame(
     .setExp(Game::gameState, gameState ?: GameState.RUNNING)
     .setExp(Game::startDate, gameStartDateTime.toLocalDate())
     .setExp(Game::startTime, gameStartDateTime.toLocalTime())
+
+private fun getCombo(
+    game: Game,
+    member: Member,
+    comboStatus: ComboStatus,
+) = fixture.giveMeKotlinBuilder<Combo>()
+    .setExp(Combo::id, 0L)
+    .setExp(Combo::memberId, member.id)
+    .setExp(Combo::game, game)
+    .setExp(Combo::comboStatus, comboStatus)
+    .setExp(Combo::gameDate, game.startDate)

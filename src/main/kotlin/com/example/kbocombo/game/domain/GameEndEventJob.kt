@@ -21,7 +21,7 @@ class GameEndEventJob(
     val gameDate: LocalDate,
 ) : BaseEntity() {
 
-    @Column(name = "processed", nullable = false, updatable = false)
+    @Column(name = "processed", nullable = false)
     var processed: Boolean = false
         protected set
 
