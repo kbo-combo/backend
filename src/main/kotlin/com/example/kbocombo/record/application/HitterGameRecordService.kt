@@ -19,7 +19,9 @@ class HitterGameRecordService(
 
     @Transactional
     fun deleteAllHitterRecordIfGameCanceled(game: Game) {
-        require(game.isCancelled()) {"게임이 종료 상태가 아닙니다."}
+        if (game.isCancelled().not()) {
+            return
+        }
         hitterGameRecordRepository.deleteAllByGameId(gameId = game.id)
     }
 
