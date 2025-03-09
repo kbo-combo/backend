@@ -5,11 +5,11 @@ import com.example.kbocombo.common.logWarn
 import com.example.kbocombo.crawler.common.application.NaverSportClient
 import com.example.kbocombo.crawler.common.utils.toTeamFilterCode
 import com.example.kbocombo.crawler.game.application.HitterRecordClient
+import com.example.kbocombo.crawler.game.infra.dto.HitterRecordDto
 import com.example.kbocombo.game.infra.GameRepository
 import com.example.kbocombo.game.infra.getById
 import com.example.kbocombo.player.vo.Team
 import com.example.kbocombo.player.vo.WebId
-import com.example.kbocombo.record.application.HitterRecordDto
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.stereotype.Component
 import java.time.LocalDate

@@ -1,6 +1,7 @@
 package com.example.kbocombo.record.application
 
-import com.example.kbocombo.common.logWarn
+import com.example.kbocombo.common.logInfo
+import com.example.kbocombo.crawler.game.infra.dto.HitterRecordDto
 import com.example.kbocombo.game.domain.Game
 import com.example.kbocombo.game.infra.GameRepository
 import com.example.kbocombo.player.domain.Player
@@ -19,15 +20,6 @@ class HitterGameRecordService(
 ) {
 
     @Transactional
-    fun deleteAllHitterRecordIfGameCanceled(game: Game) {
-        if (game.isCancelled().not()) {
-            logWarn("game is not canceled")
-            return
-        }
-        hitterGameRecordRepository.deleteAllByGameId(gameId = game.id)
-    }
-
-    @Transactional
     fun saveOrUpdateHitterRecords(gameId: Long, hitterRecordDtos: List<HitterRecordDto>) {
         val game = gameRepository.findById(gameId = gameId)
             ?: throw IllegalArgumentException("cannot find game")
@@ -37,6 +29,15 @@ class HitterGameRecordService(
         val hitterGameRecords = hitterGameRecordRepository.findAllByGameId(game.id)
             .associateBy { it.playerId }
         saveOrUpdate(requestByWebId, hitterGameRecords, game)
+    }
+
+    @Transactional
+    fun deleteAllHitterRecordIfGameCanceled(game: Game) {
+        if (game.isCancelled().not()) {
+            logInfo("game(gameId = ${game.id}) is not canceled")
+            return
+        }
+        hitterGameRecordRepository.deleteAllByGameId(gameId = game.id)
     }
 
     private fun saveOrUpdate(
@@ -70,10 +71,3 @@ class HitterGameRecordService(
         )
     }
 }
-
-
-data class HitterRecordDto(
-    val webId: WebId,
-    val atBats: Int,
-    val hits: Int
-)

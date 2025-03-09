@@ -1,5 +1,6 @@
 package com.example.kbocombo.record.application
 
+import com.example.kbocombo.crawler.game.infra.dto.HitterRecordDto
 import com.example.kbocombo.game.domain.Game
 import com.example.kbocombo.game.domain.vo.GameState
 import com.example.kbocombo.game.domain.vo.GameType
@@ -64,15 +65,7 @@ class HitterGameRecordServiceTest(
         expect("게임이 진행 예정이 아니고 DB에 존재하면 업데이트 한다.") {
             val game = gameRepository.save(getGame(GameState.RUNNING).sample())
             val player = playerRepository.save(getPlayer().sample())
-            hitterGameRecordRepository.save(
-                HitterGameRecord(
-                    gameId = game.id,
-                    gameDate = game.startDate,
-                    playerId = player.id,
-                    atBats = 0,
-                    hits = 0
-                )
-            )
+            hitterGameRecordRepository.save(getHitterGameRecord(game, player).sample())
             val records = listOf(
                 HitterRecordDto(webId = player.webId, atBats = 4, hits = 2),
             )
@@ -102,15 +95,7 @@ class HitterGameRecordServiceTest(
         expect("안타가 0에서 1이상으로 변경되면 이벤트를 발행한다.") {
             val game = gameRepository.save(getGame(GameState.RUNNING).sample())
             val player = playerRepository.save(getPlayer().sample())
-            hitterGameRecordRepository.save(
-                HitterGameRecord(
-                    gameId = game.id,
-                    gameDate = game.startDate,
-                    playerId = player.id,
-                    atBats = 0,
-                    hits = 0
-                )
-            )
+            hitterGameRecordRepository.save(getHitterGameRecord(game, player).sample())
             val records = listOf(
                 HitterRecordDto(webId = player.webId, atBats = 1, hits = 1),
             )
@@ -132,3 +117,14 @@ private fun getGame(gameState: GameState) = fixture.giveMeKotlinBuilder<Game>()
 private fun getPlayer() = fixture.giveMeKotlinBuilder<Player>()
     .setExp(Player::id, 0L)
     .setExp(Player::isRetired, false)
+
+private fun getHitterGameRecord(
+    game: Game,
+    player: Player
+)= fixture.giveMeKotlinBuilder<HitterGameRecord>()
+    .setExp(HitterGameRecord::id, 0L)
+    .setExp(HitterGameRecord::gameId, game.id)
+    .setExp(HitterGameRecord::gameDate, game.startDate)
+    .setExp(HitterGameRecord::playerId, player.id)
+    .setExp(HitterGameRecord::hits, 0)
+    .setExp(HitterGameRecord::atBats, 0)
