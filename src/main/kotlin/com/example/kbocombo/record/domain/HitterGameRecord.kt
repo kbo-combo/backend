@@ -1,12 +1,12 @@
 package com.example.kbocombo.record.domain
 
+import com.example.kbocombo.common.AggregateBaseEntity
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.PostPersist
-import org.springframework.data.domain.AbstractAggregateRoot
 import java.time.LocalDate
 
 @Entity(name = "HITTER_GAME_RECORD")
@@ -27,7 +27,7 @@ class HitterGameRecord(
     atBats: Int,
 
     hits: Int,
-) : AbstractAggregateRoot<HitterGameRecord>() {
+) : AggregateBaseEntity<HitterGameRecord>() {
 
     // 타수 AB
     @Column(name = "at_bats", nullable = false)
