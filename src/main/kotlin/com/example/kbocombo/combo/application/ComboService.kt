@@ -2,6 +2,9 @@ package com.example.kbocombo.combo.application
 
 import com.example.kbocombo.combo.application.request.ComboCreateRequest
 import com.example.kbocombo.combo.domain.Combo
+import com.example.kbocombo.combo.domain.ComboFailedEvent
+import com.example.kbocombo.combo.domain.ComboPassedEvent
+import com.example.kbocombo.combo.domain.ComboSucceedEvent
 import com.example.kbocombo.combo.domain.vo.ComboStatus
 import com.example.kbocombo.combo.infra.ComboRepository
 import com.example.kbocombo.combo.infra.getById
@@ -13,6 +16,7 @@ import com.example.kbocombo.player.infra.PlayerRepository
 import com.example.kbocombo.player.infra.getById
 import com.example.kbocombo.player.infra.getByWebId
 import com.example.kbocombo.player.vo.WebId
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
@@ -22,6 +26,7 @@ class ComboService(
     private val gameRepository: GameRepository,
     private val playerRepository: PlayerRepository,
     private val comboRepository: ComboRepository,
+    private val publisher: ApplicationEventPublisher
 ) {
 
     @Transactional
@@ -63,6 +68,7 @@ class ComboService(
         combos.forEach {
             it.success()
             comboRepository.save(it)
+            publisher.publishEvent(ComboSucceedEvent(memberId = it.memberId, comboId = it.id))
         }
     }
 
@@ -81,6 +87,7 @@ class ComboService(
         combos.forEach {
             it.fail()
             comboRepository.save(it)
+            publisher.publishEvent(ComboFailedEvent(memberId = it.memberId, comboId = it.id))
         }
     }
 
@@ -97,6 +104,7 @@ class ComboService(
         combos.forEach {
             it.pass()
             comboRepository.save(it)
+            publisher.publishEvent(ComboPassedEvent(memberId = it.memberId, comboId = it.id))
         }
     }
 

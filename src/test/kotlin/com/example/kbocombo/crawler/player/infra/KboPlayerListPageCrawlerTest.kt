@@ -1,15 +1,15 @@
 package com.example.kbocombo.crawler.player.infra
 
+import com.example.kbocombo.annotation.IntegrationTest
 import com.example.kbocombo.player.vo.WebId
 import io.kotest.core.annotation.Ignored
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.collections.shouldHaveSize
-import org.springframework.boot.test.context.SpringBootTest
 
 @Ignored
-@SpringBootTest
-class KboPlayerListPageCrawlerTest (
+@IntegrationTest
+class KboPlayerListPageCrawlerTest(
     private val sut: KboPlayerListPageCrawler
 ) : FunSpec({
 
