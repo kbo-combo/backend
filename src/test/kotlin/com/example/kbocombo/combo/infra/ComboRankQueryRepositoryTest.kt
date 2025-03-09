@@ -1,5 +1,6 @@
 package com.example.kbocombo.combo.infra
 
+import com.example.kbocombo.annotation.IntegrationTest
 import com.example.kbocombo.combo.domain.ComboRank
 import com.example.kbocombo.member.domain.Member
 import com.example.kbocombo.member.domain.vo.SocialProvider
@@ -8,10 +9,9 @@ import com.example.kbocombo.utils.fixture
 import com.navercorp.fixturemonkey.kotlin.giveMeKotlinBuilder
 import io.kotest.core.spec.style.ExpectSpec
 import io.kotest.matchers.shouldBe
-import org.springframework.boot.test.context.SpringBootTest
 import java.time.LocalDate
 
-@SpringBootTest
+@IntegrationTest
 class ComboRankQueryRepositoryTest(
     private val comboRankRepository: ComboRankRepository,
     private val comboRankQueryRepository: ComboRankQueryRepository,
