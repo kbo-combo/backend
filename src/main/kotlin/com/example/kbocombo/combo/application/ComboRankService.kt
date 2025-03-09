@@ -1,11 +1,14 @@
 package com.example.kbocombo.combo.application
 
+import com.example.kbocombo.combo.domain.Combo
 import com.example.kbocombo.combo.domain.ComboRank
+import com.example.kbocombo.combo.domain.vo.ComboStatus
 import com.example.kbocombo.combo.infra.ComboRankQueryRepository
 import com.example.kbocombo.combo.infra.ComboRankRepository
 import com.example.kbocombo.combo.infra.ComboRepository
 import com.example.kbocombo.combo.infra.TopRankQueryDto
-import com.example.kbocombo.combo.infra.getById
+import com.example.kbocombo.common.logInfo
+import com.example.kbocombo.game.domain.Game
 import com.example.kbocombo.member.infra.MemberRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -20,33 +23,35 @@ class ComboRankService(
 ) {
 
     @Transactional
-    fun recordSuccess(memberId: Long, comboId: Long) {
-        val member = memberRepository.findById(memberId)
-        val combo = comboRepository.getById(comboId)
+    fun process(game: Game) {
+        if (game.isRunning()) {
+            logInfo("아직 게임이 완료되지 않았습니다. gameId: ${game.id}")
+            return
+        }
 
-        val comboRank = findComboRankOrSave(memberId = member.id, year = combo.gameDate.year)
-        comboRank.recordComboSuccess(gameDate = combo.gameDate)
+        val combos = comboRepository.findAllByGame(game)
+        combos.forEach { recordToRank(it) }
+    }
+
+    private fun recordToRank(combo: Combo) {
+        val comboRank = findComboRankOrSave(memberId = combo.memberId, year = combo.gameDate.year)
+
+        when (combo.comboStatus) {
+            ComboStatus.SUCCESS -> comboRank.recordComboSuccess(gameDate = combo.gameDate)
+            ComboStatus.FAIL -> comboRank.recordComboFail()
+            ComboStatus.PASS -> comboRank.recordComboPass()
+            ComboStatus.PENDING -> {}
+        }
         comboRankRepository.save(comboRank)
     }
 
-    @Transactional
-    fun recordFail(memberId: Long, comboId: Long) {
-        val member = memberRepository.findById(memberId)
-        val combo = comboRepository.getById(comboId)
-
-        val comboRank = findComboRankOrSave(memberId = member.id, year = combo.gameDate.year)
-        comboRank.recordComboFail()
-        comboRankRepository.save(comboRank)
-    }
-
-    @Transactional
-    fun recordPass(memberId: Long, comboId: Long) {
-        val member = memberRepository.findById(memberId)
-        val combo = comboRepository.getById(comboId)
-
-        val comboRank = findComboRankOrSave(memberId = member.id, year = combo.gameDate.year)
-        comboRank.recordComboPass()
-        comboRankRepository.save(comboRank)
+    private fun findComboRankOrSave(memberId: Long, year: Int): ComboRank {
+        return comboRankRepository.findByMemberIdAndYear(memberId = memberId, year = year)
+            ?: comboRankRepository.save(
+                ComboRank.init(
+                    memberId = memberId, year = year
+                )
+            )
     }
 
     @Transactional
@@ -60,14 +65,7 @@ class ComboRankService(
         comboRankRepository.save(comboRank)
     }
 
-    private fun findComboRankOrSave(memberId: Long, year: Int): ComboRank {
-        return comboRankRepository.findByMemberIdAndYear(memberId = memberId, year = year)
-            ?: comboRankRepository.save(
-                ComboRank.init(memberId = memberId, year = year
-                )
-            )
-    }
-
+    @Transactional(readOnly = true)
     fun getMemberComboRank(memberId: Long): MemberComboRankResponse {
         val member = memberRepository.findById(memberId)
 
@@ -76,6 +74,7 @@ class ComboRankService(
         return MemberComboRankResponse.from(comboRank)
     }
 
+    @Transactional(readOnly = true)
     fun getComboRankStatistic(count: Int): ComboRankStatisticResponse {
         val topRanksDto = comboRankQueryRepository.findTopRanks(count.toLong())
 

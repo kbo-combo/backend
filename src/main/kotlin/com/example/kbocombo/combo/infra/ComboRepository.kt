@@ -22,4 +22,6 @@ interface ComboRepository : Repository<Combo, Long> {
     fun findAllByGameAndPlayerIdAndComboStatus(game: Game, playerId: Long, comboStatus: ComboStatus): List<Combo>
 
     fun findAllByGameAndComboStatus(game: Game, comboStatus: ComboStatus): List<Combo>
+
+    fun findAllByGame(game: Game): List<Combo>
 }
