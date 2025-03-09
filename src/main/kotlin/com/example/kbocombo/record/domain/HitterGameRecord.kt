@@ -1,5 +1,6 @@
 package com.example.kbocombo.record.domain
 
+import com.example.kbocombo.common.BaseEntity
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
@@ -27,7 +28,8 @@ class HitterGameRecord(
 
     @Column(name = "hit", nullable = false)
     var hit: Int,
-) {
+) : BaseEntity() {
+
     fun updateStat(pa: Int, hit: Int) {
         this.pa = pa
         this.hit = hit
