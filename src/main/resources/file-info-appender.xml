@@ -4,7 +4,8 @@
             <pattern>${FILE_LOG_PATTERN}</pattern>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>./log/haruhanta-dev-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <springProperty scope="context" name="APP_NAME" source="APP_NAME"/>
+            <fileNamePattern>./log/info/haruhanta-info-${APP_NAME}-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <maxFileSize>50MB</maxFileSize>
             <maxHistory>50</maxHistory>
             <totalSizeCap>1GB</totalSizeCap>
