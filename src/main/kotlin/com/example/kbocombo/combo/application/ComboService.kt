@@ -5,6 +5,7 @@ import com.example.kbocombo.combo.domain.Combo
 import com.example.kbocombo.combo.domain.vo.ComboStatus
 import com.example.kbocombo.combo.infra.ComboRepository
 import com.example.kbocombo.combo.infra.getById
+import com.example.kbocombo.common.logInfo
 import com.example.kbocombo.game.domain.Game
 import com.example.kbocombo.game.infra.GameRepository
 import com.example.kbocombo.game.infra.getById
@@ -50,7 +51,8 @@ class ComboService(
     fun updateComboToSuccess(gameId: Long, playerWebId: Long) {
         val game = gameRepository.getById(gameId)
         if (game.isRunning().not()) {
-            throw IllegalArgumentException("진행 중인 게임이 아닌 경우, 콤보 성공 처리를 할 수 없습니다.")
+            logInfo("진행 중인 게임이 아닌 경우, 콤보 성공 처리를 할 수 없습니다.")
+            return
         }
         val player = playerRepository.getByWebId(webId = WebId(playerWebId))
         val combos = comboRepository.findAllByGameAndPlayerIdAndComboStatus(

@@ -68,7 +68,8 @@ class ComboServiceTest(
             comboRepository.getById(comboB.id).comboStatus shouldBe ComboStatus.PENDING
         }
 
-        expect("SUCCESS 상태로 처리할 때 진행 중인 게임이 아니면 예외가 발생한다.") {
+        expect("SUCCESS 상태로 처리할 때 진행 중인 게임이 아니면 return") {
+            val member = memberRepository.save(getMember().sample())
             val player = playerRepository.save(getPlayer().sample())
             val game = gameRepository.save(
                 getGame(
@@ -77,9 +78,18 @@ class ComboServiceTest(
                 ).sample()
             )
 
-            shouldThrowWithMessage<IllegalArgumentException>("진행 중인 게임이 아닌 경우, 콤보 성공 처리를 할 수 없습니다.") {
-                comboService.updateComboToSuccess(gameId = game.id, playerWebId = player.webId.value)
-            }
+            val combo = comboRepository.save(
+                Combo(
+                    game = game,
+                    memberId = member.id,
+                    playerId = player.id,
+                    now = comboCreatedDateTime,
+                )
+            )
+
+            comboService.updateComboToSuccess(gameId = game.id, playerWebId = player.webId.value)
+
+            comboRepository.getById(combo.id).comboStatus shouldBe ComboStatus.PENDING
         }
 
         expect("종료된 게임에서 PENDING 상태의 콤보를 FAIL 상태로 변경한다.") {
@@ -139,9 +149,22 @@ class ComboServiceTest(
                     gameStartDateTime = gameStartDateTime
                 ).sample()
             )
-            val comboA = comboRepository.save(getCombo(game = game, member = memberA, comboStatus = ComboStatus.PENDING).sample())
-            val comboB = comboRepository.save(getCombo(game = game, member = memberB, comboStatus = ComboStatus.SUCCESS).sample())
-            val comboC = comboRepository.save(getCombo(game = game, member = memberC, comboStatus = ComboStatus.PASS).sample())
+            val comboA = comboRepository.save(
+                getCombo(
+                    game = game,
+                    member = memberA,
+                    comboStatus = ComboStatus.PENDING
+                ).sample()
+            )
+            val comboB = comboRepository.save(
+                getCombo(
+                    game = game,
+                    member = memberB,
+                    comboStatus = ComboStatus.SUCCESS
+                ).sample()
+            )
+            val comboC =
+                comboRepository.save(getCombo(game = game, member = memberC, comboStatus = ComboStatus.PASS).sample())
 
             comboService.updateComboToPass(gameId = game.id)
 
