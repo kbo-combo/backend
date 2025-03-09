@@ -23,12 +23,18 @@ class HitterGameRecord(
     @Column(name = "player_id", nullable = false)
     val playerId: Long,
 
+    pa: Int,
+
+    hit: Int,
+) : BaseEntity() {
+
     @Column(name = "pa", nullable = false)
-    var pa: Int,
+    var pa: Int = pa
+        protected set
 
     @Column(name = "hit", nullable = false)
-    var hit: Int,
-) : BaseEntity() {
+    var hit: Int = hit
+        protected set
 
     fun updateStat(pa: Int, hit: Int) {
         this.pa = pa
