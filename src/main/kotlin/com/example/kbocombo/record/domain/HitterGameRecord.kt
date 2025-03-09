@@ -41,3 +41,11 @@ class HitterGameRecord(
         this.hit = hit
     }
 }
+
+data class HitterGameRecordSaveEvent(
+    val id: Long
+)
+
+data class HitterGameRe(
+    val id: Long
+)

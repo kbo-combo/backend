@@ -26,19 +26,19 @@ class HitterGameRecordService(
     }
 
     @Transactional
-    fun saveOrUpdateHitterRecords(gameCode: String, playerRecordRequest: List<PlayerRequest>) {
-        val game = gameRepository.findByGameCode(gameCode)
+    fun saveOrUpdateHitterRecords(gameId: Long, hitterRecordDtos: List<HitterRecordDto>) {
+        val game = gameRepository.findById(gameId = gameId)
             ?: throw IllegalArgumentException("존재하지 않는 게임입니다.")
         if (game.isPending()) return
 
-        val requestByWebId = playerRecordRequest.associateBy { it.webId }
+        val requestByWebId = hitterRecordDtos.associateBy { it.webId }
         val hitterGameRecords = hitterGameRecordRepository.findAllByGameId(game.id)
             .associateBy { it.playerId }
         saveOrUpdate(requestByWebId, hitterGameRecords, game)
     }
 
     private fun saveOrUpdate(
-        requestByWebId: Map<WebId, PlayerRequest>,
+        requestByWebId: Map<WebId, HitterRecordDto>,
         hitterGameRecords: Map<Long, HitterGameRecord>,
         game: Game
     ) {
@@ -51,12 +51,12 @@ class HitterGameRecordService(
         }
     }
 
-    private fun updateHitterRecord(hitterGameRecord: HitterGameRecord, request: PlayerRequest) {
+    private fun updateHitterRecord(hitterGameRecord: HitterGameRecord, request: HitterRecordDto) {
         hitterGameRecord.updateStat(pa = request.pa, hit = request.hit)
         hitterGameRecordRepository.save(hitterGameRecord)
     }
 
-    private fun saveHitterRecord(game: Game, player: Player, request: PlayerRequest) {
+    private fun saveHitterRecord(game: Game, player: Player, request: HitterRecordDto) {
         hitterGameRecordRepository.save(
             HitterGameRecord(
                 gameId = game.id,
@@ -70,7 +70,7 @@ class HitterGameRecordService(
 }
 
 
-data class PlayerRequest(
+data class HitterRecordDto(
     val webId: WebId,
     val pa: Int,
     val hit: Int
