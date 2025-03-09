@@ -3,23 +3,24 @@ package com.example.kbocombo.crawler.game.infra
 import com.example.kbocombo.common.logInfo
 import com.example.kbocombo.crawler.common.application.NaverSportClient
 import com.example.kbocombo.crawler.common.utils.toTeamFilterCode
-import com.example.kbocombo.game.domain.Game
+import com.example.kbocombo.crawler.game.application.HitterRecordClient
 import com.example.kbocombo.game.infra.GameRepository
 import com.example.kbocombo.game.infra.getById
 import com.example.kbocombo.player.vo.Team
+import com.example.kbocombo.player.vo.WebId
+import com.example.kbocombo.record.application.HitterRecordDto
 import com.fasterxml.jackson.databind.ObjectMapper
-import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Component
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 @Component
-class NaverSportHandler(
+class NaverSportHitterRecordClient(
     private val naverSportClient: NaverSportClient,
     private val gameRepository: GameRepository,
     private val objectMapper: ObjectMapper,
-    private val eventPublisher: ApplicationEventPublisher
-) {
+) : HitterRecordClient {
+
     /**
      * -- 오늘 경기에 안타 친 선수 찾기 --
      * 1. 오늘 진행 중인 경기 가져오기
@@ -27,29 +28,34 @@ class NaverSportHandler(
      * 3. 생성한 게임 코드를 기반으로 오늘 경기 기록 조회
      * 4. 안타를 기록한 선수가 있으면 기록지에 추가. -> 오늘의 안타 이벤트 발행 -> 해당 선수를 투표한 사용자 콤보 달성
      */
-    fun run(gameId: Long) {
+    override fun findAll(gameId: Long): List<HitterRecordDto> {
         val game = gameRepository.getById(gameId)
         val gameCode = generateGameCode(game.homeTeam, game.awayTeam, game.startDate)
-        analyzeGameRecord(game, gameCode)
+        return getBatterBoxScores(gameCode)
     }
 
-    private fun analyzeGameRecord(game: Game, gameCode: String) {
+    private fun getBatterBoxScores(gameCode: String): List<HitterRecordDto> {
         val gameRecordJsonData = naverSportClient.getLiveGameRecord(gameCode = gameCode)
         val gameRecord = objectMapper.readValue(gameRecordJsonData, NaverSportApiResponse::class.java)
 
         if (gameRecord.isFailed()) {
             logInfo("${gameCode}에 대한 경기 기록 조회에 실패했습니다.")
-            return
+            return emptyList()
         }
 
         if (gameRecord.isGameCanceled()) {
             logInfo("${gameCode}에 대한 경기는 취소되었습니다.")
-            return
+            return emptyList()
         }
-        val awayTeamHitters = gameRecord.result.recordData.battersBoxscore.away
-        val homeTeamHitters = gameRecord.result.recordData.battersBoxscore.home
-        awayTeamHitters.forEach { checkIfHitExist(it, game) }
-        homeTeamHitters.forEach { checkIfHitExist(it, game) }
+        return gameRecord.result.recordData.battersBoxscore.let { boxscore ->
+            (boxscore.away + boxscore.home).map {
+                HitterRecordDto(
+                    webId = WebId( it.playerCode),
+                    pa = it.ab,
+                    hit = it.hit
+                )
+            }
+        }
     }
 
     /**
@@ -66,14 +72,6 @@ class NaverSportHandler(
         val awayTeamCode = toTeamFilterCode(awayTeam)
         val homeTeamCode = toTeamFilterCode(homeTeam)
         return "${formattedDate}${awayTeamCode}${homeTeamCode}" + "0" + startDate.year
-    }
-
-    private fun checkIfHitExist(batter: Batter, game: Game) {
-        if (batter.isHitCompleted()) {
-            val playerCode = batter.playerCode
-            eventPublisher.publishEvent(HitterHitRecordedEvent(game.id, playerCode))
-        }
-        return
     }
 }
 
@@ -142,7 +140,6 @@ data class Batter(
     val name: String,
     val rbi: Int
 ) {
-    fun isHitCompleted(): Boolean = hit > 0
 }
 
 data class HitterHitRecordedEvent(

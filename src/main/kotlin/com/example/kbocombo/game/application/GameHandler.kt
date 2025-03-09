@@ -1,9 +1,10 @@
 package com.example.kbocombo.game.application
 
 import com.example.kbocombo.common.logInfo
-import com.example.kbocombo.crawler.game.infra.NaverSportHandler
+import com.example.kbocombo.crawler.game.application.HitterRecordClient
 import com.example.kbocombo.game.domain.GameEndEventJob
 import com.example.kbocombo.game.infra.GameEndEventJobRepository
+import com.example.kbocombo.record.application.HitterGameRecordService
 import org.springframework.context.event.EventListener
 import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Component
@@ -14,7 +15,8 @@ import org.springframework.transaction.annotation.Transactional
 class GameHandler(
     private val gameService: GameService,
     private val gameEndEventJobRepository: GameEndEventJobRepository,
-    private val naverSportHandler: NaverSportHandler
+    private val hitterRecordClient: HitterRecordClient,
+    private val hitterGameRecordService: HitterGameRecordService
 ) {
 
     @Async
@@ -37,7 +39,7 @@ class GameHandler(
         )
 
         gameEndEventJobRepository.save(gameEndEventJob)
-        naverSportHandler.run(gameId = gameId)
+        updateHitterRecord(gameId)
     }
 
     /**
@@ -52,7 +54,7 @@ class GameHandler(
         logInfo("Game is Running: $gameId")
 
         gameService.run(gameId)
-        naverSportHandler.run(gameId = gameId)
+        updateHitterRecord(gameId)
     }
 
     /**
@@ -80,6 +82,11 @@ class GameHandler(
         )
 
         gameEndEventJobRepository.save(gameEndEventJob)
+    }
+
+    private fun updateHitterRecord(gameId: Long) {
+        val hitterRecords = hitterRecordClient.findAll(gameId)
+        hitterGameRecordService.saveOrUpdateHitterRecords(gameId, hitterRecords)
     }
 }
 
