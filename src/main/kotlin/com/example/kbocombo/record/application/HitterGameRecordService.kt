@@ -1,5 +1,6 @@
 package com.example.kbocombo.record.application
 
+import com.example.kbocombo.common.logWarn
 import com.example.kbocombo.game.domain.Game
 import com.example.kbocombo.game.infra.GameRepository
 import com.example.kbocombo.player.domain.Player
@@ -20,6 +21,7 @@ class HitterGameRecordService(
     @Transactional
     fun deleteAllHitterRecordIfGameCanceled(game: Game) {
         if (game.isCancelled().not()) {
+            logWarn("game is not canceled")
             return
         }
         hitterGameRecordRepository.deleteAllByGameId(gameId = game.id)

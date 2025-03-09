@@ -16,4 +16,8 @@ fun Any.logWarn(message: String? = null, e: Throwable) {
     logger().warn(message ?: e.message ?: e.localizedMessage, e)
 }
 
+fun Any.logWarn(message: String) {
+    logger().warn(message)
+}
+
 private fun Any.logger(): Logger = LoggerFactory.getLogger(this.javaClass)
