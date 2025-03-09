@@ -54,7 +54,7 @@ class HitterGameRecordService(
     }
 
     private fun updateHitterRecord(hitterGameRecord: HitterGameRecord, request: HitterRecordDto) {
-        hitterGameRecord.updateStat(pa = request.pa, hit = request.hit)
+        hitterGameRecord.updateStat(pa = request.atBats, hit = request.hits)
         hitterGameRecordRepository.save(hitterGameRecord)
     }
 
@@ -64,8 +64,8 @@ class HitterGameRecordService(
                 gameId = game.id,
                 gameDate = game.startDate,
                 playerId = player.id,
-                pa = request.pa,
-                hit = request.hit
+                atBats = request.atBats,
+                hits = request.hits
             )
         )
     }
@@ -74,6 +74,6 @@ class HitterGameRecordService(
 
 data class HitterRecordDto(
     val webId: WebId,
-    val pa: Int,
-    val hit: Int
+    val atBats: Int,
+    val hits: Int
 )

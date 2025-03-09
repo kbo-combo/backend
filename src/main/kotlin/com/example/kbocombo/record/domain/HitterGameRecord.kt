@@ -24,32 +24,33 @@ class HitterGameRecord(
     @Column(name = "player_id", nullable = false)
     val playerId: Long,
 
-    pa: Int,
+    atBats: Int,
 
-    hit: Int,
+    hits: Int,
 ) : AbstractAggregateRoot<HitterGameRecord>() {
 
-    @Column(name = "pa", nullable = false)
-    var pa: Int = pa
+
+    @Column(name = "at_bats", nullable = false)
+    var atBats: Int = atBats
         protected set
 
-    @Column(name = "hit", nullable = false)
-    var hit: Int = hit
+    @Column(name = "hits", nullable = false)
+    var hits: Int = hits
         protected set
 
     @PostPersist
     fun publishHitterHitRecordEvent() {
-        if (hit > 0) {
+        if (hits > 0) {
             registerHitterHitRecordEvent()
         }
     }
 
     fun updateStat(pa: Int, hit: Int) {
-        this.pa = pa
-        if (this.hit == 0 && hit > 0) {
+        this.atBats = pa
+        if (this.hits == 0 && hit > 0) {
             registerHitterHitRecordEvent()
         }
-        this.hit = hit
+        this.hits = hit
     }
 
     private fun registerHitterHitRecordEvent() {

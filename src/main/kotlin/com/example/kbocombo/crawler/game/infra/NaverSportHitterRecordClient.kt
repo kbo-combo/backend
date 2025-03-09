@@ -50,9 +50,9 @@ class NaverSportHitterRecordClient(
         return gameRecord.result.recordData.battersBoxscore.let { boxscore ->
             (boxscore.away + boxscore.home).map {
                 HitterRecordDto(
-                    webId = WebId( it.playerCode),
-                    pa = it.ab,
-                    hit = it.hit
+                    webId = WebId(it.playerCode),
+                    atBats = it.ab,
+                    hits = it.hit
                 )
             }
         }
