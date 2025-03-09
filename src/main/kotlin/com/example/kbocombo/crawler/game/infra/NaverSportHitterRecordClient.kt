@@ -27,7 +27,6 @@ class NaverSportHitterRecordClient(
      * 1. 오늘 진행 중인 경기 가져오기
      * 2. 해당 경기에서 홈팀, 어웨이팀 코드를 기반으로 게임 코드 생성
      * 3. 생성한 게임 코드를 기반으로 오늘 경기 기록 조회
-     * 4. 안타를 기록한 선수가 있으면 기록지에 추가. -> 오늘의 안타 이벤트 발행 -> 해당 선수를 투표한 사용자 콤보 달성
      */
     override fun findAll(gameId: Long): List<HitterRecordDto> {
         val game = gameRepository.getById(gameId)
