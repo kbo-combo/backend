@@ -50,7 +50,8 @@ class HitterGameRecordService(
     }
 
     private fun updateHitterRecord(hitterGameRecord: HitterGameRecord, request: PlayerRequest) {
-        hitterGameRecord.updateStat(pa = request.pa, hit = hitterGameRecord.hit)
+        hitterGameRecord.updateStat(pa = request.pa, hit = request.hit)
+        hitterGameRecordRepository.save(hitterGameRecord)
     }
 
     private fun saveHitterRecord(game: Game, player: Player, request: PlayerRequest) {
