@@ -19,10 +19,12 @@ class ComboRankServiceTest(
     private val memberRepository: MemberRepository
 ) : ExpectSpec({
 
+    val comboYear = LocalDate.now().year
+
     context("콤보 랭크 기록") {
         expect("최초로 생성되는 엔티티에는 기록이 초기화 되어 있다.") {
             val member = memberRepository.save(getMember().sample())
-            val comboRank = ComboRank.init(memberId = member.id)
+            val comboRank = ComboRank.init(memberId = member.id, year = comboYear)
 
             val savedComboRank = comboRankRepository.save(comboRank)
 
@@ -38,10 +40,10 @@ class ComboRankServiceTest(
 
         expect("콤보 성공을 기록하면 totalCount, successCount 값이 1 증가한다.") {
             val member = memberRepository.save(getMember().sample())
-            val comboRank = ComboRank.init(memberId = member.id)
+            val comboRank = ComboRank.init(memberId = member.id, year = comboYear)
             val priorComboRank = comboRankRepository.save(comboRank)
 
-            comboRankService.recordSuccess(memberId = member.id)
+            comboRankService.recordSuccess(memberId = member.id, comboId = 1L)
 
             val successAppliedComboRank = comboRankRepository.findByMemberId(memberId = member.id)
             successAppliedComboRank.memberId shouldBe member.id
@@ -54,10 +56,10 @@ class ComboRankServiceTest(
 
         expect("콤보 실패를 기록하면 totalCount, failCount 값이 1 증가한다.") {
             val member = memberRepository.save(getMember().sample())
-            val comboRank = ComboRank.init(memberId = member.id)
+            val comboRank = ComboRank.init(memberId = member.id, year = comboYear)
             val priorComboRank = comboRankRepository.save(comboRank)
 
-            comboRankService.recordFail(memberId = member.id)
+            comboRankService.recordFail(memberId = member.id, comboId = 1L)
 
             val successAppliedComboRank = comboRankRepository.findByMemberId(memberId = member.id)
             successAppliedComboRank.memberId shouldBe member.id
@@ -71,10 +73,10 @@ class ComboRankServiceTest(
 
         expect("콤보 패스를 기록하면 totalCount, passCount 값이 1 증가한다.") {
             val member = memberRepository.save(getMember().sample())
-            val comboRank = ComboRank.init(memberId = member.id)
+            val comboRank = ComboRank.init(memberId = member.id, year = comboYear)
             val priorComboRank = comboRankRepository.save(comboRank)
 
-            comboRankService.recordPass(memberId = member.id)
+            comboRankService.recordPass(memberId = member.id, comboId = 1L)
 
             val successAppliedComboRank = comboRankRepository.findByMemberId(memberId = member.id)
             successAppliedComboRank.memberId shouldBe member.id
@@ -90,11 +92,11 @@ class ComboRankServiceTest(
             val memberA = memberRepository.save(getMember().sample())
             val memberB = memberRepository.save(getMember().sample())
             val memberC = memberRepository.save(getMember().sample())
-            val comboRankA = ComboRank.init(memberId = memberA.id)
-            val comboRankB = ComboRank.init(memberId = memberB.id)
-            val comboRankC = ComboRank.init(memberId = memberC.id)
-            comboRankB.recordComboSuccess()
-            comboRankC.recordComboSuccess()
+            val comboRankA = ComboRank.init(memberId = memberA.id, year = comboYear)
+            val comboRankB = ComboRank.init(memberId = memberB.id, year = comboYear)
+            val comboRankC = ComboRank.init(memberId = memberC.id, year = comboYear)
+            comboRankB.recordComboSuccess(gameDate = LocalDate.now())
+            comboRankC.recordComboSuccess(gameDate = LocalDate.now())
             comboRankRepository.saveAll(listOf(comboRankA, comboRankB, comboRankC)) // memberB, memberC 동률
 
             val comboRankStatistic = comboRankService.getComboRankStatistic(3)

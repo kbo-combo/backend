@@ -6,15 +6,25 @@ import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
+import jakarta.persistence.Table
+import jakarta.persistence.UniqueConstraint
 import java.time.LocalDate
 
 @Entity(name = "COMBO_RANK")
+@Table(
+    uniqueConstraints = [
+        UniqueConstraint(columnNames = ["year", "member_id"])
+    ]
+)
 class ComboRank(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0L,
 
-    @Column(name = "member_id", updatable = false, unique = true)
+    @Column(name = "year")
+    val year: Int,
+
+    @Column(name = "member_id")
     val memberId: Long,
 
     currentRecord: Int,
@@ -79,9 +89,10 @@ class ComboRank(
     }
 
     companion object {
-        fun init(memberId: Long): ComboRank {
+        fun init(memberId: Long, year: Int): ComboRank {
             return ComboRank(
                 memberId = memberId,
+                year = year,
                 currentRecord = 0,
                 successCount = 0,
                 totalCount = 0,

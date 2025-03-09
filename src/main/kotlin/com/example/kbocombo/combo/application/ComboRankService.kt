@@ -24,7 +24,7 @@ class ComboRankService(
         val member = memberRepository.findById(memberId)
         val combo = comboRepository.getById(comboId)
 
-        val comboRank = comboRankRepository.findByMemberId(memberId = member.id)
+        val comboRank = findComboRankOrSave(memberId = member.id, year = combo.gameDate.year)
         comboRank.recordComboSuccess(gameDate = combo.gameDate)
         comboRankRepository.save(comboRank)
     }
@@ -32,8 +32,9 @@ class ComboRankService(
     @Transactional
     fun recordFail(memberId: Long, comboId: Long) {
         val member = memberRepository.findById(memberId)
+        val combo = comboRepository.getById(comboId)
 
-        val comboRank = comboRankRepository.findByMemberId(memberId = member.id)
+        val comboRank = findComboRankOrSave(memberId = member.id, year = combo.gameDate.year)
         comboRank.recordComboFail()
         comboRankRepository.save(comboRank)
     }
@@ -41,8 +42,9 @@ class ComboRankService(
     @Transactional
     fun recordPass(memberId: Long, comboId: Long) {
         val member = memberRepository.findById(memberId)
+        val combo = comboRepository.getById(comboId)
 
-        val comboRank = comboRankRepository.findByMemberId(memberId = member.id)
+        val comboRank = findComboRankOrSave(memberId = member.id, year = combo.gameDate.year)
         comboRank.recordComboPass()
         comboRankRepository.save(comboRank)
     }
@@ -52,9 +54,18 @@ class ComboRankService(
         val member = memberRepository.findById(memberId)
 
         val comboRank = ComboRank.init(
-            memberId = member.id
+            memberId = member.id,
+            year = LocalDate.now().year
         )
         comboRankRepository.save(comboRank)
+    }
+
+    private fun findComboRankOrSave(memberId: Long, year: Int): ComboRank {
+        return comboRankRepository.findByMemberIdAndYear(memberId = memberId, year = year)
+            ?: comboRankRepository.save(
+                ComboRank.init(memberId = memberId, year = year
+                )
+            )
     }
 
     fun getMemberComboRank(memberId: Long): MemberComboRankResponse {

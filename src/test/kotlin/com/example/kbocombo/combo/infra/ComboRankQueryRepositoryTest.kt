@@ -9,6 +9,7 @@ import com.navercorp.fixturemonkey.kotlin.giveMeKotlinBuilder
 import io.kotest.core.spec.style.ExpectSpec
 import io.kotest.matchers.shouldBe
 import org.springframework.boot.test.context.SpringBootTest
+import java.time.LocalDate
 
 @SpringBootTest
 class ComboRankQueryRepositoryTest(
@@ -22,12 +23,12 @@ class ComboRankQueryRepositoryTest(
             val memberA = memberRepository.save(getMember().sample())
             val memberB = memberRepository.save(getMember().sample())
             val memberC = memberRepository.save(getMember().sample())
-            val comboRankA = ComboRank.init(memberId = memberA.id)
-            val comboRankB = ComboRank.init(memberId = memberB.id)
-            val comboRankC = ComboRank.init(memberId = memberC.id)
-            comboRankB.recordComboSuccess()
-            comboRankC.recordComboSuccess()
-            comboRankC.recordComboSuccess()
+            val comboRankA = ComboRank.init(memberId = memberA.id, year = LocalDate.now().year)
+            val comboRankB = ComboRank.init(memberId = memberB.id, year = LocalDate.now().year)
+            val comboRankC = ComboRank.init(memberId = memberC.id, year = LocalDate.now().year)
+            comboRankB.recordComboSuccess(gameDate = LocalDate.now())
+            comboRankC.recordComboSuccess(gameDate = LocalDate.now())
+            comboRankC.recordComboSuccess(gameDate = LocalDate.now())
             comboRankRepository.saveAll(listOf(comboRankA, comboRankB, comboRankC))
 
             val findTopRanks = comboRankQueryRepository.findTopRanks(3)
