@@ -14,6 +14,7 @@ import com.example.kbocombo.record.infra.HitterGameRecordRepository
 import com.example.kbocombo.utils.fixture
 import com.navercorp.fixturemonkey.kotlin.giveMeKotlinBuilder
 import io.kotest.core.spec.style.ExpectSpec
+import io.kotest.datatest.withData
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import org.springframework.boot.test.context.SpringBootTest
@@ -105,6 +106,34 @@ class HitterGameRecordServiceTest(
             val event = applicationEvents.stream(HitterHitRecordedEvent::class.java).findFirst().get()!!
             event.playerId shouldBe player.id
             event.gameId shouldBe game.id
+        }
+    }
+
+    context("타자 타격 기록 삭제") {
+        withData(
+            nameFn = { gameState -> "게임 상태가 ${gameState}이면 기록이 삭제되지 않아야 한다" },
+            GameState.entries.filter { it != GameState.CANCEL }
+        ) { gameState ->
+            // Given
+            val game = gameRepository.save(getGame(gameState).sample())
+            val player = playerRepository.save(getPlayer().sample())
+            hitterGameRecordRepository.save(getHitterGameRecord(game, player).sample())
+
+            // When
+            sut.deleteAllHitterRecordIfGameCanceled(game)
+
+            // Then
+            hitterGameRecordRepository.findAllByGameId(game.id) shouldHaveSize 1
+        }
+
+        expect("게임이 취소면 해당 게임의 타격기록을 모두 삭제한다.") {
+            val game = gameRepository.save(getGame(GameState.CANCEL).sample())
+            val player = playerRepository.save(getPlayer().sample())
+            hitterGameRecordRepository.save(getHitterGameRecord(game, player).sample())
+
+            sut.deleteAllHitterRecordIfGameCanceled(game)
+
+            hitterGameRecordRepository.findAllByGameId(gameId = game.id) shouldHaveSize 0
         }
     }
 })
