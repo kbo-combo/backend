@@ -29,7 +29,6 @@ class HitterGameRecord(
     hits: Int,
 ) : AbstractAggregateRoot<HitterGameRecord>() {
 
-
     // 타수 AB
     @Column(name = "at_bats", nullable = false)
     var atBats: Int = atBats
