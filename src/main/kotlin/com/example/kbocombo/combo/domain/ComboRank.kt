@@ -55,14 +55,14 @@ class ComboRank(
         protected set
 
 
-    fun recordComboSuccess() {
+    fun recordComboSuccess(gameDate: LocalDate) {
         this.currentRecord += 1
         this.successCount += 1
         this.totalCount += 1
         if (this.firstSuccessDate == null) {
-            this.firstSuccessDate = LocalDate.now()
+            this.firstSuccessDate = gameDate
         }
-        this.lastSuccessDate = LocalDate.now()
+        this.lastSuccessDate = gameDate
     }
 
     fun recordComboFail() {

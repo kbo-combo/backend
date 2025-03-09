@@ -3,7 +3,9 @@ package com.example.kbocombo.combo.application
 import com.example.kbocombo.combo.domain.ComboRank
 import com.example.kbocombo.combo.infra.ComboRankQueryRepository
 import com.example.kbocombo.combo.infra.ComboRankRepository
+import com.example.kbocombo.combo.infra.ComboRepository
 import com.example.kbocombo.combo.infra.TopRankQueryDto
+import com.example.kbocombo.combo.infra.getById
 import com.example.kbocombo.member.infra.MemberRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -12,21 +14,23 @@ import java.time.LocalDate
 @Service
 class ComboRankService(
     private val memberRepository: MemberRepository,
+    private val comboRepository: ComboRepository,
     private val comboRankRepository: ComboRankRepository,
     private val comboRankQueryRepository: ComboRankQueryRepository
 ) {
 
     @Transactional
-    fun recordSuccess(memberId: Long) {
+    fun recordSuccess(memberId: Long, comboId: Long) {
         val member = memberRepository.findById(memberId)
+        val combo = comboRepository.getById(comboId)
 
         val comboRank = comboRankRepository.findByMemberId(memberId = member.id)
-        comboRank.recordComboSuccess()
+        comboRank.recordComboSuccess(gameDate = combo.gameDate)
         comboRankRepository.save(comboRank)
     }
 
     @Transactional
-    fun recordFail(memberId: Long) {
+    fun recordFail(memberId: Long, comboId: Long) {
         val member = memberRepository.findById(memberId)
 
         val comboRank = comboRankRepository.findByMemberId(memberId = member.id)
@@ -35,7 +39,7 @@ class ComboRankService(
     }
 
     @Transactional
-    fun recordPass(memberId: Long) {
+    fun recordPass(memberId: Long, comboId: Long) {
         val member = memberRepository.findById(memberId)
 
         val comboRank = comboRankRepository.findByMemberId(memberId = member.id)

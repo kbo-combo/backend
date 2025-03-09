@@ -2,6 +2,8 @@ package com.example.kbocombo.combo.application
 
 import com.example.kbocombo.combo.application.request.ComboCreateRequest
 import com.example.kbocombo.combo.domain.Combo
+import com.example.kbocombo.combo.domain.ComboFailedEvent
+import com.example.kbocombo.combo.domain.ComboPassedEvent
 import com.example.kbocombo.combo.domain.ComboSucceedEvent
 import com.example.kbocombo.combo.domain.vo.ComboStatus
 import com.example.kbocombo.combo.infra.ComboRepository
@@ -64,7 +66,7 @@ class ComboService(
         combos.forEach {
             it.success()
             comboRepository.save(it)
-            publisher.publishEvent(ComboSucceedEvent(memberId = it.memberId))
+            publisher.publishEvent(ComboSucceedEvent(memberId = it.memberId, comboId = it.id))
         }
     }
 
@@ -83,6 +85,7 @@ class ComboService(
         combos.forEach {
             it.fail()
             comboRepository.save(it)
+            publisher.publishEvent(ComboFailedEvent(memberId = it.memberId, comboId = it.id))
         }
     }
 
@@ -101,6 +104,7 @@ class ComboService(
         combos.forEach {
             it.pass()
             comboRepository.save(it)
+            publisher.publishEvent(ComboPassedEvent(memberId = it.memberId, comboId = it.id))
         }
     }
 
