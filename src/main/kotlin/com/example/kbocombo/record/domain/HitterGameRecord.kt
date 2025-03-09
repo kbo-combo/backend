@@ -23,8 +23,13 @@ class HitterGameRecord(
     val playerId: Long,
 
     @Column(name = "pa", nullable = false)
-    val pa: Int,
+    var pa: Int,
 
     @Column(name = "hit", nullable = false)
-    val hit: Int,
-)
+    var hit: Int,
+) {
+    fun updateStat(pa: Int, hit: Int) {
+        this.pa = pa
+        this.hit = hit
+    }
+}
