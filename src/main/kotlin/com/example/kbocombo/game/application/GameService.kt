@@ -1,5 +1,6 @@
 package com.example.kbocombo.game.application
 
+import com.example.kbocombo.common.logInfo
 import com.example.kbocombo.game.infra.GameRepository
 import com.example.kbocombo.game.infra.getById
 import org.springframework.stereotype.Service
@@ -23,7 +24,8 @@ class GameService(
     fun complete(gameId: Long) {
         val game = gameRepository.getById(gameId)
         if (game.isCompleted()) {
-            throw IllegalStateException("Game is already completed, gameId: $gameId")
+            logInfo("Game is already completed, gameId: $gameId")
+            return
         }
         game.complete()
         gameRepository.save(game)
@@ -33,7 +35,8 @@ class GameService(
     fun cancel(gameId: Long) {
         val game = gameRepository.getById(gameId)
         if (game.isCancelled()) {
-            throw IllegalStateException("Game is canceled, gameId: $gameId")
+            logInfo("Game is canceled, gameId: $gameId")
+            return
         }
 
         game.cancel()
