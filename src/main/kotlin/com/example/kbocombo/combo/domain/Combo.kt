@@ -80,6 +80,10 @@ class Combo private constructor(
         this.comboStatus = ComboStatus.PASS
     }
 
+    fun isPassed() : Boolean {
+        return this.comboStatus == ComboStatus.PASS
+    }
+
     private fun checkCreate(game: Game, now: LocalDateTime) {
         requireOrThrow(isAllowedTimeBefore(game, now)) {
             "게임 시작 ${ALLOWED_MINUTES_GAP}분 이전에만 등록할 수 있습니다."
