@@ -30,10 +30,12 @@ class HitterGameRecord(
 ) : AbstractAggregateRoot<HitterGameRecord>() {
 
 
+    // 타수 AB
     @Column(name = "at_bats", nullable = false)
     var atBats: Int = atBats
         protected set
 
+    // 안타
     @Column(name = "hits", nullable = false)
     var hits: Int = hits
         protected set
