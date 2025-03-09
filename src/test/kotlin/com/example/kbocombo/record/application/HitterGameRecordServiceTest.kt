@@ -18,8 +18,10 @@ import io.kotest.matchers.shouldBe
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.Import
 import org.springframework.test.context.event.ApplicationEvents
+import org.springframework.transaction.annotation.Transactional
 
 @Import(TestConfig::class)
+@Transactional
 @SpringBootTest
 class HitterGameRecordServiceTest(
     private val sut: HitterGameRecordService,
