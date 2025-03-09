@@ -1,7 +1,7 @@
 package com.example.kbocombo.player.infra
 
-import com.example.kbocombo.player.Player
 import com.example.kbocombo.player.QPlayer.player
+import com.example.kbocombo.player.domain.Player
 import com.example.kbocombo.player.presentation.request.HitterTeamRequest
 import com.example.kbocombo.player.vo.PlayerPosition
 import com.querydsl.jpa.impl.JPAQueryFactory

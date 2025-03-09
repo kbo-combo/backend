@@ -12,7 +12,7 @@ import com.example.kbocombo.game.infra.GameRepository
 import com.example.kbocombo.member.domain.Member
 import com.example.kbocombo.member.domain.vo.SocialProvider
 import com.example.kbocombo.member.infra.MemberRepository
-import com.example.kbocombo.player.Player
+import com.example.kbocombo.player.domain.Player
 import com.example.kbocombo.player.infra.PlayerRepository
 import com.example.kbocombo.utils.fixture
 import com.navercorp.fixturemonkey.kotlin.giveMeKotlinBuilder

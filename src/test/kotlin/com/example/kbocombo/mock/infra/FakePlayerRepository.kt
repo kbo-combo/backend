@@ -1,6 +1,6 @@
 package com.example.kbocombo.mock.infra
 
-import com.example.kbocombo.player.Player
+import com.example.kbocombo.player.domain.Player
 import com.example.kbocombo.player.infra.PlayerRepository
 import com.example.kbocombo.player.vo.WebId
 

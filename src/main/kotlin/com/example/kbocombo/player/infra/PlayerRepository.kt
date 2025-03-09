@@ -1,6 +1,6 @@
 package com.example.kbocombo.player.infra
 
-import com.example.kbocombo.player.Player
+import com.example.kbocombo.player.domain.Player
 import com.example.kbocombo.player.vo.WebId
 import org.springframework.data.repository.Repository
 

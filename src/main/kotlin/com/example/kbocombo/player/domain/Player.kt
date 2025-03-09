@@ -1,4 +1,4 @@
-package com.example.kbocombo.player
+package com.example.kbocombo.player.domain
 
 import com.example.kbocombo.common.BaseEntity
 import com.example.kbocombo.player.vo.HittingHandType

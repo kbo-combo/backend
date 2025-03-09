@@ -4,7 +4,7 @@ import com.example.kbocombo.common.logWarn
 import com.example.kbocombo.crawler.common.utils.toHittingHand
 import com.example.kbocombo.crawler.common.utils.toPitchingHand
 import com.example.kbocombo.crawler.common.utils.toPlayerDetailPosition
-import com.example.kbocombo.player.Player
+import com.example.kbocombo.player.domain.Player
 import com.example.kbocombo.player.vo.HittingHandType
 import com.example.kbocombo.player.vo.PitchingHandType
 import com.example.kbocombo.player.vo.PlayerDetailPosition

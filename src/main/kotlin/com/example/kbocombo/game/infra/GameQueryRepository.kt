@@ -2,8 +2,8 @@ package com.example.kbocombo.game.infra
 
 import com.example.kbocombo.game.domain.Game
 import com.example.kbocombo.game.domain.QGame.game
-import com.example.kbocombo.player.Player
 import com.example.kbocombo.player.QPlayer.player
+import com.example.kbocombo.player.domain.Player
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.stereotype.Repository
 import java.time.LocalDate

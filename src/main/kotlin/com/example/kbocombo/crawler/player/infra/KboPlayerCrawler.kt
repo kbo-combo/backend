@@ -1,7 +1,7 @@
 package com.example.kbocombo.crawler.player.infra
 
 import com.example.kbocombo.crawler.player.application.PlayerClient
-import com.example.kbocombo.player.Player
+import com.example.kbocombo.player.domain.Player
 import org.springframework.stereotype.Component
 
 @Component
