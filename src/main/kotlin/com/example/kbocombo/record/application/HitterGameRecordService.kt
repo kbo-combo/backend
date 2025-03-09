@@ -30,7 +30,7 @@ class HitterGameRecordService(
     @Transactional
     fun saveOrUpdateHitterRecords(gameId: Long, hitterRecordDtos: List<HitterRecordDto>) {
         val game = gameRepository.findById(gameId = gameId)
-            ?: throw IllegalArgumentException("존재하지 않는 게임입니다.")
+            ?: throw IllegalArgumentException("cannot find game")
         if (game.isPending()) return
 
         val requestByWebId = hitterRecordDtos.associateBy { it.webId }
