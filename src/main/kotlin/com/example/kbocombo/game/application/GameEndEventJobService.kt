@@ -6,6 +6,7 @@ import com.example.kbocombo.game.domain.vo.GameState
 import com.example.kbocombo.game.infra.GameEndEventJobRepository
 import com.example.kbocombo.game.infra.GameRepository
 import com.example.kbocombo.game.infra.getById
+import com.example.kbocombo.record.application.HitterGameRecordService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
@@ -14,6 +15,7 @@ import java.time.LocalDateTime
 class GameEndEventJobService(
     private val gameRepository: GameRepository,
     private val gameEndEventJobRepository: GameEndEventJobRepository,
+    private val hitterGameRecordService: HitterGameRecordService,
     private val comboService: ComboService,
     private val comboRankService: ComboRankService
 ) {
@@ -36,5 +38,6 @@ class GameEndEventJobService(
 
         gameEndEventJob.finish()
         gameEndEventJobRepository.save(gameEndEventJob)
+        hitterGameRecordService.deleteAllHitterRecordIfGameCanceled(game)
     }
 }
