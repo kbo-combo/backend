@@ -46,7 +46,7 @@ class ComboRankService(
     }
 
     private fun findComboRankOrSave(memberId: Long, year: Int): ComboRank {
-        return comboRankRepository.findByMemberIdAndYear(memberId = memberId, year = year)
+        return comboRankRepository.findByMemberIdAndYears(memberId = memberId, years = year)
             ?: comboRankRepository.save(
                 ComboRank.init(
                     memberId = memberId, years = year

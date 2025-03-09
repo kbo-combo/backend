@@ -9,5 +9,5 @@ interface ComboRankRepository : JpaRepository<ComboRank, Long> {
 
     fun findByMemberId(memberId: Long): ComboRank
     fun save(comboRank: ComboRank): ComboRank
-    fun findByMemberIdAndYear(memberId: Long, year: Int): ComboRank?
+    fun findByMemberIdAndYears(memberId: Long, years: Int): ComboRank?
 }
