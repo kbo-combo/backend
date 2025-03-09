@@ -1,6 +1,7 @@
 package com.example.kbocombo.crawler.game.infra
 
 import com.example.kbocombo.common.logInfo
+import com.example.kbocombo.common.logWarn
 import com.example.kbocombo.crawler.common.application.NaverSportClient
 import com.example.kbocombo.crawler.common.utils.toTeamFilterCode
 import com.example.kbocombo.crawler.game.application.HitterRecordClient
@@ -39,7 +40,7 @@ class NaverSportHitterRecordClient(
         val gameRecord = objectMapper.readValue(gameRecordJsonData, NaverSportApiResponse::class.java)
 
         if (gameRecord.isFailed()) {
-            logInfo("${gameCode}에 대한 경기 기록 조회에 실패했습니다.")
+            logWarn("${gameCode}에 대한 경기 기록 조회에 실패했습니다.")
             return emptyList()
         }
 
