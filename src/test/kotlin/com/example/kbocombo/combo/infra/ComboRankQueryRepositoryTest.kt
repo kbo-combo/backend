@@ -23,15 +23,15 @@ class ComboRankQueryRepositoryTest(
             val memberA = memberRepository.save(getMember().sample())
             val memberB = memberRepository.save(getMember().sample())
             val memberC = memberRepository.save(getMember().sample())
-            val comboRankA = ComboRank.init(memberId = memberA.id, year = LocalDate.now().year)
-            val comboRankB = ComboRank.init(memberId = memberB.id, year = LocalDate.now().year)
-            val comboRankC = ComboRank.init(memberId = memberC.id, year = LocalDate.now().year)
+            val comboRankA = ComboRank.init(memberId = memberA.id, years = LocalDate.now().year)
+            val comboRankB = ComboRank.init(memberId = memberB.id, years = LocalDate.now().year)
+            val comboRankC = ComboRank.init(memberId = memberC.id, years = LocalDate.now().year)
             comboRankB.recordComboSuccess(gameDate = LocalDate.now())
             comboRankC.recordComboSuccess(gameDate = LocalDate.now())
             comboRankC.recordComboSuccess(gameDate = LocalDate.now())
             comboRankRepository.saveAll(listOf(comboRankA, comboRankB, comboRankC))
 
-            val findTopRanks = comboRankQueryRepository.findTopRanks(3)
+            val findTopRanks = comboRankQueryRepository.findTopRanks(year = LocalDate.now().year, limit = 3)
 
             findTopRanks.size shouldBe 3
             findTopRanks[0].memberId shouldBe memberC.id

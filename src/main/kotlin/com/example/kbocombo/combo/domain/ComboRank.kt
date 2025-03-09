@@ -13,7 +13,7 @@ import java.time.LocalDate
 @Entity(name = "COMBO_RANK")
 @Table(
     uniqueConstraints = [
-        UniqueConstraint(columnNames = ["year", "member_id"])
+        UniqueConstraint(columnNames = ["years", "member_id"])
     ]
 )
 class ComboRank(
@@ -21,8 +21,8 @@ class ComboRank(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0L,
 
-    @Column(name = "year")
-    val year: Int,
+    @Column(name = "years")
+    val years: Int,
 
     @Column(name = "member_id")
     val memberId: Long,
@@ -89,10 +89,10 @@ class ComboRank(
     }
 
     companion object {
-        fun init(memberId: Long, year: Int): ComboRank {
+        fun init(memberId: Long, years: Int): ComboRank {
             return ComboRank(
                 memberId = memberId,
-                year = year,
+                years = years,
                 currentRecord = 0,
                 successCount = 0,
                 totalCount = 0,

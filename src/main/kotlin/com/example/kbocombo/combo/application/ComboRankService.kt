@@ -49,7 +49,7 @@ class ComboRankService(
         return comboRankRepository.findByMemberIdAndYear(memberId = memberId, year = year)
             ?: comboRankRepository.save(
                 ComboRank.init(
-                    memberId = memberId, year = year
+                    memberId = memberId, years = year
                 )
             )
     }
@@ -60,7 +60,7 @@ class ComboRankService(
 
         val comboRank = ComboRank.init(
             memberId = member.id,
-            year = LocalDate.now().year
+            years = LocalDate.now().year
         )
         comboRankRepository.save(comboRank)
     }
@@ -75,8 +75,8 @@ class ComboRankService(
     }
 
     @Transactional(readOnly = true)
-    fun getComboRankStatistic(count: Int): ComboRankStatisticResponse {
-        val topRanksDto = comboRankQueryRepository.findTopRanks(count.toLong())
+    fun getComboRankStatistic(year: Int, count: Int): ComboRankStatisticResponse {
+        val topRanksDto = comboRankQueryRepository.findTopRanks(year = year, limit = count.toLong())
 
         var previousScore: Int? = null
         var currentRank = 0
@@ -86,7 +86,7 @@ class ComboRankService(
                 currentRank = index + 1
             }
             previousScore = dto.currentRecord
-            TopRankResponse.from(dto, currentRank)
+            TopRankResponse.of(dto, currentRank)
         }
         return ComboRankStatisticResponse(topRanks = topRanks)
     }
@@ -94,6 +94,7 @@ class ComboRankService(
 
 data class MemberComboRankResponse(
     val id: Long,
+    val year: Int,
     val memberId: Long,
     val currentRecord: Int,
     val successCount: Int,
@@ -107,6 +108,7 @@ data class MemberComboRankResponse(
         fun from(comboRank: ComboRank): MemberComboRankResponse {
             return MemberComboRankResponse(
                 id = comboRank.id,
+                year = comboRank.years,
                 memberId = comboRank.memberId,
                 currentRecord = comboRank.currentRecord,
                 successCount = comboRank.successCount,
@@ -123,6 +125,7 @@ data class MemberComboRankResponse(
 data class TopRankResponse(
     val rank: Int,
     val id: Long,
+    val year: Int,
     val memberId: Long,
     val nickname: String,
     val currentRecord: Int,
@@ -134,10 +137,11 @@ data class TopRankResponse(
     val lastSuccessDate: LocalDate?
 ) {
     companion object {
-        fun from(topRankQueryDto: TopRankQueryDto, rank: Int): TopRankResponse {
+        fun of(topRankQueryDto: TopRankQueryDto, rank: Int): TopRankResponse {
             return TopRankResponse(
                 rank = rank,
                 id = topRankQueryDto.id,
+                year = topRankQueryDto.year,
                 memberId = topRankQueryDto.memberId,
                 nickname = topRankQueryDto.nickname,
                 currentRecord = topRankQueryDto.currentRecord,

@@ -11,11 +11,12 @@ import java.time.LocalDate
 class ComboRankQueryRepository(
     private val queryFactory: JPAQueryFactory
 ) {
-    fun findTopRanks(limit: Long): List<TopRankQueryDto> {
+    fun findTopRanks(year: Int, limit: Long): List<TopRankQueryDto> {
         return queryFactory
             .select(
                 QTopRankQueryDto(
                     comboRank.id,
+                    comboRank.years,
                     comboRank.memberId,
                     member.nickname,
                     comboRank.currentRecord,
@@ -31,6 +32,7 @@ class ComboRankQueryRepository(
             .join(member).on(comboRank.memberId.eq(member.id))
             .orderBy(comboRank.currentRecord.desc())
             .limit(limit)
+            .where(comboRank.years.eq(year))
             .fetch()
     }
 
@@ -38,6 +40,7 @@ class ComboRankQueryRepository(
 
 data class TopRankQueryDto @QueryProjection constructor(
     val id: Long,
+    val year: Int,
     val memberId: Long,
     val nickname: String,
     val currentRecord: Int,

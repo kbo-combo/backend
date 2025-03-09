@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import java.time.LocalDate
 
 @RestController
 @RequestMapping("/combo-rank")
@@ -29,9 +30,10 @@ class ComboRankController(
     @GetMapping("/statistic")
     fun findTopRankStatistic(
         @MemberResolver member: Member,
+        @RequestParam year: Int = LocalDate.now().year,
         @RequestParam size: Int = 20
     ): ResponseEntity<ComboRankStatisticResponse> {
-        val response = comboRankService.getComboRankStatistic(count = size)
+        val response = comboRankService.getComboRankStatistic(year = year, count = size)
         return ResponseEntity.ok(response)
     }
 }
