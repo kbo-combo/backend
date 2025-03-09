@@ -14,7 +14,7 @@ interface HitterGameRecordRepository : Repository<HitterGameRecord, Long> {
             where r.gameId = :gameId
         """
     )
-    fun deleteByGameId(gameId: Long)
+    fun deleteAllByGameId(gameId: Long)
 
     fun save(gameRecord: HitterGameRecord): HitterGameRecord
 

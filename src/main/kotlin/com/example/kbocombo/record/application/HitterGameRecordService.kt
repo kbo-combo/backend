@@ -7,10 +7,7 @@ import com.example.kbocombo.player.infra.PlayerRepository
 import com.example.kbocombo.player.vo.WebId
 import com.example.kbocombo.record.domain.HitterGameRecord
 import com.example.kbocombo.record.infra.HitterGameRecordRepository
-import org.springframework.context.event.EventListener
-import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
 
 @Service
@@ -20,11 +17,10 @@ class HitterGameRecordService(
     private val hitterGameRecordRepository: HitterGameRecordRepository
 ) {
 
-    @Async
-    @EventListener
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    fun deleteAllHitterRecordByGame(event: GameDomainCanceledEvent) {
-        hitterGameRecordRepository.deleteByGameId(event.gameId)
+    @Transactional
+    fun deleteAllHitterRecordIfGameCanceled(game: Game) {
+        require(game.isCancelled()) {"게임이 종료 상태가 아닙니다."}
+        hitterGameRecordRepository.deleteAllByGameId(gameId = game.id)
     }
 
     @Transactional
@@ -70,8 +66,6 @@ class HitterGameRecordService(
     }
 }
 
-
-data class GameDomainCanceledEvent(val gameId: Long)
 
 data class PlayerRequest(
     val webId: WebId,
