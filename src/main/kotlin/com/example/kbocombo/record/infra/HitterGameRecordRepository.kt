@@ -19,5 +19,4 @@ interface HitterGameRecordRepository : Repository<HitterGameRecord, Long> {
     fun save(gameRecord: HitterGameRecord): HitterGameRecord
 
     fun findAllByGameId(gameId: Long): List<HitterGameRecord>
-    fun pa(pa: Int): MutableList<HitterGameRecord>
 }

@@ -54,7 +54,7 @@ class HitterGameRecordService(
     }
 
     private fun updateHitterRecord(hitterGameRecord: HitterGameRecord, request: HitterRecordDto) {
-        hitterGameRecord.updateStat(pa = request.atBats, hit = request.hits)
+        hitterGameRecord.updateStat(atBats = request.atBats, hits = request.hits)
         hitterGameRecordRepository.save(hitterGameRecord)
     }
 

@@ -47,12 +47,12 @@ class HitterGameRecord(
         }
     }
 
-    fun updateStat(pa: Int, hit: Int) {
-        this.atBats = pa
-        if (this.hits == 0 && hit > 0) {
+    fun updateStat(atBats: Int, hits: Int) {
+        this.atBats = atBats
+        if (this.hits == 0 && hits > 0) {
             registerHitterHitRecordEvent()
         }
-        this.hits = hit
+        this.hits = hits
     }
 
     private fun registerHitterHitRecordEvent() {
