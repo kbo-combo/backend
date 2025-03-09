@@ -4,8 +4,8 @@ import com.example.kbocombo.combo.domain.Combo
 import com.example.kbocombo.combo.domain.QCombo.combo
 import com.example.kbocombo.game.domain.QGame.game
 import com.example.kbocombo.game.domain.vo.GameType
-import com.example.kbocombo.player.QPlayer.player
 import com.example.kbocombo.player.domain.Player
+import com.example.kbocombo.player.domain.QPlayer.player
 import com.example.kbocombo.utils.before
 import com.example.kbocombo.utils.eq
 import com.querydsl.core.BooleanBuilder
