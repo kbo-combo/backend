@@ -1,5 +1,6 @@
 package com.example.kbocombo.game.application
 
+import com.example.kbocombo.combo.application.ComboRankService
 import com.example.kbocombo.combo.application.ComboService
 import com.example.kbocombo.game.domain.vo.GameState
 import com.example.kbocombo.game.infra.GameEndEventJobRepository
@@ -13,6 +14,7 @@ class GameEndEventJobService(
     private val gameRepository: GameRepository,
     private val gameEndEventJobRepository: GameEndEventJobRepository,
     private val comboService: ComboService,
+    private val comboRankService: ComboRankService
 ) {
     
     @Transactional
@@ -25,6 +27,7 @@ class GameEndEventJobService(
             GameState.CANCEL -> comboService.updateComboToPass(gameId = game.id)
             else -> { }
         }
+        comboRankService.process(game = game)
 
         gameEndEventJob.finish()
         gameEndEventJobRepository.save(gameEndEventJob)

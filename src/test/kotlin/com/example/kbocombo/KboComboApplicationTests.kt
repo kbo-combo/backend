@@ -1,9 +1,9 @@
 package com.example.kbocombo
 
+import com.example.kbocombo.annotation.IntegrationTest
 import org.junit.jupiter.api.Test
-import org.springframework.boot.test.context.SpringBootTest
 
-@SpringBootTest
+@IntegrationTest
 class KboComboApplicationTests {
 
     @Test

@@ -1,4 +1,6 @@
-package com.example.kbocombo.member.application 
+package com.example.kbocombo.member.application
+
+import com.example.kbocombo.annotation.IntegrationTest
 import com.example.kbocombo.exception.type.BadRequestException
 import com.example.kbocombo.member.domain.Member
 import com.example.kbocombo.member.domain.vo.SocialProvider
@@ -7,11 +9,8 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.ExpectSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.transaction.annotation.Transactional
 
-@SpringBootTest
-@Transactional
+@IntegrationTest
 class MemberServiceTest(
     private val memberRepository: MemberRepository,
     private val memberService: MemberService
@@ -35,18 +34,22 @@ class MemberServiceTest(
         }
 
         expect("중복된 닉네임이면 예외가 발생한다.") {
-            val duplicateNameMember = memberRepository.save(Member(
-                email = "kbocombo@example.com",
-                nickname = "duplicateNickname",
-                socialProvider = SocialProvider.KAKAO,
-                socialId = "456"
-            ))
-            val savedMember = memberRepository.save(Member(
-                email = "kbocombo@example.co.kr",
-                nickname = "originMember",
-                socialProvider = SocialProvider.KAKAO,
-                socialId = "123"
-            ))
+            val duplicateNameMember = memberRepository.save(
+                Member(
+                    email = "kbocombo@example.com",
+                    nickname = "duplicateNickname",
+                    socialProvider = SocialProvider.KAKAO,
+                    socialId = "456"
+                )
+            )
+            val savedMember = memberRepository.save(
+                Member(
+                    email = "kbocombo@example.co.kr",
+                    nickname = "originMember",
+                    socialProvider = SocialProvider.KAKAO,
+                    socialId = "123"
+                )
+            )
 
             val updateNickname = duplicateNameMember.nickname
 
