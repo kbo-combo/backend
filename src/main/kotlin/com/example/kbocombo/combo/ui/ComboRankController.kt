@@ -1,6 +1,6 @@
 package com.example.kbocombo.combo.ui
 
-import com.example.kbocombo.combo.application.ComboRankService
+import com.example.kbocombo.combo.application.ComboRankQueryService
 import com.example.kbocombo.combo.application.ComboRankStatisticResponse
 import com.example.kbocombo.combo.application.MemberComboRankResponse
 import com.example.kbocombo.member.domain.Member
@@ -15,7 +15,7 @@ import java.time.LocalDate
 @RestController
 @RequestMapping("/combo-rank")
 class ComboRankController(
-    private val comboRankService: ComboRankService
+    private val comboRankQueryService: ComboRankQueryService
 ) {
 
     @GetMapping("/detail")
@@ -23,7 +23,7 @@ class ComboRankController(
         @MemberResolver member: Member,
         @RequestParam targetMemberId: Long,
     ): ResponseEntity<MemberComboRankResponse> {
-        val response = comboRankService.getMemberComboRank(memberId = targetMemberId)
+        val response = comboRankQueryService.getMemberComboRank(memberId = targetMemberId)
         return ResponseEntity.ok(response)
     }
 
@@ -33,7 +33,7 @@ class ComboRankController(
         @RequestParam year: Int = LocalDate.now().year,
         @RequestParam size: Int = 20
     ): ResponseEntity<ComboRankStatisticResponse> {
-        val response = comboRankService.getComboRankStatistic(year = year, count = size)
+        val response = comboRankQueryService.getComboRankStatistic(year = year, count = size)
         return ResponseEntity.ok(response)
     }
 }

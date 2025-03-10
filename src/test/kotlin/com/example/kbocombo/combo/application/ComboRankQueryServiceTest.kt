@@ -10,13 +10,11 @@ import com.example.kbocombo.utils.fixture
 import com.navercorp.fixturemonkey.kotlin.giveMeKotlinBuilder
 import io.kotest.core.spec.style.ExpectSpec
 import io.kotest.matchers.shouldBe
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
 
 @IntegrationTest
-class ComboRankServiceTest(
-    private val comboRankService: ComboRankService,
+class ComboRankQueryServiceTest(
+    private val comboRankQueryService: ComboRankQueryService,
     private val comboRankRepository: ComboRankRepository,
     private val memberRepository: MemberRepository
 ) : ExpectSpec({
@@ -53,7 +51,7 @@ class ComboRankServiceTest(
             comboRankC.recordComboSuccess(gameDate = LocalDate.now())
             comboRankRepository.saveAll(listOf(comboRankA, comboRankB, comboRankC)) // memberB, memberC 동률
 
-            val comboRankStatistic = comboRankService.getComboRankStatistic(year = comboYear, count = 3)
+            val comboRankStatistic = comboRankQueryService.getComboRankStatistic(year = comboYear, count = 3)
 
             comboRankStatistic.topRanks.size shouldBe 3
             comboRankStatistic.topRanks[0].rank shouldBe 1
