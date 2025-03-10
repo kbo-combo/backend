@@ -30,17 +30,28 @@ class ComboRankQueryService(
     fun getComboRankStatistic(year: Int, count: Int): ComboRankStatisticResponse {
         val topRanksDto = comboRankQueryRepository.findTopRanks(year = year, limit = count.toLong())
 
+        val groupedByGameType = topRanksDto.groupBy { it.gameType }
+        val preSeasonRanks = groupedByGameType[GameType.PRE_SEASON]?.let { calculateRankForDtos(it) } ?: emptyList()
+        val regularSeasonRanks = groupedByGameType[GameType.REGULAR_SEASON]?.let { calculateRankForDtos(it) } ?: emptyList()
+        val postSeasonRanks = groupedByGameType[GameType.POST_SEASON]?.let { calculateRankForDtos(it) } ?: emptyList()
+
+        return ComboRankStatisticResponse(
+            preSeason = preSeasonRanks,
+            regularSeason = regularSeasonRanks,
+            postSeason = postSeasonRanks
+        )
+    }
+
+    private fun calculateRankForDtos(dtos: List<TopRankQueryDto>): List<TopRankResponse> {
         var previousScore: Int? = null
         var currentRank = 0
-        val topRanks = topRanksDto.mapIndexed { index, dto ->
-            // 이전 점수와 다르면 현재 인덱스 + 1이 순위가 됩니다.
+        return dtos.mapIndexed { index, dto ->
             if (previousScore == null || dto.currentRecord != previousScore) {
                 currentRank = index + 1
             }
             previousScore = dto.currentRecord
             TopRankResponse.of(dto, currentRank)
         }
-        return ComboRankStatisticResponse(topRanks = topRanks)
     }
 }
 
@@ -111,6 +122,12 @@ data class MemberComboRankResponse(
     }
 }
 
+data class ComboRankStatisticResponse(
+    val preSeason: List<TopRankResponse>,
+    val regularSeason: List<TopRankResponse>,
+    val postSeason: List<TopRankResponse>
+)
+
 data class TopRankResponse(
     val rank: Int,
     val id: Long,
@@ -144,7 +161,3 @@ data class TopRankResponse(
         }
     }
 }
-
-data class ComboRankStatisticResponse(
-    val topRanks: List<TopRankResponse>
-)

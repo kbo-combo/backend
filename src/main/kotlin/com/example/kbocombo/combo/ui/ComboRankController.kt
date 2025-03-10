@@ -3,7 +3,6 @@ package com.example.kbocombo.combo.ui
 import com.example.kbocombo.combo.application.ComboRankQueryService
 import com.example.kbocombo.combo.application.ComboRankStatisticResponse
 import com.example.kbocombo.combo.application.MemberComboRankByYearResponse
-import com.example.kbocombo.combo.application.MemberComboRankResponse
 import com.example.kbocombo.member.domain.Member
 import com.example.kbocombo.member.ui.MemberResolver
 import org.springframework.http.ResponseEntity

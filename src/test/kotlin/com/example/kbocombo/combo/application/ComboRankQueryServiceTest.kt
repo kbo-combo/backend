@@ -9,6 +9,7 @@ import com.example.kbocombo.member.domain.vo.SocialProvider
 import com.example.kbocombo.member.infra.MemberRepository
 import com.example.kbocombo.utils.fixture
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.navercorp.fixturemonkey.kotlin.giveMeKotlinBuilder
 import io.kotest.core.spec.style.ExpectSpec
 import io.kotest.matchers.shouldBe
@@ -76,10 +77,12 @@ class ComboRankQueryServiceTest(
 
             val comboRankStatistic = comboRankQueryService.getComboRankStatistic(year = comboYear, count = 3)
 
-            comboRankStatistic.topRanks.size shouldBe 3
-            comboRankStatistic.topRanks[0].rank shouldBe 1
-            comboRankStatistic.topRanks[1].rank shouldBe 1
-            comboRankStatistic.topRanks[2].rank shouldBe 3
+            comboRankStatistic.preSeason shouldBe emptyList()
+            comboRankStatistic.regularSeason.size shouldBe 3
+            comboRankStatistic.regularSeason[0].rank shouldBe 1
+            comboRankStatistic.regularSeason[1].rank shouldBe 1
+            comboRankStatistic.regularSeason[2].rank shouldBe 3
+            comboRankStatistic.postSeason shouldBe emptyList()
         }
     }
 })

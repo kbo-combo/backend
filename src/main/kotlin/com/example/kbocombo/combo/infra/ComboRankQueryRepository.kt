@@ -1,6 +1,7 @@
 package com.example.kbocombo.combo.infra
 
 import com.example.kbocombo.combo.domain.QComboRank.comboRank
+import com.example.kbocombo.game.domain.vo.GameType
 import com.example.kbocombo.member.domain.QMember.member
 import com.querydsl.core.annotations.QueryProjection
 import com.querydsl.jpa.impl.JPAQueryFactory
@@ -18,6 +19,7 @@ class ComboRankQueryRepository(
                     comboRank.id,
                     comboRank.years,
                     comboRank.memberId,
+                    comboRank.gameType,
                     member.nickname,
                     comboRank.currentRecord,
                     comboRank.successCount,
@@ -42,6 +44,7 @@ data class TopRankQueryDto @QueryProjection constructor(
     val id: Long,
     val year: Int,
     val memberId: Long,
+    val gameType: GameType,
     val nickname: String,
     val currentRecord: Int,
     val successCount: Int,
