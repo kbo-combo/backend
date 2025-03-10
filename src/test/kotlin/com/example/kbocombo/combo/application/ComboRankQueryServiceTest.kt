@@ -8,6 +8,7 @@ import com.example.kbocombo.member.domain.Member
 import com.example.kbocombo.member.domain.vo.SocialProvider
 import com.example.kbocombo.member.infra.MemberRepository
 import com.example.kbocombo.utils.fixture
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.navercorp.fixturemonkey.kotlin.giveMeKotlinBuilder
 import io.kotest.core.spec.style.ExpectSpec
 import io.kotest.matchers.shouldBe
@@ -20,7 +21,7 @@ class ComboRankQueryServiceTest(
     private val memberRepository: MemberRepository
 ) : ExpectSpec({
 
-    val comboYear = LocalDate.now().year
+    val comboYear = 2025
 
     context("콤보 랭크 기록") {
         expect("최초로 생성되는 엔티티에는 기록이 초기화 되어 있다.") {
@@ -42,6 +43,23 @@ class ComboRankQueryServiceTest(
     }
 
     context("콤보 랭크 통계 조회") {
+        expect("회원의 콤보 랭크 내역을 연도와 게임 타입으로 나눠 반환한다.") {
+            val member = memberRepository.save(getMember().sample())
+            val comboRankA =
+                ComboRank.init(memberId = member.id, years = comboYear, gameType = GameType.PRE_SEASON)
+            val comboRankB =
+                ComboRank.init(memberId = member.id, years = comboYear, gameType = GameType.REGULAR_SEASON)
+            val comboRankC =
+                ComboRank.init(memberId = member.id, years = comboYear, gameType = GameType.POST_SEASON)
+            val comboRankD =
+                ComboRank.init(memberId = member.id, years = 2024, gameType = GameType.REGULAR_SEASON)
+            comboRankRepository.saveAll(listOf(comboRankA, comboRankB, comboRankC, comboRankD))
+
+            val memberComboRanks = comboRankQueryService.getMemberComboRank(memberId = member.id)
+
+            println(ObjectMapper().writeValueAsString(memberComboRanks))
+        }
+
         expect("상위 N명을 조회하고 동점자 처리를 통해 순위를 결정한다.") {
             val memberA = memberRepository.save(getMember().sample())
             val memberB = memberRepository.save(getMember().sample())

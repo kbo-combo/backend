@@ -4,6 +4,7 @@ import com.example.kbocombo.combo.domain.ComboRank
 import com.example.kbocombo.combo.infra.ComboRankQueryRepository
 import com.example.kbocombo.combo.infra.ComboRankRepository
 import com.example.kbocombo.combo.infra.TopRankQueryDto
+import com.example.kbocombo.game.domain.vo.GameType
 import com.example.kbocombo.member.infra.MemberRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -17,12 +18,12 @@ class ComboRankQueryService(
 ) {
 
     @Transactional(readOnly = true)
-    fun getMemberComboRank(memberId: Long): MemberComboRankResponse {
+    fun getMemberComboRank(memberId: Long): List<MemberComboRankByYearResponse> {
         val member = memberRepository.findById(memberId)
 
-        val comboRank = comboRankRepository.findByMemberId(memberId = member.id)
+        val comboRanks = comboRankRepository.findAllByMemberId(memberId = member.id)
 
-        return MemberComboRankResponse.from(comboRank)
+        return MemberComboRankByYearResponse.from(comboRanks)
     }
 
     @Transactional(readOnly = true)
@@ -43,10 +44,46 @@ class ComboRankQueryService(
     }
 }
 
+data class MemberComboRankByYearResponse(
+    val year: Int,
+    val comboRanks: MemberComboRankByGameType
+) {
+    companion object {
+        fun from(comboRanks: List<ComboRank>): List<MemberComboRankByYearResponse> {
+            return comboRanks.groupBy { it.years }
+                .map { (year, listForYear) ->
+                    MemberComboRankByYearResponse(
+                        year = year,
+                        comboRanks = MemberComboRankByGameType.from(listForYear)
+                    )
+                }
+                .sortedByDescending { it.year }
+        }
+    }
+}
+
+data class MemberComboRankByGameType(
+    val preSeason: MemberComboRankResponse?,
+    val regularSeason: MemberComboRankResponse?,
+    val postSeason: MemberComboRankResponse?
+) {
+    companion object {
+        fun from(comboRanks: List<ComboRank>): MemberComboRankByGameType {
+            val map = comboRanks.associateBy { it.gameType }
+            return MemberComboRankByGameType(
+                preSeason = map[GameType.PRE_SEASON]?.let { MemberComboRankResponse.from(it) },
+                regularSeason = map[GameType.REGULAR_SEASON]?.let { MemberComboRankResponse.from(it) },
+                postSeason = map[GameType.POST_SEASON]?.let { MemberComboRankResponse.from(it) },
+            )
+        }
+    }
+}
+
 data class MemberComboRankResponse(
     val id: Long,
     val year: Int,
     val memberId: Long,
+    val gameType: GameType,
     val currentRecord: Int,
     val successCount: Int,
     val failCount: Int,
@@ -67,7 +104,8 @@ data class MemberComboRankResponse(
                 passCount = comboRank.passCount,
                 totalCount = comboRank.totalCount,
                 firstSuccessDate = comboRank.firstSuccessDate,
-                lastSuccessDate = comboRank.lastSuccessDate
+                lastSuccessDate = comboRank.lastSuccessDate,
+                gameType = comboRank.gameType
             )
         }
     }

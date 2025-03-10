@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository
 @Repository
 interface ComboRankRepository : JpaRepository<ComboRank, Long> {
 
-    fun findByMemberId(memberId: Long): ComboRank
+    fun findAllByMemberId(memberId: Long): List<ComboRank>
     fun save(comboRank: ComboRank): ComboRank
     fun findByMemberIdAndYears(memberId: Long, years: Int): ComboRank?
 }

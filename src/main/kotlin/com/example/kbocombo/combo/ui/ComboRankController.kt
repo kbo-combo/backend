@@ -2,6 +2,7 @@ package com.example.kbocombo.combo.ui
 
 import com.example.kbocombo.combo.application.ComboRankQueryService
 import com.example.kbocombo.combo.application.ComboRankStatisticResponse
+import com.example.kbocombo.combo.application.MemberComboRankByYearResponse
 import com.example.kbocombo.combo.application.MemberComboRankResponse
 import com.example.kbocombo.member.domain.Member
 import com.example.kbocombo.member.ui.MemberResolver
@@ -22,7 +23,7 @@ class ComboRankController(
     fun findOne(
         @MemberResolver member: Member,
         @RequestParam targetMemberId: Long,
-    ): ResponseEntity<MemberComboRankResponse> {
+    ): ResponseEntity<List<MemberComboRankByYearResponse>> {
         val response = comboRankQueryService.getMemberComboRank(memberId = targetMemberId)
         return ResponseEntity.ok(response)
     }
