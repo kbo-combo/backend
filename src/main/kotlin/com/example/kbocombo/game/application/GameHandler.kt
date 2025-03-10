@@ -27,6 +27,10 @@ class GameHandler(
 
         gameService.complete(gameId)
 
+        gameEndEventJobRepository.findByGameId(gameId)?.let {
+            return
+        }
+
         val gameEndEventJob = GameEndEventJob(
             gameId = gameId,
             gameDate = gameDate,
@@ -65,6 +69,10 @@ class GameHandler(
 
         gameService.cancel(gameId)
         logInfo("Game is canceled: $gameId")
+
+        gameEndEventJobRepository.findByGameId(gameId)?.let {
+            return
+        }
 
         val gameEndEventJob = GameEndEventJob(
             gameId = gameId,
