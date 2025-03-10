@@ -7,6 +7,7 @@ import com.example.kbocombo.combo.infra.ComboRankRepository
 import com.example.kbocombo.combo.infra.ComboRepository
 import com.example.kbocombo.common.logInfo
 import com.example.kbocombo.game.domain.Game
+import com.example.kbocombo.game.domain.vo.GameType
 import com.example.kbocombo.member.infra.MemberRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -31,7 +32,7 @@ class ComboRankService(
     }
 
     private fun recordToRank(combo: Combo) {
-        val comboRank = findComboRankOrSave(memberId = combo.memberId, year = combo.gameDate.year)
+        val comboRank = findComboRankOrSave(combo)
 
         when (combo.comboStatus) {
             ComboStatus.SUCCESS -> comboRank.recordComboSuccess(gameDate = combo.gameDate)
@@ -42,11 +43,15 @@ class ComboRankService(
         comboRankRepository.save(comboRank)
     }
 
-    private fun findComboRankOrSave(memberId: Long, year: Int): ComboRank {
+    private fun findComboRankOrSave(combo: Combo): ComboRank {
+        val memberId = combo.memberId
+        val year = combo.gameDate.year
         return comboRankRepository.findByMemberIdAndYears(memberId = memberId, years = year)
             ?: comboRankRepository.save(
                 ComboRank.init(
-                    memberId = memberId, years = year
+                    memberId = memberId,
+                    years = year,
+                    gameType = GameType.getGameTypeByDate(gameDate = combo.gameDate)
                 )
             )
     }
@@ -54,10 +59,12 @@ class ComboRankService(
     @Transactional
     fun create(memberId: Long) {
         val member = memberRepository.findById(memberId)
+        val today = LocalDate.now()
 
         val comboRank = ComboRank.init(
             memberId = member.id,
-            years = LocalDate.now().year
+            years = LocalDate.now().year,
+            gameType = GameType.getGameTypeByDate(gameDate = today)
         )
         comboRankRepository.save(comboRank)
     }

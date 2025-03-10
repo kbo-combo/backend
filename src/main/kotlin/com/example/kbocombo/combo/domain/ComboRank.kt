@@ -1,8 +1,11 @@
 package com.example.kbocombo.combo.domain
 
 import com.example.kbocombo.common.BaseEntity
+import com.example.kbocombo.game.domain.vo.GameType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
@@ -13,7 +16,7 @@ import java.time.LocalDate
 @Entity(name = "COMBO_RANK")
 @Table(
     uniqueConstraints = [
-        UniqueConstraint(columnNames = ["years", "member_id"])
+        UniqueConstraint(columnNames = ["years", "game_type", "member_id"])
     ]
 )
 class ComboRank(
@@ -21,10 +24,14 @@ class ComboRank(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0L,
 
-    @Column(name = "years")
+    @Column(name = "years", nullable = false)
     val years: Int,
 
-    @Column(name = "member_id")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "game_type", nullable = false)
+    val gameType: GameType,
+
+    @Column(name = "member_id", nullable = false)
     val memberId: Long,
 
     currentRecord: Int,
@@ -89,10 +96,11 @@ class ComboRank(
     }
 
     companion object {
-        fun init(memberId: Long, years: Int): ComboRank {
+        fun init(memberId: Long, years: Int, gameType: GameType): ComboRank {
             return ComboRank(
                 memberId = memberId,
                 years = years,
+                gameType = gameType,
                 currentRecord = 0,
                 successCount = 0,
                 totalCount = 0,

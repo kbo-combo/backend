@@ -2,6 +2,7 @@ package com.example.kbocombo.combo.infra
 
 import com.example.kbocombo.annotation.IntegrationTest
 import com.example.kbocombo.combo.domain.ComboRank
+import com.example.kbocombo.game.domain.vo.GameType
 import com.example.kbocombo.member.domain.Member
 import com.example.kbocombo.member.domain.vo.SocialProvider
 import com.example.kbocombo.member.infra.MemberRepository
@@ -23,9 +24,21 @@ class ComboRankQueryRepositoryTest(
             val memberA = memberRepository.save(getMember().sample())
             val memberB = memberRepository.save(getMember().sample())
             val memberC = memberRepository.save(getMember().sample())
-            val comboRankA = ComboRank.init(memberId = memberA.id, years = LocalDate.now().year)
-            val comboRankB = ComboRank.init(memberId = memberB.id, years = LocalDate.now().year)
-            val comboRankC = ComboRank.init(memberId = memberC.id, years = LocalDate.now().year)
+            val comboRankA = ComboRank.init(
+                memberId = memberA.id,
+                years = LocalDate.now().year,
+                gameType = GameType.REGULAR_SEASON
+            )
+            val comboRankB = ComboRank.init(
+                memberId = memberB.id,
+                years = LocalDate.now().year,
+                gameType = GameType.REGULAR_SEASON
+            )
+            val comboRankC = ComboRank.init(
+                memberId = memberC.id,
+                years = LocalDate.now().year,
+                gameType = GameType.REGULAR_SEASON
+            )
             comboRankB.recordComboSuccess(gameDate = LocalDate.now())
             comboRankC.recordComboSuccess(gameDate = LocalDate.now())
             comboRankC.recordComboSuccess(gameDate = LocalDate.now())

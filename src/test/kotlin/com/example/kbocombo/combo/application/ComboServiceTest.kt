@@ -139,9 +139,22 @@ class ComboServiceTest(
                     gameStartDateTime = gameStartDateTime
                 ).sample()
             )
-            val comboA = comboRepository.save(getCombo(game = game, member = memberA, comboStatus = ComboStatus.PENDING).sample())
-            val comboB = comboRepository.save(getCombo(game = game, member = memberB, comboStatus = ComboStatus.SUCCESS).sample())
-            val comboC = comboRepository.save(getCombo(game = game, member = memberC, comboStatus = ComboStatus.PASS).sample())
+            val comboA = comboRepository.save(
+                getCombo(
+                    game = game,
+                    member = memberA,
+                    comboStatus = ComboStatus.PENDING
+                ).sample()
+            )
+            val comboB = comboRepository.save(
+                getCombo(
+                    game = game,
+                    member = memberB,
+                    comboStatus = ComboStatus.SUCCESS
+                ).sample()
+            )
+            val comboC =
+                comboRepository.save(getCombo(game = game, member = memberC, comboStatus = ComboStatus.PASS).sample())
 
             comboService.updateComboToPass(gameId = game.id)
 
