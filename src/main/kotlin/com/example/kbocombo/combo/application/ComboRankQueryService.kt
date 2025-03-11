@@ -27,22 +27,18 @@ class ComboRankQueryService(
     }
 
     @Transactional(readOnly = true)
-    fun getComboRankStatistic(year: Int, count: Int): ComboRankStatisticResponse {
-        val topRanksDto = comboRankQueryRepository.findTopRanks(year = year, limit = count.toLong())
-
-        val groupedByGameType = topRanksDto.groupBy { it.gameType }
-        val preSeasonRanks = groupedByGameType[GameType.PRE_SEASON]?.let { calculateRankForDtos(it) } ?: emptyList()
-        val regularSeasonRanks = groupedByGameType[GameType.REGULAR_SEASON]?.let { calculateRankForDtos(it) } ?: emptyList()
-        val postSeasonRanks = groupedByGameType[GameType.POST_SEASON]?.let { calculateRankForDtos(it) } ?: emptyList()
-
-        return ComboRankStatisticResponse(
-            preSeason = preSeasonRanks,
-            regularSeason = regularSeasonRanks,
-            postSeason = postSeasonRanks
+    fun getComboRankStatistic(year: Int, count: Int, gameType: GameType): TopComboRankResponse {
+        val topRanksDto = comboRankQueryRepository.findTopRanks(
+            year = year,
+            limit = count.toLong(),
+            gameType = gameType
         )
+
+        val topRankResponses = calculateRankForDtos(topRanksDto)
+        return TopComboRankResponse(gameType = gameType.name, comboRankResponse = topRankResponses)
     }
 
-    private fun calculateRankForDtos(dtos: List<TopRankQueryDto>): List<TopRankResponse> {
+    private fun calculateRankForDtos(dtos: List<TopRankQueryDto>): List<ComboRankResponse> {
         var previousScore: Int? = null
         var currentRank = 0
         return dtos.mapIndexed { index, dto ->
@@ -50,7 +46,7 @@ class ComboRankQueryService(
                 currentRank = index + 1
             }
             previousScore = dto.currentRecord
-            TopRankResponse.of(dto, currentRank)
+            ComboRankResponse.of(dto, currentRank)
         }
     }
 }
@@ -122,13 +118,12 @@ data class MemberComboRankResponse(
     }
 }
 
-data class ComboRankStatisticResponse(
-    val preSeason: List<TopRankResponse>,
-    val regularSeason: List<TopRankResponse>,
-    val postSeason: List<TopRankResponse>
+data class TopComboRankResponse(
+    val gameType: String,
+    val comboRankResponse: List<ComboRankResponse>
 )
 
-data class TopRankResponse(
+data class ComboRankResponse(
     val rank: Int,
     val id: Long,
     val year: Int,
@@ -143,8 +138,8 @@ data class TopRankResponse(
     val lastSuccessDate: LocalDate?
 ) {
     companion object {
-        fun of(topRankQueryDto: TopRankQueryDto, rank: Int): TopRankResponse {
-            return TopRankResponse(
+        fun of(topRankQueryDto: TopRankQueryDto, rank: Int): ComboRankResponse {
+            return ComboRankResponse(
                 rank = rank,
                 id = topRankQueryDto.id,
                 year = topRankQueryDto.year,

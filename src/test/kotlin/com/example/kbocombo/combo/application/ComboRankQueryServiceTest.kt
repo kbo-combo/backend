@@ -9,7 +9,6 @@ import com.example.kbocombo.member.domain.vo.SocialProvider
 import com.example.kbocombo.member.infra.MemberRepository
 import com.example.kbocombo.utils.fixture
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.navercorp.fixturemonkey.kotlin.giveMeKotlinBuilder
 import io.kotest.core.spec.style.ExpectSpec
 import io.kotest.matchers.shouldBe
@@ -75,14 +74,17 @@ class ComboRankQueryServiceTest(
             comboRankC.recordComboSuccess(gameDate = LocalDate.now())
             comboRankRepository.saveAll(listOf(comboRankA, comboRankB, comboRankC)) // memberB, memberC 동률
 
-            val comboRankStatistic = comboRankQueryService.getComboRankStatistic(year = comboYear, count = 3)
+            val rankStatistic = comboRankQueryService.getComboRankStatistic(
+                year = comboYear,
+                count = 3,
+                gameType = GameType.REGULAR_SEASON
+            )
 
-            comboRankStatistic.preSeason shouldBe emptyList()
-            comboRankStatistic.regularSeason.size shouldBe 3
-            comboRankStatistic.regularSeason[0].rank shouldBe 1
-            comboRankStatistic.regularSeason[1].rank shouldBe 1
-            comboRankStatistic.regularSeason[2].rank shouldBe 3
-            comboRankStatistic.postSeason shouldBe emptyList()
+            rankStatistic.comboRankResponse.size shouldBe 3
+            rankStatistic.comboRankResponse[0].rank shouldBe 1
+            rankStatistic.comboRankResponse[1].rank shouldBe 1
+            rankStatistic.comboRankResponse[2].rank shouldBe 3
+            rankStatistic.gameType shouldBe GameType.REGULAR_SEASON.name
         }
     }
 })

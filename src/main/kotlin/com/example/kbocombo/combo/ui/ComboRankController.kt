@@ -1,10 +1,9 @@
 package com.example.kbocombo.combo.ui
 
 import com.example.kbocombo.combo.application.ComboRankQueryService
-import com.example.kbocombo.combo.application.ComboRankStatisticResponse
 import com.example.kbocombo.combo.application.MemberComboRankByYearResponse
-import com.example.kbocombo.member.domain.Member
-import com.example.kbocombo.member.ui.MemberResolver
+import com.example.kbocombo.combo.application.TopComboRankResponse
+import com.example.kbocombo.game.domain.vo.GameType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -29,9 +28,10 @@ class ComboRankController(
     @GetMapping("/statistic")
     fun findTopRankStatistic(
         @RequestParam year: Int = LocalDate.now().year,
-        @RequestParam size: Int = 20
-    ): ResponseEntity<ComboRankStatisticResponse> {
-        val response = comboRankQueryService.getComboRankStatistic(year = year, count = size)
+        @RequestParam size: Int = 20,
+        @RequestParam gameType: GameType = GameType.REGULAR_SEASON
+    ): ResponseEntity<TopComboRankResponse> {
+        val response = comboRankQueryService.getComboRankStatistic(year = year, count = size, gameType = gameType)
         return ResponseEntity.ok(response)
     }
 }

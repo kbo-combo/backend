@@ -39,12 +39,22 @@ class ComboRankQueryRepositoryTest(
                 years = LocalDate.now().year,
                 gameType = GameType.REGULAR_SEASON
             )
+            val comboRankD = ComboRank.init(
+                memberId = memberC.id,
+                years = LocalDate.now().year,
+                gameType = GameType.PRE_SEASON
+            )
             comboRankB.recordComboSuccess(gameDate = LocalDate.now())
             comboRankC.recordComboSuccess(gameDate = LocalDate.now())
             comboRankC.recordComboSuccess(gameDate = LocalDate.now())
-            comboRankRepository.saveAll(listOf(comboRankA, comboRankB, comboRankC))
+            comboRankD.recordComboSuccess(gameDate = LocalDate.of(2025, 3, 2))
+            comboRankRepository.saveAll(listOf(comboRankA, comboRankB, comboRankC, comboRankD))
 
-            val findTopRanks = comboRankQueryRepository.findTopRanks(year = LocalDate.now().year, limit = 3)
+            val findTopRanks = comboRankQueryRepository.findTopRanks(
+                year = LocalDate.now().year,
+                limit = 3,
+                gameType = GameType.REGULAR_SEASON
+            )
 
             findTopRanks.size shouldBe 3
             findTopRanks[0].memberId shouldBe memberC.id
