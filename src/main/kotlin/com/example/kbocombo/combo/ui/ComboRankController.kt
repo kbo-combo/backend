@@ -20,7 +20,6 @@ class ComboRankController(
 
     @GetMapping("/detail")
     fun findOne(
-        @MemberResolver member: Member,
         @RequestParam targetMemberId: Long,
     ): ResponseEntity<List<MemberComboRankByYearResponse>> {
         val response = comboRankQueryService.getMemberComboRank(memberId = targetMemberId)
@@ -29,7 +28,6 @@ class ComboRankController(
 
     @GetMapping("/statistic")
     fun findTopRankStatistic(
-        @MemberResolver member: Member,
         @RequestParam year: Int = LocalDate.now().year,
         @RequestParam size: Int = 20
     ): ResponseEntity<ComboRankStatisticResponse> {
