@@ -28,11 +28,11 @@ class ComboRankService(
         }
 
         val combos = comboRepository.findAllByGame(game)
-        combos.forEach { recordToRank(it) }
+        combos.forEach { recordToRank(it, game) }
     }
 
-    private fun recordToRank(combo: Combo) {
-        val comboRank = findComboRankOrSave(combo)
+    private fun recordToRank(combo: Combo, game: Game) {
+        val comboRank = findComboRankOrSave(combo = combo, game = game)
 
         when (combo.comboStatus) {
             ComboStatus.SUCCESS -> comboRank.recordComboSuccess(gameDate = combo.gameDate)
@@ -43,7 +43,7 @@ class ComboRankService(
         comboRankRepository.save(comboRank)
     }
 
-    private fun findComboRankOrSave(combo: Combo): ComboRank {
+    private fun findComboRankOrSave(combo: Combo, game: Game): ComboRank {
         val memberId = combo.memberId
         val year = combo.gameDate.year
         return comboRankRepository.findByMemberIdAndYears(memberId = memberId, years = year)
@@ -51,7 +51,7 @@ class ComboRankService(
                 ComboRank.init(
                     memberId = memberId,
                     years = year,
-                    gameType = GameType.getGameTypeByDate(gameDate = combo.gameDate)
+                    gameType = game.gameType
                 )
             )
     }
