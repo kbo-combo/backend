@@ -1,5 +1,6 @@
 package com.example.kbocombo.combo.application
 
+import com.example.kbocombo.annotation.IntegrationTest
 import com.example.kbocombo.combo.domain.Combo
 import com.example.kbocombo.combo.domain.vo.ComboStatus
 import com.example.kbocombo.combo.infra.ComboRepository
@@ -18,10 +19,9 @@ import com.navercorp.fixturemonkey.kotlin.giveMeKotlinBuilder
 import io.kotest.assertions.throwables.shouldThrowWithMessage
 import io.kotest.core.spec.style.ExpectSpec
 import io.kotest.matchers.shouldBe
-import org.springframework.boot.test.context.SpringBootTest
 import java.time.LocalDateTime
 
-@SpringBootTest
+@IntegrationTest
 class ComboServiceTest(
     private val memberRepository: MemberRepository,
     private val gameRepository: GameRepository,

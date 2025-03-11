@@ -6,6 +6,7 @@ import com.example.kbocombo.member.domain.Member
 import com.example.kbocombo.member.domain.vo.SocialProvider
 import com.example.kbocombo.member.infra.MemberRepository
 import com.example.kbocombo.utils.UserRandomNameGenerator
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -13,7 +14,8 @@ import org.springframework.transaction.annotation.Transactional
 class AuthService(
     private val oAuthClients: OAuthClients,
     private val userRandomNameGenerator: UserRandomNameGenerator,
-    private val memberRepository: MemberRepository
+    private val memberRepository: MemberRepository,
+    private val publisher: ApplicationEventPublisher
 ) {
 
     fun getRedirectUri(socialProvider: SocialProvider, redirectUri: String): OAuthRedirectUriResponse {
@@ -46,7 +48,15 @@ class AuthService(
     ): Member {
         val email = memberInfo.email
 
-        return memberRepository.findByEmail(email) ?: memberRepository.save(
+        return memberRepository.findByEmail(email) ?: signup(email, socialProvider, memberInfo)
+    }
+
+    private fun signup(
+        email: String,
+        socialProvider: SocialProvider,
+        memberInfo: MemberInfo
+    ): Member {
+        val savedMember = memberRepository.save(
             Member(
                 email = email,
                 nickname = userRandomNameGenerator.generate(),
@@ -54,6 +64,9 @@ class AuthService(
                 socialId = memberInfo.socialId.toString()
             )
         )
+
+        publisher.publishEvent(MemberSignupedEvent(memberId = savedMember.id))
+        return savedMember
     }
 }
 
@@ -80,3 +93,7 @@ data class OAuthMemberResponse(
         }
     }
 }
+
+data class MemberSignupedEvent(
+    val memberId: Long
+)

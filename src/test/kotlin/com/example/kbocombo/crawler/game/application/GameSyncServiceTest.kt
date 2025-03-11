@@ -1,16 +1,16 @@
 package com.example.kbocombo.crawler.game.application
 
+import com.example.kbocombo.annotation.IntegrationTest
 import io.kotest.core.annotation.Ignored
 import io.kotest.core.spec.style.FunSpec
 import org.junit.jupiter.api.DisplayNameGeneration
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores
-import org.springframework.boot.test.context.SpringBootTest
 import java.time.LocalDate
 import java.time.LocalDateTime
 
 @Ignored
 @DisplayNameGeneration(ReplaceUnderscores::class)
-@SpringBootTest
+@IntegrationTest
 class GameSyncServiceTest(
     private val sut: GameSyncService
 ) : FunSpec({
