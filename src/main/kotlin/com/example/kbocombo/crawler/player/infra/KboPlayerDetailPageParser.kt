@@ -1,6 +1,6 @@
 package com.example.kbocombo.crawler.player.infra
 
-import com.example.kbocombo.common.logError
+import com.example.kbocombo.common.logWarn
 import com.example.kbocombo.crawler.common.utils.toHittingHand
 import com.example.kbocombo.crawler.common.utils.toPitchingHand
 import com.example.kbocombo.crawler.common.utils.toPlayerDetailPosition
@@ -24,7 +24,7 @@ class KboPlayerDetailPageParser {
 
     fun getPlayerProfile(playerData: WebPlayerInfo): Player? {
         return runCatching { toPlayer(playerData) }
-            .onFailure { e -> logError("Failed to parse player with ${playerData.webId}", e) }
+            .onFailure { e -> logWarn("Failed to parse player with ${playerData.webId}", e) }
             .getOrNull()
     }
 
