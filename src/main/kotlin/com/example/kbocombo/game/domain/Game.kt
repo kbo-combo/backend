@@ -66,7 +66,7 @@ class Game(
     var startTime: LocalTime = startTime
         protected set
 
-    fun updateStartingPitcher(gameStartTime: LocalTime, homeStartingPitcherId: Long?, awayStartingPitcherId: Long?) {
+    fun updateGameData(gameStartTime: LocalTime, homeStartingPitcherId: Long?, awayStartingPitcherId: Long?) {
         this.homeStartingPitcherId = homeStartingPitcherId
         this.awayStartingPitcherId = awayStartingPitcherId
         this.startTime = gameStartTime

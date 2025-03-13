@@ -34,7 +34,7 @@ class GameRenewService(
     }
 
     private fun updateGameData(savedGame: Game, gameDto: GameDto) {
-        savedGame.updateStartingPitcher(
+        savedGame.updateGameData(
             gameStartTime = gameDto.startTime,
             homeStartingPitcherId = gameDto.homeStartingPitcherId,
             awayStartingPitcherId = gameDto.awayStartingPitcherId,
