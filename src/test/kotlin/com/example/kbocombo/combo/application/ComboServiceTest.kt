@@ -88,7 +88,7 @@ class ComboServiceTest(
                 )
             )
 
-            comboService.updateComboToSuccess(gameId = game.id, playerWebId = player.webId.value)
+            comboService.updateComboToSuccess(gameId = game.id, playerId = player.id)
 
             comboRepository.getById(combo.id).comboStatus shouldBe ComboStatus.PENDING
         }
