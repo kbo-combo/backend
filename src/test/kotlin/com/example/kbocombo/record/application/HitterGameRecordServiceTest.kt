@@ -1,5 +1,6 @@
 package com.example.kbocombo.record.application
 
+import com.example.kbocombo.annotation.IntegrationTest
 import com.example.kbocombo.crawler.game.infra.dto.HitterRecordDto
 import com.example.kbocombo.game.domain.Game
 import com.example.kbocombo.game.domain.vo.GameState
@@ -17,14 +18,11 @@ import io.kotest.core.spec.style.ExpectSpec
 import io.kotest.datatest.withData
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
-import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.Import
 import org.springframework.test.context.event.ApplicationEvents
-import org.springframework.transaction.annotation.Transactional
 
 @Import(TestConfig::class)
-@Transactional
-@SpringBootTest
+@IntegrationTest
 class HitterGameRecordServiceTest(
     private val sut: HitterGameRecordService,
     private val gameRepository: GameRepository,
