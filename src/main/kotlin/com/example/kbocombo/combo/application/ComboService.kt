@@ -87,10 +87,10 @@ class ComboService(
     }
 
     @Transactional
-    fun updateComboToPass(gameId: Long) {
+    fun updateComboToPass(gameId: Long, now: LocalDateTime) {
         val game = gameRepository.getById(gameId)
-        if (game.isCompleted().not()) {
-            throw IllegalArgumentException("게임이 종료되지 않은 경우, 콤보 패스 처리를 할 수 없습니다.")
+        if (game.isCancelled().not()) {
+            throw IllegalArgumentException("게임이 취소되지 않은 경우, 콤보 패스 처리를 할 수 없습니다.")
         }
 
         val combos = comboRepository.findAllByGame(game = game)
