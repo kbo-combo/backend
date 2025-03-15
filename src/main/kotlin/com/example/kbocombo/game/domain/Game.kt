@@ -81,7 +81,7 @@ class Game(
     }
 
     fun isAfterGameStart(dateTime: LocalDateTime): Boolean {
-        return LocalDateTime.of(startDate, startTime) >= dateTime
+        return LocalDateTime.of(startDate, startTime) < dateTime
     }
 
     fun cancel() {
