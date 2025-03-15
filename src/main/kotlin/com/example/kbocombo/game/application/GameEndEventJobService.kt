@@ -19,11 +19,11 @@ class GameEndEventJobService(
 ) {
     
     @Transactional
-    fun process(gameEndEventJobId: Long) {
+    fun process(gameEndEventJobId: Long, now: LocalDateTime) {
         val gameEndEventJob = gameEndEventJobRepository.findById(gameEndEventJobId)
         val game = gameRepository.getById(gameEndEventJob.gameId)
 
-        if (game.isAfterGameStart(LocalDateTime.now()).not()) {
+        if (game.isAfterGameStart(now).not()) {
             return
         }
 
