@@ -41,8 +41,7 @@ class Game(
     @Column(name = "start_date", nullable = false)
     val startDate: LocalDate,
 
-    @Column(name = "start_time", nullable = false)
-    val startTime: LocalTime,
+    startTime: LocalTime,
 
     @Enumerated(EnumType.STRING)
     @Column(name = "game_type", nullable = false)
@@ -63,9 +62,14 @@ class Game(
     var awayStartingPitcherId: Long? = awayStartingPitcherId
         protected set
 
-    fun updateStartingPitcher(homeStartingPitcherId: Long?, awayStartingPitcherId: Long?) {
+    @Column(name = "start_time", nullable = false)
+    var startTime: LocalTime = startTime
+        protected set
+
+    fun updateGameData(gameStartTime: LocalTime, homeStartingPitcherId: Long?, awayStartingPitcherId: Long?) {
         this.homeStartingPitcherId = homeStartingPitcherId
         this.awayStartingPitcherId = awayStartingPitcherId
+        this.startTime = gameStartTime
     }
 
     fun isRunning(): Boolean {

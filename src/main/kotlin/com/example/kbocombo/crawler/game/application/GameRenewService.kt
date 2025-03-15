@@ -29,18 +29,15 @@ class GameRenewService(
                 continue
             }
 
-            updateStartingPitcher(
-                savedGame = savedGame,
-                homeStartingPitcherId = gameDto.homeStartingPitcherId,
-                awayStartingPitcherId = gameDto.awayStartingPitcherId
-            )
+            updateGameData(savedGame = savedGame, gameDto = gameDto)
         }
     }
 
-    private fun updateStartingPitcher(savedGame: Game, homeStartingPitcherId: Long?, awayStartingPitcherId: Long?) {
-        savedGame.updateStartingPitcher(
-            homeStartingPitcherId = homeStartingPitcherId,
-            awayStartingPitcherId = awayStartingPitcherId,
+    private fun updateGameData(savedGame: Game, gameDto: GameDto) {
+        savedGame.updateGameData(
+            gameStartTime = gameDto.startTime,
+            homeStartingPitcherId = gameDto.homeStartingPitcherId,
+            awayStartingPitcherId = gameDto.awayStartingPitcherId,
         )
     }
 }
