@@ -31,7 +31,7 @@ class GameScheduler(
             .filter { it.createdDateTime.isBefore(now.minusMinutes(10)) }
             .map { it.id }
 
-        processableJobIds.forEach { gameEndEventJobService.process(it!!) }
+        processableJobIds.forEach { gameEndEventJobService.process(it!!, now) }
     }
 
     @Scheduled(cron = "0 0/10 * * * ?")
