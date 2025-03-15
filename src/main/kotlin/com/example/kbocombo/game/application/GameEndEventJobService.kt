@@ -23,6 +23,10 @@ class GameEndEventJobService(
         val gameEndEventJob = gameEndEventJobRepository.findById(gameEndEventJobId)
         val game = gameRepository.getById(gameEndEventJob.gameId)
 
+        if (game.isAfterGameStart(LocalDateTime.now()).not()) {
+            return
+        }
+
         when (game.gameState) {
             GameState.COMPLETED -> comboService.updateComboToFail(gameId = game.id)
             GameState.CANCEL -> comboService.updateComboToPass(gameId = game.id, LocalDateTime.now())
