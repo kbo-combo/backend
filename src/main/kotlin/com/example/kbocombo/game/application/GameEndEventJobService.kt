@@ -8,6 +8,7 @@ import com.example.kbocombo.game.infra.GameRepository
 import com.example.kbocombo.game.infra.getById
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDateTime
 
 @Service
 class GameEndEventJobService(
@@ -24,7 +25,7 @@ class GameEndEventJobService(
 
         when (game.gameState) {
             GameState.COMPLETED -> comboService.updateComboToFail(gameId = game.id)
-            GameState.CANCEL -> comboService.updateComboToPass(gameId = game.id)
+            GameState.CANCEL -> comboService.updateComboToPass(gameId = game.id, LocalDateTime.now())
             else -> { }
         }
         comboRankService.process(game = game)
