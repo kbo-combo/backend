@@ -18,6 +18,7 @@ import com.example.kbocombo.utils.fixture
 import com.navercorp.fixturemonkey.kotlin.giveMeKotlinBuilder
 import io.kotest.assertions.throwables.shouldThrowWithMessage
 import io.kotest.core.spec.style.ExpectSpec
+import io.kotest.inspectors.forAll
 import io.kotest.matchers.shouldBe
 import java.time.LocalDateTime
 
@@ -145,7 +146,7 @@ class ComboServiceTest(
             val memberC = memberRepository.save(getMember().sample())
             val game = gameRepository.save(
                 getGame(
-                    gameState = GameState.COMPLETED,
+                    gameState = GameState.CANCEL,
                     gameStartDateTime = gameStartDateTime
                 ).sample()
             )
@@ -166,16 +167,26 @@ class ComboServiceTest(
             val comboC =
                 comboRepository.save(getCombo(game = game, member = memberC, comboStatus = ComboStatus.PASS).sample())
 
-            comboService.updateComboToPass(gameId = game.id)
+            comboService.updateComboToPass(gameId = game.id, now = gameStartDateTime.plusMinutes(1))
 
             comboRepository.getById(comboA.id).comboStatus shouldBe ComboStatus.PASS
             comboRepository.getById(comboB.id).comboStatus shouldBe ComboStatus.PASS
             comboRepository.getById(comboC.id).comboStatus shouldBe ComboStatus.PASS
         }
-    }
 
-}) {
-}
+        expect("취소 상태인 게임일때만 PASS 처리가 가능하다") {
+            val givenGameStates = GameState.entries.filterNot { it == GameState.CANCEL }
+            givenGameStates.forAll { gameState ->
+                val game =
+                    gameRepository.save(getGame(gameState = gameState, gameStartDateTime = gameStartDateTime).sample())
+
+                shouldThrowWithMessage<IllegalArgumentException>("게임이 취소되지 않은 경우, 콤보 패스 처리를 할 수 없습니다.") {
+                    comboService.updateComboToPass(gameId = game.id, now = gameStartDateTime.plusMinutes(1))
+                }
+            }
+        }
+    }
+})
 
 private fun getMember() =
     fixture.giveMeKotlinBuilder<Member>()
