@@ -4,6 +4,7 @@ import com.example.kbocombo.common.logInfo
 import com.example.kbocombo.crawler.game.infra.dto.HitterRecordDto
 import com.example.kbocombo.game.domain.Game
 import com.example.kbocombo.game.infra.GameRepository
+import com.example.kbocombo.game.infra.getById
 import com.example.kbocombo.player.domain.Player
 import com.example.kbocombo.player.infra.PlayerRepository
 import com.example.kbocombo.player.vo.WebId
@@ -21,8 +22,7 @@ class HitterGameRecordService(
 
     @Transactional
     fun saveOrUpdateHitterRecords(gameId: Long, hitterRecordDtos: List<HitterRecordDto>) {
-        val game = gameRepository.findById(gameId = gameId)
-            ?: throw IllegalArgumentException("cannot find game")
+        val game = gameRepository.getById(gameId = gameId)
         if (game.isPending()) return
 
         val requestByWebId = hitterRecordDtos.associateBy { it.webId }
