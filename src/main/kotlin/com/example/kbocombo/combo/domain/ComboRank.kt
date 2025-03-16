@@ -76,14 +76,18 @@ class ComboRank(
     var lastSuccessDate: LocalDate? = lastSuccessDate
         protected set
 
-
     fun recordComboSuccess(gameDate: LocalDate) {
         this.currentRecord += 1
         this.successCount += 1
         this.totalCount += 1
+        if (this.currentRecord > this.maxRecord) {
+            this.maxRecord = this.currentRecord
+        }
+
         if (this.firstSuccessDate == null) {
             this.firstSuccessDate = gameDate
         }
+
         this.lastSuccessDate = gameDate
     }
 
