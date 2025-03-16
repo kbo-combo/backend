@@ -12,7 +12,17 @@ import java.time.LocalDate
 class ComboRankQueryRepository(
     private val queryFactory: JPAQueryFactory
 ) {
-    fun findTopRanks(year: Int, limit: Long, gameType: GameType): List<TopRankQueryDto> {
+    fun findTopRanks(
+        year: Int,
+        limit: Long,
+        gameType: GameType,
+        comboRankSearchType: ComboRankSearchType
+    ): List<TopRankQueryDto> {
+        val orderSpecifier = when (comboRankSearchType) {
+            ComboRankSearchType.CURRENT_RECORD -> comboRank.currentRecord.desc()
+            ComboRankSearchType.MAX_RECORD -> comboRank.maxRecord.desc()
+        }
+
         return queryFactory
             .select(
                 QTopRankQueryDto(
@@ -22,6 +32,7 @@ class ComboRankQueryRepository(
                     comboRank.gameType,
                     member.nickname,
                     comboRank.currentRecord,
+                    comboRank.maxRecord,
                     comboRank.successCount,
                     comboRank.failCount,
                     comboRank.passCount,
@@ -32,7 +43,7 @@ class ComboRankQueryRepository(
             )
             .from(comboRank)
             .join(member).on(comboRank.memberId.eq(member.id))
-            .orderBy(comboRank.currentRecord.desc())
+            .orderBy(orderSpecifier)
             .limit(limit)
             .where(
                 comboRank.years.eq(year),
@@ -50,6 +61,7 @@ data class TopRankQueryDto @QueryProjection constructor(
     val gameType: GameType,
     val nickname: String,
     val currentRecord: Int,
+    val maxRecord: Int,
     val successCount: Int,
     val failCount: Int,
     val passCount: Int,
@@ -57,3 +69,9 @@ data class TopRankQueryDto @QueryProjection constructor(
     val firstSuccessDate: LocalDate?,
     val lastSuccessDate: LocalDate?
 )
+
+
+enum class ComboRankSearchType {
+    CURRENT_RECORD,
+    MAX_RECORD
+}

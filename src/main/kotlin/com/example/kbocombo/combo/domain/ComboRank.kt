@@ -35,6 +35,7 @@ class ComboRank(
     val memberId: Long,
 
     currentRecord: Int,
+    maxRecord: Int,
     successCount: Int,
     failCount: Int,
     passCount: Int,
@@ -45,6 +46,10 @@ class ComboRank(
 
     @Column(name = "current_record")
     var currentRecord: Int = currentRecord
+        protected set
+
+    @Column(name = "max_record")
+    var maxRecord: Int = maxRecord
         protected set
 
     @Column(name = "success_count")
@@ -71,14 +76,18 @@ class ComboRank(
     var lastSuccessDate: LocalDate? = lastSuccessDate
         protected set
 
-
     fun recordComboSuccess(gameDate: LocalDate) {
         this.currentRecord += 1
         this.successCount += 1
         this.totalCount += 1
+        if (this.currentRecord > this.maxRecord) {
+            this.maxRecord = this.currentRecord
+        }
+
         if (this.firstSuccessDate == null) {
             this.firstSuccessDate = gameDate
         }
+
         this.lastSuccessDate = gameDate
     }
 
@@ -102,6 +111,7 @@ class ComboRank(
                 years = years,
                 gameType = gameType,
                 currentRecord = 0,
+                maxRecord = 0,
                 successCount = 0,
                 totalCount = 0,
                 failCount = 0,

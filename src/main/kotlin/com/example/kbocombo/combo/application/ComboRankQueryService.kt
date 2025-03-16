@@ -3,6 +3,7 @@ package com.example.kbocombo.combo.application
 import com.example.kbocombo.combo.domain.ComboRank
 import com.example.kbocombo.combo.infra.ComboRankQueryRepository
 import com.example.kbocombo.combo.infra.ComboRankRepository
+import com.example.kbocombo.combo.infra.ComboRankSearchType
 import com.example.kbocombo.combo.infra.TopRankQueryDto
 import com.example.kbocombo.game.domain.vo.GameType
 import com.example.kbocombo.member.infra.MemberRepository
@@ -27,25 +28,39 @@ class ComboRankQueryService(
     }
 
     @Transactional(readOnly = true)
-    fun getComboRankStatistic(year: Int, count: Int, gameType: GameType): TopComboRankResponse {
+    fun getComboRankStatistic(
+        year: Int,
+        count: Int,
+        gameType: GameType,
+        sort: String,
+    ): TopComboRankResponse {
+        val comboRankSearchType = ComboRankSearchType.valueOf(sort)
         val topRanksDto = comboRankQueryRepository.findTopRanks(
             year = year,
             limit = count.toLong(),
-            gameType = gameType
+            gameType = gameType,
+            comboRankSearchType = comboRankSearchType
         )
 
-        val topRankResponses = calculateRankForDtos(topRanksDto)
+        val topRankResponses = when (comboRankSearchType) {
+            ComboRankSearchType.CURRENT_RECORD -> calculateRankForDtos(topRanksDto) { it.currentRecord }
+            ComboRankSearchType.MAX_RECORD -> calculateRankForDtos(topRanksDto) { it.maxRecord }
+        }
         return TopComboRankResponse(gameType = gameType.name, comboRankResponse = topRankResponses)
     }
 
-    private fun calculateRankForDtos(dtos: List<TopRankQueryDto>): List<ComboRankResponse> {
+    private fun calculateRankForDtos(
+        dtos: List<TopRankQueryDto>,
+        scoreSelector: (TopRankQueryDto) -> Int
+    ): List<ComboRankResponse> {
         var previousScore: Int? = null
         var currentRank = 0
         return dtos.mapIndexed { index, dto ->
-            if (previousScore == null || dto.currentRecord != previousScore) {
+            val score = scoreSelector(dto)
+            if (previousScore == null || score != previousScore) {
                 currentRank = index + 1
             }
-            previousScore = dto.currentRecord
+            previousScore = score
             ComboRankResponse.of(dto, currentRank)
         }
     }
@@ -92,6 +107,7 @@ data class MemberComboRankResponse(
     val memberId: Long,
     val gameType: GameType,
     val currentRecord: Int,
+    val maxRecord: Int,
     val successCount: Int,
     val failCount: Int,
     val passCount: Int,
@@ -106,6 +122,7 @@ data class MemberComboRankResponse(
                 year = comboRank.years,
                 memberId = comboRank.memberId,
                 currentRecord = comboRank.currentRecord,
+                maxRecord = comboRank.maxRecord,
                 successCount = comboRank.successCount,
                 failCount = comboRank.failCount,
                 passCount = comboRank.passCount,
@@ -130,6 +147,7 @@ data class ComboRankResponse(
     val memberId: Long,
     val nickname: String,
     val currentRecord: Int,
+    val maxRecord: Int,
     val successCount: Int,
     val failCount: Int,
     val passCount: Int,
@@ -146,6 +164,7 @@ data class ComboRankResponse(
                 memberId = topRankQueryDto.memberId,
                 nickname = topRankQueryDto.nickname,
                 currentRecord = topRankQueryDto.currentRecord,
+                maxRecord = topRankQueryDto.maxRecord,
                 successCount = topRankQueryDto.successCount,
                 failCount = topRankQueryDto.failCount,
                 passCount = topRankQueryDto.passCount,
