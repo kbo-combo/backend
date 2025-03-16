@@ -29,9 +29,15 @@ class ComboRankController(
     fun findTopRankStatistic(
         @RequestParam year: Int = LocalDate.now().year,
         @RequestParam size: Int = 20,
-        @RequestParam gameType: GameType = GameType.REGULAR_SEASON
+        @RequestParam gameType: GameType = GameType.REGULAR_SEASON,
+        @RequestParam sort: String = "CURRENT_RECORD"
     ): ResponseEntity<TopComboRankResponse> {
-        val response = comboRankQueryService.getComboRankStatistic(year = year, count = size, gameType = gameType)
+        val response = comboRankQueryService.getComboRankStatistic(
+            year = year,
+            count = size,
+            gameType = gameType,
+            sort = sort
+        )
         return ResponseEntity.ok(response)
     }
 }
