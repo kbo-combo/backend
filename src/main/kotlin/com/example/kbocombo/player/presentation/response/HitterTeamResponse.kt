@@ -1,6 +1,6 @@
 package com.example.kbocombo.player.presentation.response
 
-import com.example.kbocombo.player.Player
+import com.example.kbocombo.player.domain.Player
 import com.example.kbocombo.player.vo.HittingHandType
 import com.example.kbocombo.player.vo.PlayerDetailPosition
 import com.example.kbocombo.player.vo.Team

@@ -12,7 +12,7 @@ import com.example.kbocombo.game.infra.GameRepository
 import com.example.kbocombo.member.domain.Member
 import com.example.kbocombo.member.domain.vo.SocialProvider
 import com.example.kbocombo.member.infra.MemberRepository
-import com.example.kbocombo.player.Player
+import com.example.kbocombo.player.domain.Player
 import com.example.kbocombo.player.infra.PlayerRepository
 import com.example.kbocombo.utils.fixture
 import com.navercorp.fixturemonkey.kotlin.giveMeKotlinBuilder
@@ -63,7 +63,7 @@ class ComboServiceTest(
                 )
             )
 
-            comboService.updateComboToSuccess(gameId = game.id, playerWebId = playerA.webId.value)
+            comboService.updateComboToSuccess(gameId = game.id, playerId = playerA.id)
 
             comboRepository.getById(comboA.id).comboStatus shouldBe ComboStatus.SUCCESS
             comboRepository.getById(comboB.id).comboStatus shouldBe ComboStatus.PENDING
@@ -88,7 +88,7 @@ class ComboServiceTest(
                 )
             )
 
-            comboService.updateComboToSuccess(gameId = game.id, playerWebId = player.webId.value)
+            comboService.updateComboToSuccess(gameId = game.id, playerId = player.id)
 
             comboRepository.getById(combo.id).comboStatus shouldBe ComboStatus.PENDING
         }

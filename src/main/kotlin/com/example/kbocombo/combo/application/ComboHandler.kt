@@ -1,10 +1,13 @@
 package com.example.kbocombo.combo.application
 
 import com.example.kbocombo.common.logInfo
-import com.example.kbocombo.crawler.game.infra.HitterHitRecordedEvent
-import org.springframework.context.event.EventListener
+import com.example.kbocombo.record.domain.HitterHitRecordedEvent
 import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Propagation.REQUIRES_NEW
+import org.springframework.transaction.annotation.Transactional
+import org.springframework.transaction.event.TransactionPhase
+import org.springframework.transaction.event.TransactionalEventListener
 
 @Component
 class ComboHandler(
@@ -12,12 +15,13 @@ class ComboHandler(
 ) {
 
     @Async
-    @EventListener
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    @Transactional(propagation = REQUIRES_NEW)
     fun handleHitterHitRecordedEvent(hitterHitRecordedEvent: HitterHitRecordedEvent) {
         val gameId = hitterHitRecordedEvent.gameId
-        val playerCode = hitterHitRecordedEvent.playerCode
-        logInfo("Player code: $playerCode hits in game: $gameId ")
+        val playerId = hitterHitRecordedEvent.playerId
+        logInfo("Player Id: $playerId hits in game: $gameId ")
 
-        comboService.updateComboToSuccess(gameId = gameId, playerWebId = playerCode.toLong())
+        comboService.updateComboToSuccess(gameId = gameId, playerId = playerId)
     }
 }

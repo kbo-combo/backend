@@ -72,6 +72,10 @@ class Game(
         this.startTime = gameStartTime
     }
 
+    fun isPending(): Boolean {
+        return gameState == GameState.PENDING
+    }
+
     fun isRunning(): Boolean {
         return gameState == GameState.RUNNING
     }

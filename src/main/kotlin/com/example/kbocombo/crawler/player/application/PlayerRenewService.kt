@@ -1,6 +1,6 @@
 package com.example.kbocombo.crawler.player.application
 
-import com.example.kbocombo.player.Player
+import com.example.kbocombo.player.domain.Player
 import com.example.kbocombo.player.infra.PlayerRepository
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service

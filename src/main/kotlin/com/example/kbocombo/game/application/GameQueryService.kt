@@ -3,7 +3,7 @@ package com.example.kbocombo.game.application
 import com.example.kbocombo.game.domain.Game
 import com.example.kbocombo.game.domain.vo.GameState
 import com.example.kbocombo.game.infra.GameQueryRepository
-import com.example.kbocombo.player.Player
+import com.example.kbocombo.player.domain.Player
 import com.example.kbocombo.player.vo.Team
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional

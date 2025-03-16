@@ -1,6 +1,6 @@
 package com.example.kbocombo.player.infra
 
-import com.example.kbocombo.player.Player
+import com.example.kbocombo.player.domain.Player
 import com.example.kbocombo.player.vo.WebId
 import org.springframework.data.repository.Repository
 
@@ -19,4 +19,6 @@ interface PlayerRepository : Repository<Player, Long> {
     fun findById(playerId: Long): Player?
 
     fun findByWebId(webId: WebId) : Player?
+
+    fun findAllByWebIdIn(webIds: List<Long>) : List<Player>
 }
