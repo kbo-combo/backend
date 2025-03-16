@@ -44,7 +44,7 @@ class HitterGameRecordService(
         hitterGameRecords: Map<Long, HitterGameRecord>,
         game: Game
     ) {
-        val players = playerRepository.findAllByWebIdIn(requestByWebId.keys)
+        val players = playerRepository.findAllByWebIdIn(requestByWebId.keys.map { it.value })
         players.forEach { player ->
             val request = requestByWebId[player.webId]!!
             hitterGameRecords[player.id]

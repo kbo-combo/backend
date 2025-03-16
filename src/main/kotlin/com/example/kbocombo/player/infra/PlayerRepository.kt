@@ -20,5 +20,5 @@ interface PlayerRepository : Repository<Player, Long> {
 
     fun findByWebId(webId: WebId) : Player?
 
-    fun findAllByWebIdIn(webIds: Set<WebId>) : List<Player>
+    fun findAllByWebIdIn(webIds: List<Long>) : List<Player>
 }
