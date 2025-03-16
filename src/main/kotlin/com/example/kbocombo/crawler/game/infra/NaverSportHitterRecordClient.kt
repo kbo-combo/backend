@@ -139,10 +139,4 @@ data class Batter(
     val inn14: String,
     val name: String,
     val rbi: Int
-) {
-}
-
-data class HitterHitRecordedEvent(
-    val gameId: Long,
-    val playerCode: String
 )

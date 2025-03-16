@@ -1,11 +1,12 @@
 package com.example.kbocombo.record.domain
 
-import com.example.kbocombo.common.BaseEntity
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
+import jakarta.persistence.PostPersist
+import org.springframework.data.domain.AbstractAggregateRoot
 import java.time.LocalDate
 
 @Entity(name = "HITTER_GAME_RECORD")
@@ -26,7 +27,7 @@ class HitterGameRecord(
     pa: Int,
 
     hit: Int,
-) : BaseEntity() {
+) : AbstractAggregateRoot<HitterGameRecord>() {
 
     @Column(name = "pa", nullable = false)
     var pa: Int = pa
@@ -36,16 +37,27 @@ class HitterGameRecord(
     var hit: Int = hit
         protected set
 
+    @PostPersist
+    fun publishHitterHitRecordEvent() {
+        if (hit > 0) {
+            registerHitterHitRecordEvent()
+        }
+    }
+
     fun updateStat(pa: Int, hit: Int) {
         this.pa = pa
+        if (this.hit == 0 && hit > 0) {
+            registerHitterHitRecordEvent()
+        }
         this.hit = hit
+    }
+
+    private fun registerHitterHitRecordEvent() {
+        registerEvent(HitterHitRecordedEvent(playerId = playerId, gameId = gameId))
     }
 }
 
-data class HitterGameRecordSaveEvent(
-    val id: Long
-)
-
-data class HitterGameRe(
-    val id: Long
+data class HitterHitRecordedEvent(
+    val playerId: Long,
+    val gameId: Long,
 )

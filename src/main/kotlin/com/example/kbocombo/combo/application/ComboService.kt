@@ -11,9 +11,6 @@ import com.example.kbocombo.game.infra.GameRepository
 import com.example.kbocombo.game.infra.getById
 import com.example.kbocombo.player.infra.PlayerRepository
 import com.example.kbocombo.player.infra.getById
-import com.example.kbocombo.player.infra.getByWebId
-import com.example.kbocombo.player.vo.WebId
-import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
@@ -23,7 +20,6 @@ class ComboService(
     private val gameRepository: GameRepository,
     private val playerRepository: PlayerRepository,
     private val comboRepository: ComboRepository,
-    private val publisher: ApplicationEventPublisher
 ) {
 
     @Transactional
@@ -50,13 +46,13 @@ class ComboService(
     }
 
     @Transactional
-    fun updateComboToSuccess(gameId: Long, playerWebId: Long) {
-        val game = gameRepository.getById(gameId)
+    fun updateComboToSuccess(gameId: Long, playerId: Long) {
+        val game = gameRepository.getById(gameId = gameId)
         if (game.isRunning().not()) {
             logInfo("진행 중인 게임이 아닌 경우, 콤보 성공 처리를 할 수 없습니다.")
             return
         }
-        val player = playerRepository.getByWebId(webId = WebId(playerWebId))
+        val player = playerRepository.getById(playerId = playerId)
         val combos = comboRepository.findAllByGameAndPlayerIdAndComboStatus(
             game = game,
             playerId = player.id,
