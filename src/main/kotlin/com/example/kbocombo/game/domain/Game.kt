@@ -1,10 +1,12 @@
 package com.example.kbocombo.game.domain
 
 import com.example.kbocombo.common.BaseEntity
+import com.example.kbocombo.game.domain.vo.GameScore
 import com.example.kbocombo.game.domain.vo.GameState
 import com.example.kbocombo.game.domain.vo.GameType
 import com.example.kbocombo.player.vo.Team
 import jakarta.persistence.Column
+import jakarta.persistence.Embedded
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
@@ -64,6 +66,10 @@ class Game(
 
     @Column(name = "start_time", nullable = false)
     var startTime: LocalTime = startTime
+        protected set
+
+    @Embedded
+    var gameScore: GameScore? = null
         protected set
 
     fun updateGameData(gameStartTime: LocalTime, homeStartingPitcherId: Long?, awayStartingPitcherId: Long?) {
