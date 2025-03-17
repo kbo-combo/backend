@@ -24,7 +24,6 @@ class GameHandler(
     fun completeGame(gameId: Long, gameScore: GameScore) {
         val game = gameService.complete(gameId)
         logInfo("Game completed: $gameId ")
-        game.updateGameScore(gameScore)
         saveGameEndEventJob(gameId, game.startDate)
         updateHitterRecord(gameId)
     }
