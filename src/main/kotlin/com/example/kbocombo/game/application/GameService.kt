@@ -1,7 +1,9 @@
 package com.example.kbocombo.game.application
 
 import com.example.kbocombo.common.logInfo
+import com.example.kbocombo.common.logWarn
 import com.example.kbocombo.game.domain.Game
+import com.example.kbocombo.game.domain.vo.GameScore
 import com.example.kbocombo.game.infra.GameRepository
 import com.example.kbocombo.game.infra.getById
 import org.springframework.stereotype.Service
@@ -42,5 +44,15 @@ class GameService(
 
         game.cancel()
         return gameRepository.save(game)
+    }
+
+    @Transactional
+    fun updateGameScore(gameCode: String, gameScore: GameScore) {
+        val game = gameRepository.findByGameCode(gameCode)
+            ?: run {
+                logWarn("Game does not exist in DB, gameCode: $gameCode")
+                return
+            }
+        game.updateGameScore(gameScore)
     }
 }

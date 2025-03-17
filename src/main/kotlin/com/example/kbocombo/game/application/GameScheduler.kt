@@ -18,6 +18,7 @@ class GameScheduler(
     private val gameClient: GameClient,
     private val gameSyncService: GameSyncService,
     private val gameRepository: GameRepository,
+    private val gameService: GameService,
     private val gameHandler: GameHandler
 ) {
 
@@ -64,6 +65,15 @@ class GameScheduler(
             val targetDate = today.plusDays(i.toLong())
             gameSyncService.syncGame(targetDate, now)
             logInfo("renew post date game, game date is $targetDate")
+        }
+    }
+
+    @Scheduled(cron = "0 0/1 13-23 * * ?")
+    fun scheduleGameScore() {
+        val today = LocalDate.now()
+        val gameDtos = gameClient.findGames(today)
+        for (gameDto in gameDtos) {
+            gameService.updateGameScore(gameCode = gameDto.gameCode, gameScore = gameDto.gameScore)
         }
     }
 }
