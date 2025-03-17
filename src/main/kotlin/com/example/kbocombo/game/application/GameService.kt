@@ -33,14 +33,14 @@ class GameService(
     }
 
     @Transactional
-    fun cancel(gameId: Long) {
+    fun cancel(gameId: Long): Game {
         val game = gameRepository.getById(gameId)
         if (game.isCancelled()) {
             logInfo("Game is already canceled, gameId: $gameId")
-            return
+            return game
         }
 
         game.cancel()
-        gameRepository.save(game)
+        return gameRepository.save(game)
     }
 }
