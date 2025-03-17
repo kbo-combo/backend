@@ -25,7 +25,7 @@ class GameHandler(
     @Transactional
     fun completeGame(gameId: Long, gameScore: GameScore) {
         val game = gameService.complete(gameId)
-        logInfo("Game ended: $gameId ")
+        logInfo("Game completed: $gameId ")
         game.updateGameScore(gameScore)
         saveGameEndEventJob(gameId, game.startDate)
         updateHitterRecord(gameId)
