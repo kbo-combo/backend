@@ -35,6 +35,7 @@ class GameHandler(
      * 진행 중인 경기에서 안타를 찾도록 -> 콤보 체크
      */
     @Async
+    @Transactional
     fun runGame(gameId: Long) {
         gameService.run(gameId)
         logInfo("Game is Running: $gameId")
