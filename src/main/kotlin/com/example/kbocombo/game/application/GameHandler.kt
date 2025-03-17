@@ -31,7 +31,7 @@ class GameHandler(
 
     /**
      * @author gray
-     * 경기가 진행 중일 때 gameScheduler에서 gameRunningEvnet 발행
+     * 네이버 API 상에서 경기가 진행 중일 때 GameEntity Running 상태로 변경
      * 진행 중인 경기에서 안타를 찾도록 -> 콤보 체크
      */
     @Async
