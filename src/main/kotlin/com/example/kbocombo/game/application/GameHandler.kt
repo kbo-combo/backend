@@ -10,6 +10,7 @@ import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDate
 
 @Component
 class GameHandler(
@@ -28,17 +29,7 @@ class GameHandler(
         logInfo("Game ended: $gameId ")
 
         gameService.complete(gameId)
-
-        gameEndEventJobRepository.findByGameId(gameId)?.let {
-            return
-        }
-
-        val gameEndEventJob = GameEndEventJob(
-            gameId = gameId,
-            gameDate = gameDate,
-        )
-
-        gameEndEventJobRepository.save(gameEndEventJob)
+        saveGameEndEventJob(gameId, gameDate)
         updateHitterRecord(gameId)
     }
 
@@ -71,16 +62,15 @@ class GameHandler(
 
         gameService.cancel(gameId)
         logInfo("Game is canceled: $gameId")
+        saveGameEndEventJob(gameId, gameDate)
+    }
 
+    private fun saveGameEndEventJob(gameId: Long, gameDate: LocalDate) {
         gameEndEventJobRepository.findByGameId(gameId)?.let {
             return
         }
 
-        val gameEndEventJob = GameEndEventJob(
-            gameId = gameId,
-            gameDate = gameDate,
-        )
-
+        val gameEndEventJob = GameEndEventJob(gameId = gameId, gameDate = gameDate,)
         gameEndEventJobRepository.save(gameEndEventJob)
     }
 
