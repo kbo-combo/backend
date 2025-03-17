@@ -35,7 +35,7 @@ class GameService(
     fun cancel(gameId: Long) {
         val game = gameRepository.getById(gameId)
         if (game.isCancelled()) {
-            logInfo("Game is canceled, gameId: $gameId")
+            logInfo("Game is already canceled, gameId: $gameId")
             return
         }
 
