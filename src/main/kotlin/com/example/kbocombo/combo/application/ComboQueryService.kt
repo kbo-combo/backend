@@ -21,7 +21,7 @@ class ComboQueryService(
     @Transactional(readOnly = true)
     fun findOneByParams(memberId: Long, gameDate: LocalDate?, gameId: Long?): ComboDetailResponse? {
         val dto = comboQueryRepository.findOneByParams(memberId = memberId, gameDate = gameDate, gameId = gameId)
-        return dto?.let {  ComboDetailResponse.of(dto)}
+        return dto?.let {  ComboDetailResponse.from(dto)}
     }
 
     @Transactional(readOnly = true)
@@ -43,7 +43,7 @@ data class ComboDetailResponse(
 ) {
     companion object {
 
-        fun of(queryDto: ComboDetailQueryDto): ComboDetailResponse {
+        fun from(queryDto: ComboDetailQueryDto): ComboDetailResponse {
             val combo = queryDto.combo
             val game = combo.game
             val player = queryDto.player
