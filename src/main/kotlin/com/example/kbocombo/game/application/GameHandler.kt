@@ -3,6 +3,7 @@ package com.example.kbocombo.game.application
 import com.example.kbocombo.common.logInfo
 import com.example.kbocombo.crawler.game.application.HitterRecordClient
 import com.example.kbocombo.game.domain.GameEndEventJob
+import com.example.kbocombo.game.domain.vo.GameScore
 import com.example.kbocombo.game.infra.GameEndEventJobRepository
 import com.example.kbocombo.record.application.HitterGameRecordService
 import org.springframework.context.event.EventListener
@@ -22,9 +23,10 @@ class GameHandler(
 
     @Async
     @Transactional
-    fun completeGame(gameId: Long) {
-        logInfo("Game ended: $gameId ")
+    fun completeGame(gameId: Long, gameScore: GameScore) {
         val game = gameService.complete(gameId)
+        logInfo("Game ended: $gameId ")
+        game.updateGameScore(gameScore)
         saveGameEndEventJob(gameId, game.startDate)
         updateHitterRecord(gameId)
     }
