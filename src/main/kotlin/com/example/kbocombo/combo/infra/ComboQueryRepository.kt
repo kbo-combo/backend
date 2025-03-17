@@ -60,11 +60,11 @@ class ComboQueryRepository(
 data class ComboDetailQueryDto @QueryProjection constructor(
     val combo: Combo,
     val player: Player,
-    val hitterGameRecord: HitterGameRecord
+    val hitterGameRecord: HitterGameRecord?
 )
 
 data class ComboListQueryDto @QueryProjection constructor(
     val combo: Combo,
     val player: Player,
-    val hitterGameRecord: HitterGameRecord
+    val hitterGameRecord: HitterGameRecord?
 )
