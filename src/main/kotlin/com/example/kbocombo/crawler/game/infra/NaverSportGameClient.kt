@@ -59,7 +59,9 @@ class NaverSportGameClient(
             startDate = naverGameResponse.gameDate,
             startTime = naverGameResponse.gameDateTime.toLocalTime(),
             gameType = GameType.getGameTypeByDate(naverGameResponse.gameDate),
-            gameState = convertToGameStatus(statusCode = statusCode, statusInfo = statusInfo)
+            gameState = convertToGameStatus(statusCode = statusCode, statusInfo = statusInfo),
+            homeTeamScore = naverGameResponse.homeTeamScore,
+            awayTeamScore = naverGameResponse.awayTeamScore,
         )
     }
 
@@ -165,6 +167,8 @@ data class GameDto(
     val startTime: LocalTime,
     val gameType: GameType,
     val gameState: GameState? = null,
+    val homeTeamScore: Int,
+    val awayTeamScore: Int,
 )
 
 fun GameDto.toEntity(): Game {
