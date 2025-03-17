@@ -19,7 +19,8 @@ class GameScheduler(
     private val gameClient: GameClient,
     private val gameSyncService: GameSyncService,
     private val publisher: ApplicationEventPublisher,
-    private val gameRepository: GameRepository
+    private val gameRepository: GameRepository,
+    private val gameHandler: GameHandler
 ) {
 
     @Scheduled(cron = "0 0/10 * * * ?")
@@ -50,7 +51,7 @@ class GameScheduler(
             val currentGameState = todayGameDto.gameState ?: savedTodayGame.gameState
             when (currentGameState) {
                 GameState.RUNNING -> publisher.publishEvent(GameRunningEvent(gameId = savedTodayGame.id))
-                GameState.COMPLETED -> publisher.publishEvent(GameCompletedEvent(gameId = savedTodayGame.id, gameDate = savedTodayGame.startDate))
+                GameState.COMPLETED -> gameHandler.completeGame(gameId = savedTodayGame.id)
                 GameState.CANCEL -> publisher.publishEvent(GameCancelledEvent(gameId = savedTodayGame.id, gameDate = savedTodayGame.startDate))
                 GameState.PENDING -> {}
             }

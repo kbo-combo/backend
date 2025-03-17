@@ -1,6 +1,7 @@
 package com.example.kbocombo.game.application
 
 import com.example.kbocombo.common.logInfo
+import com.example.kbocombo.game.domain.Game
 import com.example.kbocombo.game.infra.GameRepository
 import com.example.kbocombo.game.infra.getById
 import org.springframework.stereotype.Service
@@ -21,14 +22,14 @@ class GameService(
     }
 
     @Transactional
-    fun complete(gameId: Long) {
+    fun complete(gameId: Long): Game {
         val game = gameRepository.getById(gameId)
         if (game.isCompleted()) {
             logInfo("Game is already completed, gameId: $gameId")
-            return
+            return game
         }
         game.complete()
-        gameRepository.save(game)
+        return gameRepository.save(game)
     }
 
     @Transactional

@@ -21,15 +21,11 @@ class GameHandler(
 ) {
 
     @Async
-    @EventListener
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    fun handleGameCompletedEvent(gameCompletedEvent: GameCompletedEvent) {
-        val gameId = gameCompletedEvent.gameId
-        val gameDate = gameCompletedEvent.gameDate
+    @Transactional
+    fun completeGame(gameId: Long) {
         logInfo("Game ended: $gameId ")
-
-        gameService.complete(gameId)
-        saveGameEndEventJob(gameId, gameDate)
+        val game = gameService.complete(gameId)
+        saveGameEndEventJob(gameId, game.startDate)
         updateHitterRecord(gameId)
     }
 
