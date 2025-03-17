@@ -74,11 +74,6 @@ data class GameRunningEvent(
     val gameId: Long
 )
 
-data class GameCompletedEvent(
-    val gameId: Long,
-    val gameDate: LocalDate
-)
-
 data class GameCancelledEvent(
     val gameId: Long,
     val gameDate: LocalDate
