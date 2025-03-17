@@ -78,6 +78,10 @@ class Game(
         this.startTime = gameStartTime
     }
 
+    fun updateGameScore(homeTeamScore: Int, awayTeamScore: Int) {
+        this.gameScore = GameScore(homeTeamScore, awayTeamScore)
+    }
+
     fun isPending(): Boolean {
         return gameState == GameState.PENDING
     }
