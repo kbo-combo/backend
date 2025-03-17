@@ -1,6 +1,7 @@
 package com.example.kbocombo.game.application
 
 import com.example.kbocombo.game.domain.Game
+import com.example.kbocombo.game.domain.vo.GameScore
 import com.example.kbocombo.game.domain.vo.GameState
 import com.example.kbocombo.game.infra.GameQueryRepository
 import com.example.kbocombo.player.domain.Player
@@ -44,7 +45,8 @@ data class GameByDateResponse(
     val startTime: LocalTime,
     val gameState: GameState,
     val homeStartingPitcher: StartingPitcherResponse?,
-    val awayStartingPitcher: StartingPitcherResponse?
+    val awayStartingPitcher: StartingPitcherResponse?,
+    val gameScore: GameScoreResponse?
 ) {
 
     companion object {
@@ -60,6 +62,7 @@ data class GameByDateResponse(
                     gameState = it.gameState,
                     homeStartingPitcher = StartingPitcherResponse.from(playersById[it.homeStartingPitcherId]),
                     awayStartingPitcher = StartingPitcherResponse.from(playersById[it.awayStartingPitcherId]),
+                    gameScore = GameScoreResponse.from(it.gameScore)
                 )
             }
         }
@@ -89,6 +92,18 @@ data class GameYearMonthResponse(
             return dates.map {
                 GameYearMonthResponse(gameDate = it)
             }
+        }
+    }
+}
+
+
+data class GameScoreResponse(
+    val homeTeamScore: Int,
+    val awayTeamScore: Int
+) {
+    companion object {
+        fun from(gameScore: GameScore?): GameScoreResponse? {
+            return gameScore?.let { GameScoreResponse(homeTeamScore = it.homeTeamScore, awayTeamScore =  it.awayTeamScore) }
         }
     }
 }
