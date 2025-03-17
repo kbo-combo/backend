@@ -27,7 +27,8 @@ class ComboQueryRepository(
             .from(combo)
             .leftJoin(combo.game, game).fetchJoin()
             .leftJoin(player).on(player.id.eq(combo.playerId))
-            .leftJoin(hitterGameRecord).on(hitterGameRecord.gameId.eq(game.id))
+            .leftJoin(hitterGameRecord).on(hitterGameRecord.gameId.eq(game.id)
+                .and(hitterGameRecord.playerId.eq(player.id)))
             .where(
                 BooleanBuilder()
                     .and(combo.memberId.eq(memberId))
@@ -44,7 +45,8 @@ class ComboQueryRepository(
             .from(combo)
             .leftJoin(combo.game, game).fetchJoin()
             .leftJoin(player).on(player.id.eq(combo.playerId))
-            .leftJoin(hitterGameRecord).on(hitterGameRecord.gameId.eq(game.id))
+            .leftJoin(hitterGameRecord).on(hitterGameRecord.gameId.eq(game.id)
+                .and(hitterGameRecord.playerId.eq(player.id)))
             .where(
                 BooleanBuilder()
                     .and(combo.memberId.eq(memberId))
