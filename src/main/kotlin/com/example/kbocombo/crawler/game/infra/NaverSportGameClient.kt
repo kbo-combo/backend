@@ -4,6 +4,7 @@ import com.example.kbocombo.crawler.common.application.NaverSportClient
 import com.example.kbocombo.crawler.common.infra.dto.NaverApiResponse
 import com.example.kbocombo.crawler.game.application.GameClient
 import com.example.kbocombo.game.domain.Game
+import com.example.kbocombo.game.domain.vo.GameScore
 import com.example.kbocombo.game.domain.vo.GameState
 import com.example.kbocombo.game.domain.vo.GameType
 import com.example.kbocombo.player.infra.PlayerRepository
@@ -60,8 +61,7 @@ class NaverSportGameClient(
             startTime = naverGameResponse.gameDateTime.toLocalTime(),
             gameType = GameType.getGameTypeByDate(naverGameResponse.gameDate),
             gameState = convertToGameStatus(statusCode = statusCode, statusInfo = statusInfo),
-            homeTeamScore = naverGameResponse.homeTeamScore,
-            awayTeamScore = naverGameResponse.awayTeamScore,
+            gameScore = GameScore(homeTeamScore = naverGameResponse.homeTeamScore, awayTeamScore = naverGameResponse.awayTeamScore),
         )
     }
 
@@ -167,8 +167,7 @@ data class GameDto(
     val startTime: LocalTime,
     val gameType: GameType,
     val gameState: GameState? = null,
-    val homeTeamScore: Int,
-    val awayTeamScore: Int,
+    val gameScore: GameScore,
 )
 
 fun GameDto.toEntity(): Game {
