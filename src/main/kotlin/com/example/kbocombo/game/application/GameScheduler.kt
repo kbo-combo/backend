@@ -10,6 +10,7 @@ import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.LocalTime
 
 @Component
 class GameScheduler(
@@ -50,7 +51,11 @@ class GameScheduler(
             val currentGameState = todayGameDto.gameState ?: savedTodayGame.gameState
             when (currentGameState) {
                 GameState.RUNNING -> gameHandler.runGame(gameId = savedTodayGame.id)
-                GameState.COMPLETED -> gameHandler.completeGame(gameId = savedTodayGame.id, gameScore = todayGameDto.gameScore)
+                GameState.COMPLETED -> gameHandler.completeGame(
+                    gameId = savedTodayGame.id,
+                    gameScore = todayGameDto.gameScore
+                )
+
                 GameState.CANCEL -> gameHandler.cancelGame(gameId = savedTodayGame.id)
                 GameState.PENDING -> {}
             }
@@ -71,7 +76,9 @@ class GameScheduler(
     @Scheduled(cron = "0 0/1 13-23 * * ?")
     fun scheduleGameScore() {
         val today = LocalDate.now()
+        val now = LocalTime.now()
         val gameDtos = gameClient.findGames(today)
+            .filter { it.startTime < now && it.gameState != GameState.PENDING }
         for (gameDto in gameDtos) {
             gameService.updateGameScore(gameCode = gameDto.gameCode, gameScore = gameDto.gameScore)
         }
