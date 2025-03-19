@@ -21,4 +21,8 @@ class FakePlayerRepository : BaseFakeRepository<Player>(Player::class), PlayerRe
     override fun findAllByWebIdIn(webIds: List<Long>): List<Player> {
         return db.filter { webIds.contains(it.webId.value)}
     }
+
+    override fun findAllByIdIn(ids: List<Long>): List<Player> {
+        return db.filter { ids.contains(it.id) }
+    }
 }
