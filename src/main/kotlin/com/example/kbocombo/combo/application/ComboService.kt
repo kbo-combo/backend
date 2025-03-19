@@ -45,7 +45,10 @@ class ComboService(
     fun deleteCombo(comboId: Long, now: LocalDateTime) {
         val combo = comboRepository.getById(comboId)
         combo.checkDelete(now)
+
         comboRepository.delete(combo)
+
+        comboRankingService.decrementPlayerComboVote(gameDate = combo.gameDate, playerId = combo.playerId)
     }
 
     @Transactional

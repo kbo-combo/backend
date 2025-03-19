@@ -19,7 +19,28 @@ class ComboRankingRepository(
         val operations = redisTemplate.opsForZSet()
         operations.incrementScore(key, playerId.toString(), increment.toDouble())
 
+        // 데이터 만료 설정 (30일)
         redisTemplate.expire(key, 30, TimeUnit.DAYS)
+    }
+
+    /**
+     * 특정 날짜의 특정 선수에 대한 콤보 투표 감소
+     */
+    fun decrementPlayerComboVote(gameDate: LocalDate, playerId: Long) {
+        val key = ComboRankingKey.playerComboRankByDate(gameDate)
+        val operations = redisTemplate.opsForZSet()
+
+        val currentScore = operations.score(key, playerId.toString()) ?: 0.0
+        if (currentScore <= 0.0) {
+            return
+        }
+
+        val newScore = currentScore.minus(1)
+        if (newScore <= 0) {
+            operations.remove(key, playerId.toString())
+        } else {
+            operations.incrementScore(key, playerId.toString(), -1.0)
+        }
     }
 
     /**

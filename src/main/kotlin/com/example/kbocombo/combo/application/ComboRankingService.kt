@@ -24,6 +24,16 @@ class ComboRankingService(
     }
 
     /**
+     * 특정 선수에 대한 콤보 투표 감소
+     */
+    @Transactional
+    fun decrementPlayerComboVote(gameDate: LocalDate, playerId: Long) {
+        val player = playerRepository.getById(playerId)
+
+        comboRankingRepository.decrementPlayerComboVote(gameDate = gameDate, playerId = player.id)
+    }
+
+    /**
      * 특정 날짜의 콤보 투표 TOP N 선수 조회
      */
     @Transactional(readOnly = true)
