@@ -2,8 +2,8 @@ package com.example.kbocombo.combo.application
 
 import com.example.kbocombo.annotation.IntegrationTest
 import com.example.kbocombo.combo.domain.Combo
-import com.example.kbocombo.combo.domain.ComboRankingKey
-import com.example.kbocombo.combo.infra.ComboRankingRepository
+import com.example.kbocombo.combo.domain.ComboVoteRankingKey
+import com.example.kbocombo.combo.infra.ComboVoteRankingRepository
 import com.example.kbocombo.combo.infra.ComboRepository
 import com.example.kbocombo.game.domain.Game
 import com.example.kbocombo.game.domain.vo.GameState
@@ -23,7 +23,7 @@ import java.time.LocalDateTime
 class ComboServiceDeleteTest(
     private val comboService: ComboService,
     private val comboRepository: ComboRepository,
-    private val comboRankingRepository: ComboRankingRepository,
+    private val comboVoteRankingRepository: ComboVoteRankingRepository,
     private val playerRepository: PlayerRepository,
     private val gameRepository: GameRepository,
     private val redisTemplate: RedisTemplate<String, Any>
@@ -31,7 +31,7 @@ class ComboServiceDeleteTest(
 
     beforeEach {
         // Redis 데이터 초기화
-        val keys = redisTemplate.keys("${ComboRankingKey.playerComboRankByDate(LocalDate.now())}*")
+        val keys = redisTemplate.keys("${ComboVoteRankingKey.playerComboRankByDate(LocalDate.now())}*")
         if (keys.isNotEmpty()) {
             redisTemplate.delete(keys)
         }
@@ -58,16 +58,16 @@ class ComboServiceDeleteTest(
                 )
             )
             
-            comboRankingRepository.incrementPlayerComboVote(
+            comboVoteRankingRepository.incrementPlayerComboVote(
                 gameDate = game.startDate,
                 playerId = player.id,
                 increment = 1L
             )
-            val beforeVoteCount = comboRankingRepository.getPlayerComboVoteCount(game.startDate, player.id)
+            val beforeVoteCount = comboVoteRankingRepository.getPlayerComboVoteCount(game.startDate, player.id)
 
             comboService.deleteCombo(combo.id, comboCreatedDateTime.plusMinutes(1))
             
-            val afterVoteCount = comboRankingRepository.getPlayerComboVoteCount(game.startDate, player.id)
+            val afterVoteCount = comboVoteRankingRepository.getPlayerComboVoteCount(game.startDate, player.id)
             beforeVoteCount shouldBe 1L
             afterVoteCount shouldBe 0L
         }
@@ -89,17 +89,17 @@ class ComboServiceDeleteTest(
                     now = comboCreatedDateTime
                 )
             )
-            comboRankingRepository.incrementPlayerComboVote(
+            comboVoteRankingRepository.incrementPlayerComboVote(
                 gameDate = game.startDate,
                 playerId = player.id,
                 increment = 3L
             )
-            val beforeVoteCount = comboRankingRepository.getPlayerComboVoteCount(game.startDate, player.id)
+            val beforeVoteCount = comboVoteRankingRepository.getPlayerComboVoteCount(game.startDate, player.id)
             
             
             comboService.deleteCombo(combo.id, comboCreatedDateTime.plusMinutes(1))
             
-            val afterVoteCount = comboRankingRepository.getPlayerComboVoteCount(game.startDate, player.id)
+            val afterVoteCount = comboVoteRankingRepository.getPlayerComboVoteCount(game.startDate, player.id)
             beforeVoteCount shouldBe 3L
             afterVoteCount shouldBe 2L
         }

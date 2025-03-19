@@ -3,7 +3,7 @@ package com.example.kbocombo.combo.domain
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-object ComboRankingKey {
+object ComboVoteRankingKey {
     private const val PLAYER_COMBO_RANK_PREFIX = "player:combo:rank"
     private val DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd")
 

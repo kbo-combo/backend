@@ -1,6 +1,6 @@
 package com.example.kbocombo.combo.application
 
-import com.example.kbocombo.combo.infra.ComboRankingRepository
+import com.example.kbocombo.combo.infra.ComboVoteRankingRepository
 import com.example.kbocombo.player.infra.PlayerRepository
 import com.example.kbocombo.player.infra.getById
 import org.springframework.stereotype.Service
@@ -8,8 +8,8 @@ import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
 
 @Service
-class ComboRankingService(
-    private val comboRankingRepository: ComboRankingRepository,
+class ComboVoteRankingService(
+    private val comboVoteRankingRepository: ComboVoteRankingRepository,
     private val playerRepository: PlayerRepository
 ) {
 
@@ -20,7 +20,7 @@ class ComboRankingService(
     fun incrementPlayerComboVote(gameDate: LocalDate, playerId: Long) {
         val player = playerRepository.getById(playerId)
 
-        comboRankingRepository.incrementPlayerComboVote(gameDate = gameDate, playerId = player.id)
+        comboVoteRankingRepository.incrementPlayerComboVote(gameDate = gameDate, playerId = player.id)
     }
 
     /**
@@ -30,7 +30,7 @@ class ComboRankingService(
     fun decrementPlayerComboVote(gameDate: LocalDate, playerId: Long) {
         val player = playerRepository.getById(playerId)
 
-        comboRankingRepository.decrementPlayerComboVote(gameDate = gameDate, playerId = player.id)
+        comboVoteRankingRepository.decrementPlayerComboVote(gameDate = gameDate, playerId = player.id)
     }
 
     /**
@@ -38,7 +38,7 @@ class ComboRankingService(
      */
     @Transactional(readOnly = true)
     fun getTopRankedPlayersByDate(gameDate: LocalDate, count: Long = 10): List<PlayerComboRankingResponse> {
-        val rankedPlayers = comboRankingRepository.getTopRankedPlayersByDate(gameDate, count)
+        val rankedPlayers = comboVoteRankingRepository.getTopRankedPlayersByDate(gameDate, count)
         
         if (rankedPlayers.isEmpty()) {
             return emptyList()
@@ -68,8 +68,8 @@ class ComboRankingService(
      */
     @Transactional(readOnly = true)
     fun getPlayerRankByDate(gameDate: LocalDate, playerId: Long): PlayerComboRankingResponse {
-        val rank = comboRankingRepository.getPlayerRankByDate(gameDate, playerId)
-        val voteCount = comboRankingRepository.getPlayerComboVoteCount(gameDate, playerId)
+        val rank = comboVoteRankingRepository.getPlayerRankByDate(gameDate, playerId)
+        val voteCount = comboVoteRankingRepository.getPlayerComboVoteCount(gameDate, playerId)
         
         val player = playerRepository.getById(playerId)
         

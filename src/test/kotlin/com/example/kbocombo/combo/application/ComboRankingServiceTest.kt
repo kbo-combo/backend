@@ -1,8 +1,8 @@
 package com.example.kbocombo.combo.application
 
 import com.example.kbocombo.annotation.IntegrationTest
-import com.example.kbocombo.combo.domain.ComboRankingKey
-import com.example.kbocombo.combo.infra.ComboRankingRepository
+import com.example.kbocombo.combo.domain.ComboVoteRankingKey
+import com.example.kbocombo.combo.infra.ComboVoteRankingRepository
 import com.example.kbocombo.player.domain.Player
 import com.example.kbocombo.player.infra.PlayerRepository
 import com.example.kbocombo.utils.fixture
@@ -14,14 +14,14 @@ import java.time.LocalDate
 
 @IntegrationTest
 class ComboRankingServiceTest(
-    private val comboRankingService: ComboRankingService,
-    private val comboRankingRepository: ComboRankingRepository,
+    private val comboVoteRankingService: ComboVoteRankingService,
+    private val comboVoteRankingRepository: ComboVoteRankingRepository,
     private val playerRepository: PlayerRepository,
     private val redisTemplate: RedisTemplate<String, Any>
 ) : ExpectSpec({
 
     beforeEach {
-        val keys = redisTemplate.keys("${ComboRankingKey.playerComboRankByDate(LocalDate.now())}*")
+        val keys = redisTemplate.keys("${ComboVoteRankingKey.playerComboRankByDate(LocalDate.now())}*")
         if (keys.isNotEmpty()) {
             redisTemplate.delete(keys)
         }
@@ -34,10 +34,10 @@ class ComboRankingServiceTest(
             val player = playerRepository.save(getPlayer().sample())
 
             // when
-            comboRankingService.incrementPlayerComboVote(gameDate, player.id)
+            comboVoteRankingService.incrementPlayerComboVote(gameDate, player.id)
 
             // then
-            val score = comboRankingRepository.getPlayerComboVoteCount(gameDate, player.id)
+            val score = comboVoteRankingRepository.getPlayerComboVoteCount(gameDate, player.id)
             score shouldBe 1L
         }
 
@@ -48,11 +48,11 @@ class ComboRankingServiceTest(
 
             // when
             repeat(5) {
-                comboRankingService.incrementPlayerComboVote(gameDate, player.id)
+                comboVoteRankingService.incrementPlayerComboVote(gameDate, player.id)
             }
 
             // then
-            val score = comboRankingRepository.getPlayerComboVoteCount(gameDate, player.id)
+            val score = comboVoteRankingRepository.getPlayerComboVoteCount(gameDate, player.id)
             score shouldBe 5L
         }
 
@@ -64,12 +64,12 @@ class ComboRankingServiceTest(
             val playerC = playerRepository.save(getPlayer().sample())
 
             // when
-            repeat(5) { comboRankingService.incrementPlayerComboVote(gameDate, playerA.id) }
-            repeat(10) { comboRankingService.incrementPlayerComboVote(gameDate, playerB.id) }
-            repeat(3) { comboRankingService.incrementPlayerComboVote(gameDate, playerC.id) }
+            repeat(5) { comboVoteRankingService.incrementPlayerComboVote(gameDate, playerA.id) }
+            repeat(10) { comboVoteRankingService.incrementPlayerComboVote(gameDate, playerB.id) }
+            repeat(3) { comboVoteRankingService.incrementPlayerComboVote(gameDate, playerC.id) }
 
             // then
-            val topPlayers = comboRankingRepository.getTopRankedPlayersByDate(gameDate, 3)
+            val topPlayers = comboVoteRankingRepository.getTopRankedPlayersByDate(gameDate, 3)
 
             topPlayers.size shouldBe 3
             topPlayers[0].first shouldBe playerB.id.toString()
@@ -81,9 +81,9 @@ class ComboRankingServiceTest(
             topPlayers[2].first shouldBe playerC.id.toString()
             topPlayers[2].second shouldBe 3L
 
-            comboRankingRepository.getPlayerRankByDate(gameDate, playerB.id) shouldBe 1L
-            comboRankingRepository.getPlayerRankByDate(gameDate, playerA.id) shouldBe 2L
-            comboRankingRepository.getPlayerRankByDate(gameDate, playerC.id) shouldBe 3L
+            comboVoteRankingRepository.getPlayerRankByDate(gameDate, playerB.id) shouldBe 1L
+            comboVoteRankingRepository.getPlayerRankByDate(gameDate, playerA.id) shouldBe 2L
+            comboVoteRankingRepository.getPlayerRankByDate(gameDate, playerC.id) shouldBe 3L
         }
     }
 })

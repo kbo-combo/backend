@@ -20,7 +20,7 @@ class ComboService(
     private val gameRepository: GameRepository,
     private val playerRepository: PlayerRepository,
     private val comboRepository: ComboRepository,
-    private val comboRankingService: ComboRankingService
+    private val comboVoteRankingService: ComboVoteRankingService
 ) {
 
     @Transactional
@@ -38,7 +38,7 @@ class ComboService(
         )
         comboRepository.save(combo)
         
-        comboRankingService.incrementPlayerComboVote(gameDate = game.startDate, playerId = player.id)
+        comboVoteRankingService.incrementPlayerComboVote(gameDate = game.startDate, playerId = player.id)
     }
 
     @Transactional
@@ -48,7 +48,7 @@ class ComboService(
 
         comboRepository.delete(combo)
 
-        comboRankingService.decrementPlayerComboVote(gameDate = combo.gameDate, playerId = combo.playerId)
+        comboVoteRankingService.decrementPlayerComboVote(gameDate = combo.gameDate, playerId = combo.playerId)
     }
 
     @Transactional
