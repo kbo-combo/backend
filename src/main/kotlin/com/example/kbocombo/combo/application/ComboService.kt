@@ -20,6 +20,7 @@ class ComboService(
     private val gameRepository: GameRepository,
     private val playerRepository: PlayerRepository,
     private val comboRepository: ComboRepository,
+    private val comboRankingService: ComboRankingService
 ) {
 
     @Transactional
@@ -36,6 +37,8 @@ class ComboService(
             now = now
         )
         comboRepository.save(combo)
+        
+        comboRankingService.incrementPlayerComboVote(gameDate = game.startDate, playerId = player.id)
     }
 
     @Transactional
