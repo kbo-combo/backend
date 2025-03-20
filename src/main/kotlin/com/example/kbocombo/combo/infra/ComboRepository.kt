@@ -17,7 +17,7 @@ interface ComboRepository : Repository<Combo, Long> {
 
     fun delete(combo: Combo)
 
-    fun findByMemberIdAndGameDate(memberId: Long, gameDate: LocalDate) : Combo?
+    fun findByMemberIdAndGameDate(memberId: Long, gameDate: LocalDate): Combo?
 
     fun findAllByGameAndPlayerIdAndComboStatus(game: Game, playerId: Long, comboStatus: ComboStatus): List<Combo>
 

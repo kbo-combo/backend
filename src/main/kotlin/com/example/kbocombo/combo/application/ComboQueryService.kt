@@ -25,8 +25,18 @@ class ComboQueryService(
     }
 
     @Transactional(readOnly = true)
-    fun findAllComboByParams(memberId: Long, beforeGameDate: LocalDate?, gameType: GameType?, pageSize: Long): SliceResponse<ComboListResponse> {
-        val dtos = comboQueryRepository.findAllComboByParams(memberId = memberId, beforeGameDate = beforeGameDate, gameType = gameType, pageSize = pageSize + 1)
+    fun findAllComboByParams(
+        memberId: Long,
+        beforeGameDate: LocalDate?,
+        gameType: GameType?,
+        pageSize: Long
+    ): SliceResponse<ComboListResponse> {
+        val dtos = comboQueryRepository.findAllComboByParams(
+            memberId = memberId,
+            beforeGameDate = beforeGameDate,
+            gameType = gameType,
+            pageSize = pageSize + 1
+        )
         return SliceResponse.of(ComboListResponse.toList(dtos), pageSize)
     }
 }

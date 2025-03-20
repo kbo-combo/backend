@@ -38,7 +38,8 @@ class DatabaseMemberSessionServiceTest : StringSpec({
         val memberSession = memberSessionRepository.save(
             MemberSession(
                 memberId = 1L,
-                now = today.minusYears(10))
+                now = today.minusYears(10)
+            )
         )
 
         val actual = sut.findMemberBySessionKey(sessionKey = memberSession.sessionKey, today)
@@ -53,10 +54,13 @@ class DatabaseMemberSessionServiceTest : StringSpec({
             MemberSession(
                 memberId = 1L,
                 now = LocalDateTime.parse("2025-05-03T14:00:00")
-        ))
+            )
+        )
 
-        sut.findMemberBySessionKey(sessionKey = memberSession.sessionKey,
-            now = LocalDateTime.parse("2025-05-09T14:00:00"))
+        sut.findMemberBySessionKey(
+            sessionKey = memberSession.sessionKey,
+            now = LocalDateTime.parse("2025-05-09T14:00:00")
+        )
 
         memberSession.expiredDateTime.toLocalDate() shouldBe LocalDate.parse("2025-05-10")
     }
@@ -65,7 +69,8 @@ class DatabaseMemberSessionServiceTest : StringSpec({
         val now = LocalDateTime.parse("2025-05-03T14:00:00")
         val member = memberRepository.save(fixture.giveMeOne(Member::class.java))
         val memberSession = memberSessionRepository.save(
-            MemberSession(memberId = member.id, now = now))
+            MemberSession(memberId = member.id, now = now)
+        )
 
         var actual = sut.findMemberBySessionKey(sessionKey = memberSession.sessionKey, now = now)
 

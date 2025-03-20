@@ -86,7 +86,7 @@ class HitterGameRecordServiceTest(
 
             sut.saveOrUpdateHitterRecords(gameId = game.id, hitterRecordDtos = records)
 
-            val event = applicationEvents.stream(HitterHitRecordedEvent::class.java).findFirst().get()!!
+            val event = applicationEvents.stream(HitterHitRecordedEvent::class.java).findFirst().get()
             event.playerId shouldBe player.id
             event.gameId shouldBe game.id
         }
@@ -101,7 +101,7 @@ class HitterGameRecordServiceTest(
 
             sut.saveOrUpdateHitterRecords(gameId = game.id, hitterRecordDtos = records)
 
-            val event = applicationEvents.stream(HitterHitRecordedEvent::class.java).findFirst().get()!!
+            val event = applicationEvents.stream(HitterHitRecordedEvent::class.java).findFirst().get()
             event.playerId shouldBe player.id
             event.gameId shouldBe game.id
         }
@@ -145,7 +145,7 @@ private fun getPlayer() = fixture.giveMeKotlinBuilder<Player>()
 private fun getHitterGameRecord(
     game: Game,
     player: Player
-)= fixture.giveMeKotlinBuilder<HitterGameRecord>()
+) = fixture.giveMeKotlinBuilder<HitterGameRecord>()
     .setExp(HitterGameRecord::id, 0L)
     .setExp(HitterGameRecord::gameId, game.id)
     .setExp(HitterGameRecord::gameDate, game.startDate)

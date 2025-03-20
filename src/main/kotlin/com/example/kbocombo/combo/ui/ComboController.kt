@@ -73,6 +73,7 @@ class ComboController(
     ) {
         comboService.deleteCombo(
             comboId = comboId,
-            now = LocalDateTime.now())
+            now = LocalDateTime.now()
+        )
     }
 }

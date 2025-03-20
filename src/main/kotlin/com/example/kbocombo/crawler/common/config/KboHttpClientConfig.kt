@@ -11,7 +11,7 @@ import org.springframework.web.service.invoker.HttpServiceProxyFactory
 class KboHttpClientConfig {
 
     @Bean
-    fun kboClient() : KboHttpClient {
+    fun kboClient(): KboHttpClient {
         val client = RestClient.builder()
             .baseUrl("https://www.koreabaseball.com")
             .build()

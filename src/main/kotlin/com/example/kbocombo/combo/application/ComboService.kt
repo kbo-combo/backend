@@ -20,6 +20,7 @@ class ComboService(
     private val gameRepository: GameRepository,
     private val playerRepository: PlayerRepository,
     private val comboRepository: ComboRepository,
+    private val comboVoteRankingService: ComboVoteRankingService
 ) {
 
     @Transactional
@@ -28,6 +29,7 @@ class ComboService(
         val player = playerRepository.getById(request.playerId)
         val sameDateCombo = findSameDateCombo(memberId, game)
         val combo = sameDateCombo?.apply {
+            comboVoteRankingService.decrementPlayerComboVote(gameDate = game.startDate, playerId = this.playerId)
             update(game = game, playerId = player.id, now = now)
         } ?: Combo(
             game = game,
@@ -36,13 +38,18 @@ class ComboService(
             now = now
         )
         comboRepository.save(combo)
+
+        comboVoteRankingService.incrementPlayerComboVote(gameDate = game.startDate, playerId = player.id)
     }
 
     @Transactional
     fun deleteCombo(comboId: Long, now: LocalDateTime) {
         val combo = comboRepository.getById(comboId)
         combo.checkDelete(now)
+
         comboRepository.delete(combo)
+
+        comboVoteRankingService.decrementPlayerComboVote(gameDate = combo.gameDate, playerId = combo.playerId)
     }
 
     @Transactional
@@ -90,7 +97,7 @@ class ComboService(
         }
 
         val combos = comboRepository.findAllByGame(game = game)
-            .filter { it.isPassed().not()  }
+            .filter { it.isPassed().not() }
 
         combos.forEach {
             it.pass()

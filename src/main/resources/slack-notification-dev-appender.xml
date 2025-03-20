@@ -6,7 +6,7 @@
             <pattern>${FILE_LOG_PATTERN}</pattern>
         </layout>
         <username>하루한타-개발-서버-로그</username>
-<!--        <iconEmoji>:야구:</iconEmoji>-->
+        <!--        <iconEmoji>:야구:</iconEmoji>-->
         <colorCoding>true</colorCoding>
 
         <filter class="ch.qos.logback.classic.filter.LevelFilter">

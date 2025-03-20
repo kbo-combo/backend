@@ -11,7 +11,7 @@ class MemberQueryService(
     private val memberRepository: MemberRepository
 ) {
 
-    fun getMemberDetail(memberId: Long) : MemberDetailResponse {
+    fun getMemberDetail(memberId: Long): MemberDetailResponse {
         val member = memberRepository.findById(memberId)
         return MemberDetailResponse.from(member)
     }
