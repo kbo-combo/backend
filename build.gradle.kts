@@ -58,6 +58,11 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testImplementation("io.kotest.extensions:kotest-extensions-spring:1.1.2")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+    // TestContainers
+    testImplementation("org.testcontainers:testcontainers:1.19.7")
+    testImplementation("org.testcontainers:junit-jupiter:1.19.7")
+    testImplementation("com.redis.testcontainers:testcontainers-redis:1.4.6")
 }
 
 kotlin {

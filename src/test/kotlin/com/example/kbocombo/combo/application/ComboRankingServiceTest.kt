@@ -3,16 +3,19 @@ package com.example.kbocombo.combo.application
 import com.example.kbocombo.annotation.IntegrationTest
 import com.example.kbocombo.combo.domain.ComboVoteRankingKey
 import com.example.kbocombo.combo.infra.ComboVoteRankingRepository
+import com.example.kbocombo.config.RedisTestContainerConfig
 import com.example.kbocombo.player.domain.Player
 import com.example.kbocombo.player.infra.PlayerRepository
 import com.example.kbocombo.utils.fixture
 import com.navercorp.fixturemonkey.kotlin.giveMeKotlinBuilder
 import io.kotest.core.spec.style.ExpectSpec
 import io.kotest.matchers.shouldBe
+import org.springframework.context.annotation.Import
 import org.springframework.data.redis.core.RedisTemplate
 import java.time.LocalDate
 
 @IntegrationTest
+@Import(RedisTestContainerConfig::class)
 class ComboRankingServiceTest(
     private val comboVoteRankingService: ComboVoteRankingService,
     private val comboVoteRankingRepository: ComboVoteRankingRepository,
@@ -21,10 +24,8 @@ class ComboRankingServiceTest(
 ) : ExpectSpec({
 
     beforeEach {
-        val keys = redisTemplate.keys("${ComboVoteRankingKey.playerComboRankByDate(LocalDate.now())}*")
-        if (keys.isNotEmpty()) {
-            redisTemplate.delete(keys)
-        }
+        // Redis의 모든 데이터 초기화
+        redisTemplate.connectionFactory?.connection?.serverCommands()?.flushDb()
     }
 
     context("실시간 콤보 랭킹") {
@@ -72,13 +73,13 @@ class ComboRankingServiceTest(
             val topPlayers = comboVoteRankingRepository.getTopRankedPlayersByDate(gameDate, 3)
 
             topPlayers.size shouldBe 3
-            topPlayers[0].first shouldBe playerB.id.toString()
+            topPlayers[0].first.toLong() shouldBe playerB.id
             topPlayers[0].second shouldBe 10L
 
-            topPlayers[1].first shouldBe playerA.id.toString()
+            topPlayers[1].first.toLong() shouldBe playerA.id
             topPlayers[1].second shouldBe 5L
 
-            topPlayers[2].first shouldBe playerC.id.toString()
+            topPlayers[2].first.toLong() shouldBe playerC.id
             topPlayers[2].second shouldBe 3L
 
             comboVoteRankingRepository.getPlayerRankByDate(gameDate, playerB.id) shouldBe 1L

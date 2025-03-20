@@ -6,10 +6,6 @@ spring:
     hibernate:
       format_sql: true
       ddl-auto: create
-  data:
-    redis:
-      host: localhost
-      port: 6379
       
 kakao:
   client_id: 'hellWorldasddas'
