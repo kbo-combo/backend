@@ -72,13 +72,13 @@ class ComboRankingServiceTest(
             val topPlayers = comboVoteRankingRepository.getTopRankedPlayersByDate(gameDate, 3)
 
             topPlayers.size shouldBe 3
-            topPlayers[0].first.toLong() shouldBe playerB.id
+            topPlayers[0].first shouldBe playerB.id
             topPlayers[0].second shouldBe 10L
 
-            topPlayers[1].first.toLong() shouldBe playerA.id
+            topPlayers[1].first shouldBe playerA.id
             topPlayers[1].second shouldBe 5L
 
-            topPlayers[2].first.toLong() shouldBe playerC.id
+            topPlayers[2].first shouldBe playerC.id
             topPlayers[2].second shouldBe 3L
 
             comboVoteRankingRepository.getPlayerRankByDate(gameDate, playerB.id) shouldBe 1L
