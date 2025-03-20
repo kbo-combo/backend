@@ -9,7 +9,8 @@ data class SliceResponse<T> private constructor(
         fun <T> of(content: List<T>, pageSize: Long): SliceResponse<T> {
             return SliceResponse(
                 content = content.take(pageSize.toInt()),
-                hasNext = content.size > pageSize)
+                hasNext = content.size > pageSize
+            )
         }
     }
 }

@@ -35,7 +35,12 @@ class ComboQueryRepository(
     }
 
 
-    fun findAllComboByParams(memberId: Long, beforeGameDate: LocalDate?, gameType: GameType?, pageSize: Long): List<ComboListQueryDto> {
+    fun findAllComboByParams(
+        memberId: Long,
+        beforeGameDate: LocalDate?,
+        gameType: GameType?,
+        pageSize: Long
+    ): List<ComboListQueryDto> {
         return queryFactory
             .select(QComboListQueryDto(combo, player))
             .from(combo)

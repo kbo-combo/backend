@@ -80,7 +80,7 @@ class Combo private constructor(
         this.comboStatus = ComboStatus.PASS
     }
 
-    fun isPassed() : Boolean {
+    fun isPassed(): Boolean {
         return this.comboStatus == ComboStatus.PASS
     }
 

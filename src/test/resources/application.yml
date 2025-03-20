@@ -6,6 +6,6 @@ spring:
     hibernate:
       format_sql: true
       ddl-auto: create
-      
+
 kakao:
   client_id: 'hellWorldasddas'

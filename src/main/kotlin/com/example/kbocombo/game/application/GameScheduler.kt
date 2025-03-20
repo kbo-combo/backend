@@ -50,8 +50,20 @@ class GameScheduler(
             val currentGameState = todayGameDto.gameState ?: savedTodayGame.gameState
             when (currentGameState) {
                 GameState.RUNNING -> publisher.publishEvent(GameRunningEvent(gameId = savedTodayGame.id))
-                GameState.COMPLETED -> publisher.publishEvent(GameCompletedEvent(gameId = savedTodayGame.id, gameDate = savedTodayGame.startDate))
-                GameState.CANCEL -> publisher.publishEvent(GameCancelledEvent(gameId = savedTodayGame.id, gameDate = savedTodayGame.startDate))
+                GameState.COMPLETED -> publisher.publishEvent(
+                    GameCompletedEvent(
+                        gameId = savedTodayGame.id,
+                        gameDate = savedTodayGame.startDate
+                    )
+                )
+
+                GameState.CANCEL -> publisher.publishEvent(
+                    GameCancelledEvent(
+                        gameId = savedTodayGame.id,
+                        gameDate = savedTodayGame.startDate
+                    )
+                )
+
                 GameState.PENDING -> {}
             }
         }

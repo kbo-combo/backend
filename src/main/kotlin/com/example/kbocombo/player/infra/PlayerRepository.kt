@@ -12,15 +12,15 @@ fun PlayerRepository.getByWebId(webId: WebId): Player =
 
 interface PlayerRepository : Repository<Player, Long> {
 
-    fun save(player: Player) : Player
+    fun save(player: Player): Player
 
-    fun findAllByIsRetiredFalse() : List<Player>
+    fun findAllByIsRetiredFalse(): List<Player>
 
     fun findById(playerId: Long): Player?
 
-    fun findByWebId(webId: WebId) : Player?
+    fun findByWebId(webId: WebId): Player?
 
-    fun findAllByWebIdIn(webIds: List<Long>) : List<Player>
+    fun findAllByWebIdIn(webIds: List<Long>): List<Player>
 
     fun findAllByIdIn(ids: List<Long>): List<Player>
 }

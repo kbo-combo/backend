@@ -25,7 +25,7 @@ class GameRenewService(
                 continue
             }
 
-            if (savedGame.isAfterGameStart(now)){
+            if (savedGame.isAfterGameStart(now)) {
                 continue
             }
 

@@ -2,9 +2,8 @@ package com.example.kbocombo.combo.application
 
 import com.example.kbocombo.annotation.IntegrationTest
 import com.example.kbocombo.combo.domain.Combo
-import com.example.kbocombo.combo.domain.ComboVoteRankingKey
-import com.example.kbocombo.combo.infra.ComboVoteRankingRepository
 import com.example.kbocombo.combo.infra.ComboRepository
+import com.example.kbocombo.combo.infra.ComboVoteRankingRepository
 import com.example.kbocombo.config.RedisTestContainerConfig
 import com.example.kbocombo.game.domain.Game
 import com.example.kbocombo.game.domain.vo.GameState
@@ -18,7 +17,6 @@ import io.kotest.core.spec.style.ExpectSpec
 import io.kotest.matchers.shouldBe
 import org.springframework.context.annotation.Import
 import org.springframework.data.redis.core.RedisTemplate
-import java.time.LocalDate
 import java.time.LocalDateTime
 
 @IntegrationTest
@@ -57,7 +55,7 @@ class ComboServiceDeleteTest(
                     now = comboCreatedDateTime
                 )
             )
-            
+
             comboVoteRankingRepository.incrementPlayerComboVote(
                 gameDate = game.startDate,
                 playerId = player.id,
@@ -66,12 +64,12 @@ class ComboServiceDeleteTest(
             val beforeVoteCount = comboVoteRankingRepository.getPlayerComboVoteCount(game.startDate, player.id)
 
             comboService.deleteCombo(combo.id, comboCreatedDateTime.plusMinutes(1))
-            
+
             val afterVoteCount = comboVoteRankingRepository.getPlayerComboVoteCount(game.startDate, player.id)
             beforeVoteCount shouldBe 1L
             afterVoteCount shouldBe 0L
         }
-        
+
         expect("여러 개의 투표를 받은 선수의 콤보를 삭제해도 랭킹이 1만 감소한다") {
             val player = playerRepository.save(getPlayer().sample())
             val game = gameRepository.save(
@@ -94,9 +92,9 @@ class ComboServiceDeleteTest(
                 increment = 3L
             )
             val beforeVoteCount = comboVoteRankingRepository.getPlayerComboVoteCount(game.startDate, player.id)
-            
+
             comboService.deleteCombo(combo.id, comboCreatedDateTime.plusMinutes(1))
-            
+
             val afterVoteCount = comboVoteRankingRepository.getPlayerComboVoteCount(game.startDate, player.id)
             beforeVoteCount shouldBe 3L
             afterVoteCount shouldBe 2L

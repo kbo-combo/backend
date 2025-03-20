@@ -19,7 +19,7 @@ class GameEndEventJobService(
     private val comboService: ComboService,
     private val comboRankService: ComboRankService
 ) {
-    
+
     @Transactional
     fun process(gameEndEventJobId: Long, now: LocalDateTime) {
         val gameEndEventJob = gameEndEventJobRepository.findById(gameEndEventJobId)
@@ -32,7 +32,7 @@ class GameEndEventJobService(
         when (game.gameState) {
             GameState.COMPLETED -> comboService.updateComboToFail(gameId = game.id)
             GameState.CANCEL -> comboService.updateComboToPass(gameId = game.id, LocalDateTime.now())
-            else -> { }
+            else -> {}
         }
         comboRankService.process(game = game)
 

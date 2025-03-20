@@ -22,7 +22,7 @@ class MemberSession private constructor(
 
     @Column(name = "expired_datetime", nullable = false, updatable = false)
     var expiredDateTime: LocalDateTime,
- ) {
+) {
 
     constructor(
         memberId: Long,
@@ -37,7 +37,7 @@ class MemberSession private constructor(
         return expiredDateTime.isBefore(now)
     }
 
-    fun extendIfEnable(now: LocalDateTime)  {
+    fun extendIfEnable(now: LocalDateTime) {
         if (expiredDateTime.isBefore(now.plusDays(SESSION_EXTEND_DAY_GAP))) {
             expiredDateTime = now.plusDays(SESSION_EXPIRED_DAY)
         }

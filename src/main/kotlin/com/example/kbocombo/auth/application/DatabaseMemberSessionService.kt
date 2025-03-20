@@ -12,7 +12,7 @@ import java.time.LocalDateTime
 class DatabaseMemberSessionService(
     private val sessionRepository: MemberSessionRepository,
     private val memberRepository: MemberRepository
-) :MemberSessionService {
+) : MemberSessionService {
 
     @Transactional
     override fun saveSession(memberId: Long, now: LocalDateTime): MemberSessionResponse {

@@ -17,6 +17,7 @@ abstract class AggregateBaseEntity<T : AggregateBaseEntity<T>> : AbstractAggrega
     @Column(updatable = false)
     var createdDateTime: LocalDateTime = LocalDateTime.now()
         protected set
+
     @LastModifiedDate
     var updatedDateTime: LocalDateTime = LocalDateTime.now()
         protected set

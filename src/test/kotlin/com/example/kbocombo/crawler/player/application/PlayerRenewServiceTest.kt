@@ -29,7 +29,7 @@ class PlayerRenewServiceTest : StringSpec({
 
         sut.renew(listOf(player))
 
-        player.id shouldNotBe  0L
+        player.id shouldNotBe 0L
         playerRepository.findAllByIsRetiredFalse() shouldHaveSize 1
     }
 

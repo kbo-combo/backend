@@ -11,7 +11,7 @@ import org.springframework.web.service.invoker.HttpServiceProxyFactory
 class NaverSportClientConfig {
 
     @Bean
-    fun naverSportClient() : NaverSportClient {
+    fun naverSportClient(): NaverSportClient {
         val client = RestClient.builder()
             .baseUrl("https://api-gw.sports.naver.com")
             .build()

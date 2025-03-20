@@ -4,5 +4,5 @@ import com.example.kbocombo.player.domain.Player
 
 interface PlayerClient {
 
-    fun getRecentPlayers() : List<Player>
+    fun getRecentPlayers(): List<Player>
 }

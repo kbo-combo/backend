@@ -27,7 +27,7 @@ class ComboVoteRankingController(
         )
         return ResponseEntity.ok(result)
     }
-    
+
     /**
      * 특정 날짜의 특정 선수 콤보 투표 랭킹 조회
      */

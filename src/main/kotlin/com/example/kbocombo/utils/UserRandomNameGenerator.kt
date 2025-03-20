@@ -7,7 +7,7 @@ import kotlin.random.Random
 @Component
 class UserRandomNameGenerator {
 
-    fun generate() : String {
+    fun generate(): String {
         return "${getRandomPrefix()} ${getRandomSuffix()}_${getUuidByLength(6)}"
     }
 

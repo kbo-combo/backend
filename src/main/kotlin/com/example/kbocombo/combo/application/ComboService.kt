@@ -38,7 +38,7 @@ class ComboService(
             now = now
         )
         comboRepository.save(combo)
-        
+
         comboVoteRankingService.incrementPlayerComboVote(gameDate = game.startDate, playerId = player.id)
     }
 
@@ -97,7 +97,7 @@ class ComboService(
         }
 
         val combos = comboRepository.findAllByGame(game = game)
-            .filter { it.isPassed().not()  }
+            .filter { it.isPassed().not() }
 
         combos.forEach {
             it.pass()

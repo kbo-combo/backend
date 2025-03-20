@@ -11,7 +11,7 @@ interface GameRepository : Repository<Game, Long> {
 
     fun findById(gameId: Long): Game?
 
-    fun findAllByStartDate(startDate: LocalDate) : List<Game>
+    fun findAllByStartDate(startDate: LocalDate): List<Game>
 
     fun save(game: Game): Game
 

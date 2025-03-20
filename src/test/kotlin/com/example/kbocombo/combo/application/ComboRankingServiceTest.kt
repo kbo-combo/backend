@@ -1,7 +1,6 @@
 package com.example.kbocombo.combo.application
 
 import com.example.kbocombo.annotation.IntegrationTest
-import com.example.kbocombo.combo.domain.ComboVoteRankingKey
 import com.example.kbocombo.combo.infra.ComboVoteRankingRepository
 import com.example.kbocombo.config.RedisTestContainerConfig
 import com.example.kbocombo.player.domain.Player

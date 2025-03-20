@@ -1,7 +1,7 @@
 package com.example.kbocombo.auth.config
 
-import com.example.kbocombo.auth.infra.KakaoHttpClient
 import com.example.kbocombo.auth.infra.KakaoAuthorizedHttpClient
+import com.example.kbocombo.auth.infra.KakaoHttpClient
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.client.RestClient
