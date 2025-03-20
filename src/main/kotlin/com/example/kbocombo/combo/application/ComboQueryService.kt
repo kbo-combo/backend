@@ -7,6 +7,7 @@ import com.example.kbocombo.combo.infra.ComboQueryRepository
 import com.example.kbocombo.common.dto.SliceResponse
 import com.example.kbocombo.game.domain.vo.GameType
 import com.example.kbocombo.player.vo.Team
+import com.example.kbocombo.record.domain.HitterGameRecord
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
@@ -20,7 +21,7 @@ class ComboQueryService(
     @Transactional(readOnly = true)
     fun findOneByParams(memberId: Long, gameDate: LocalDate?, gameId: Long?): ComboDetailResponse? {
         val dto = comboQueryRepository.findOneByParams(memberId = memberId, gameDate = gameDate, gameId = gameId)
-        return dto?.let { ComboDetailResponse.of(dto) }
+        return dto?.let {  ComboDetailResponse.from(dto)}
     }
 
     @Transactional(readOnly = true)
@@ -48,10 +49,11 @@ data class ComboDetailResponse(
     val comboStatus: ComboStatus,
     val gameStartDate: LocalDate,
     val gameStartTime: LocalTime,
+    val hitterGameRecord: HitterGameRecordDto?
 ) {
     companion object {
 
-        fun of(queryDto: ComboDetailQueryDto): ComboDetailResponse {
+        fun from(queryDto: ComboDetailQueryDto): ComboDetailResponse {
             val combo = queryDto.combo
             val game = combo.game
             val player = queryDto.player
@@ -63,6 +65,7 @@ data class ComboDetailResponse(
                 comboStatus = combo.comboStatus,
                 gameStartDate = game.startDate,
                 gameStartTime = game.startTime,
+                hitterGameRecord = HitterGameRecordDto.from(queryDto.hitterGameRecord)
             )
         }
     }
@@ -79,6 +82,7 @@ data class ComboListResponse(
     val gameType: GameType,
     val homeTeam: Team,
     val awayTeam: Team,
+    val hitterGameRecord: HitterGameRecordDto?
 ) {
     companion object {
 
@@ -98,8 +102,21 @@ data class ComboListResponse(
                     homeTeam = game.homeTeam,
                     awayTeam = game.awayTeam,
                     gameType = game.gameType,
+                    hitterGameRecord = HitterGameRecordDto.from(it.hitterGameRecord)
                 )
             }
+        }
+    }
+}
+
+data class HitterGameRecordDto(
+    val hits: Int,
+    val atBats: Int,
+) {
+    companion object {
+
+        fun from(hitterGameRecord: HitterGameRecord?): HitterGameRecordDto? {
+            return hitterGameRecord?.let { return  HitterGameRecordDto(atBats = it.atBats, hits = it.hits)}
         }
     }
 }

@@ -6,11 +6,11 @@ import com.example.kbocombo.crawler.game.application.GameSyncService
 import com.example.kbocombo.game.domain.vo.GameState
 import com.example.kbocombo.game.infra.GameEndEventJobRepository
 import com.example.kbocombo.game.infra.GameRepository
-import org.springframework.context.ApplicationEventPublisher
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.LocalTime
 
 @Component
 class GameScheduler(
@@ -18,8 +18,9 @@ class GameScheduler(
     private val gameEndEventJobService: GameEndEventJobService,
     private val gameClient: GameClient,
     private val gameSyncService: GameSyncService,
-    private val publisher: ApplicationEventPublisher,
-    private val gameRepository: GameRepository
+    private val gameRepository: GameRepository,
+    private val gameService: GameService,
+    private val gameHandler: GameHandler
 ) {
 
     @Scheduled(cron = "0 0/10 * * * ?")
@@ -49,21 +50,13 @@ class GameScheduler(
 
             val currentGameState = todayGameDto.gameState ?: savedTodayGame.gameState
             when (currentGameState) {
-                GameState.RUNNING -> publisher.publishEvent(GameRunningEvent(gameId = savedTodayGame.id))
-                GameState.COMPLETED -> publisher.publishEvent(
-                    GameCompletedEvent(
-                        gameId = savedTodayGame.id,
-                        gameDate = savedTodayGame.startDate
-                    )
+                GameState.RUNNING -> gameHandler.runGame(gameId = savedTodayGame.id)
+                GameState.COMPLETED -> gameHandler.completeGame(
+                    gameId = savedTodayGame.id,
+                    gameScore = todayGameDto.gameScore
                 )
 
-                GameState.CANCEL -> publisher.publishEvent(
-                    GameCancelledEvent(
-                        gameId = savedTodayGame.id,
-                        gameDate = savedTodayGame.startDate
-                    )
-                )
-
+                GameState.CANCEL -> gameHandler.cancelGame(gameId = savedTodayGame.id)
                 GameState.PENDING -> {}
             }
         }
@@ -79,18 +72,15 @@ class GameScheduler(
             logInfo("renew post date game, game date is $targetDate")
         }
     }
+
+    @Scheduled(cron = "0 0/1 13-23 * * ?")
+    fun scheduleGameScore() {
+        val today = LocalDate.now()
+        val now = LocalTime.now()
+        val gameDtos = gameClient.findGames(today)
+            .filter { it.startTime < now && it.gameState != GameState.PENDING }
+        for (gameDto in gameDtos) {
+            gameService.updateGameScore(gameCode = gameDto.gameCode, gameScore = gameDto.gameScore)
+        }
+    }
 }
-
-data class GameRunningEvent(
-    val gameId: Long
-)
-
-data class GameCompletedEvent(
-    val gameId: Long,
-    val gameDate: LocalDate
-)
-
-data class GameCancelledEvent(
-    val gameId: Long,
-    val gameDate: LocalDate
-)
