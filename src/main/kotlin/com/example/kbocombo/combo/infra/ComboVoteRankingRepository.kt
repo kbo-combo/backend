@@ -46,14 +46,14 @@ class ComboVoteRankingRepository(
     /**
      * 특정 날짜의 콤보 투표 TOP N 선수 반환
      */
-    fun getTopRankedPlayersByDate(gameDate: LocalDate, count: Long = 10): List<Pair<String, Long>> {
+    fun getTopRankedPlayersByDate(gameDate: LocalDate, count: Long = 10): List<Pair<Long, Long>> {
         val key = ComboVoteRankingKey.playerComboRankByDate(gameDate)
         val operations = redisTemplate.opsForZSet()
 
         val rangeWithScores = operations.reverseRangeWithScores(key, 0, count - 1)
 
         return rangeWithScores?.map {
-            Pair(it.value.toString(), (it.score ?: 0.0).toLong())
+            Pair(it.value.toString().toLong(), (it.score ?: 0.0).toLong())
         } ?: emptyList()
     }
 

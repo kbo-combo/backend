@@ -44,14 +44,13 @@ class ComboVoteRankingService(
             return emptyList()
         }
         
-        val playerIds = rankedPlayers.map { it.first.toLong() }
+        val playerIds = rankedPlayers.map { it.first }
         val playerMap = playerRepository.findAllByIdIn(playerIds)
             .associateBy { it.id }
         
-        return rankedPlayers.mapIndexed { index, (playerIdStr, voteCount) ->
-            val playerId = playerIdStr.toLong()
+        return rankedPlayers.mapIndexed { index, (playerId, voteCount) ->
             val player = playerMap[playerId]
-            
+
             PlayerComboRankingResponse(
                 rank = (index + 1).toLong(),
                 playerId = playerId,
