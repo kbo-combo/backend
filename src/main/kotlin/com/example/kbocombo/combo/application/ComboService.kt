@@ -29,6 +29,7 @@ class ComboService(
         val player = playerRepository.getById(request.playerId)
         val sameDateCombo = findSameDateCombo(memberId, game)
         val combo = sameDateCombo?.apply {
+            comboVoteRankingService.decrementPlayerComboVote(gameDate = game.startDate, playerId = this.playerId)
             update(game = game, playerId = player.id, now = now)
         } ?: Combo(
             game = game,
